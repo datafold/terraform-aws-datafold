@@ -1,0 +1,34 @@
+name: Build and release
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '*.tf'
+      - '**/*.tf'
+      - '.github/workflows/release.yaml'
+
+jobs:
+  build:
+    name: Release
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'datafold'
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.DATAFOLD_RELEASE_TOKEN }}
+          persist-credentials: false
+
+      - name: Release
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          semantic_version: 19.0.2
+          extra_plugins: |
+            @semantic-release/changelog@6.0.1
+            @semantic-release/git@10.0.1
+            conventional-changelog-conventionalcommits@4.6.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.DATAFOLD_RELEASE_TOKEN }}
+
