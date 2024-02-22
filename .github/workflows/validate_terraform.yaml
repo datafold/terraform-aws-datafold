@@ -1,0 +1,17 @@
+name: Validate Terraform
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+  workflow_dispatch:
+
+jobs:
+  terraform-validate:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Validate Terraform modules
+      uses: devops-infra/action-terraform-validate@v0.3.1
+      with:
+        dir_filter: modules
