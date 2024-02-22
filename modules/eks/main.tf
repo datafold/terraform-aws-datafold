@@ -70,6 +70,13 @@ module "eks" {
     aws-ebs-csi-driver = {
       service_account_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.deployment_name}-ebs-csi-controller"
       most_recent              = true
+      configuration_values     = jsonencode({
+        "sidecars": {
+          "snapshotter": {
+            "forceEnable": false
+          }
+        }
+      })
     }
   }
 
