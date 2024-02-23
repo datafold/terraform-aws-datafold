@@ -139,3 +139,9 @@ variable "rds_extra_tags" {
   type    = map(any)
   default = {}
 }
+
+variable "db_extra_parameters" {
+  type        = list
+  default     = []
+  description = "List of map of extra variables to apply to the RDS database parameter group"
+}

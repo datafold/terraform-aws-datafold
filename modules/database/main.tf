@@ -63,7 +63,7 @@ module "db" {
   performance_insights_enabled = false
   create_monitoring_role       = false
 
-  parameters = [
+  parameters = concat([
     {
       name  = "autovacuum"
       value = 1
@@ -72,7 +72,7 @@ module "db" {
       name  = "client_encoding"
       value = "utf8"
     }
-  ]
+  ], var.db_extra_parameters)
 
   tags = merge({
     component = "app"

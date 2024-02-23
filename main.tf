@@ -122,6 +122,7 @@ module "database" {
   db_subnet_group_tags                     = var.db_subnet_group_tags
   rds_extra_tags                           = var.rds_extra_tags
   security_group_id                        = local.security_group_id
+  db_extra_parameters                      = var.db_extra_parameters
 }
 
 module "clickhouse_backup" {
