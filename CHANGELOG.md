@@ -2,6 +2,14 @@
 
 See this file for notable changes between versions.
 
+### [1.0.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.0.1...v1.0.2) (2024-02-23)
+
+
+### Bug Fixes
+
+* Return the external ALB IP correctly ([be82c91](https://github.com/datafold/terraform-aws-datafold/commit/be82c91627104465296f8e3bc8075f8bb7999941))
+* Return the external ALB IP correctly ([#3](https://github.com/datafold/terraform-aws-datafold/issues/3)) ([844e2a8](https://github.com/datafold/terraform-aws-datafold/commit/844e2a81ca74c2634309841b9f642a312c8db62d))
+
 ### [1.0.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.0.0...v1.0.1) (2024-02-22)
 
 
