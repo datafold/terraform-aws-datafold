@@ -404,6 +404,12 @@ variable "apply_major_upgrade" {
   description = "Sets the flag to allow AWS to apply major upgrade on the maintenance plan schedule."
 }
 
+variable "db_extra_parameters" {
+  type        = list
+  default     = []
+  description = "List of map of extra variables to apply to the RDS database parameter group"
+}
+
 #  ┏━╸╻  ╻┏━╸╻┏ ╻ ╻┏━┓╻ ╻┏━┓┏━╸
 #  ┃  ┃  ┃┃  ┣┻┓┣━┫┃ ┃┃ ┃┗━┓┣╸
 #  ┗━╸┗━╸╹┗━╸╹ ╹╹ ╹┗━┛┗━┛┗━┛┗━╸
