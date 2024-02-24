@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.1.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.0.2...v1.1.0) (2024-02-24)
+
+
+### Features
+
+* Allow extra db parameters to be specified ([a9b3104](https://github.com/datafold/terraform-aws-datafold/commit/a9b3104a1ba845505aa23ac09b951b49e888d56c))
+
 ### [1.0.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.0.1...v1.0.2) (2024-02-23)
 
 
