@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.1.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.1.0...v1.1.1) (2024-02-26)
+
+
+### Bug Fixes
+
+* Tightening the security group settings on the cluster ([041f892](https://github.com/datafold/terraform-aws-datafold/commit/041f89222304efa0378b99d25b814ccd7af62957))
+
 ## [1.1.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.0.2...v1.1.0) (2024-02-24)
 
 
