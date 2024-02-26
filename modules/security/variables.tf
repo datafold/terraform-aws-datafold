@@ -65,3 +65,8 @@ variable "sg_tags" {
   type    = map(any)
   default = {}
 }
+
+variable "backend_app_port" {
+  type        = number
+  description = "The target port to use for the backend services"
+}
