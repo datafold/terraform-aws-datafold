@@ -24,7 +24,7 @@ output "target_group_arn" {
 }
 
 output "security_group_id" {
-  value = module.security.security_group_id
+  value = module.security.lb_security_group_id
   description = "The security group ID managing ingress from the load balancer"
 }
 

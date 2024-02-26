@@ -40,11 +40,13 @@ module "security" {
   whitelisted_egress_cidrs  = var.whitelisted_egress_cidrs
   ingress_enable_http_sg    = var.ingress_enable_http_sg
   dns_egress_cidrs          = var.dns_egress_cidrs
+  backend_app_port          = var.backend_app_port
   sg_tags                   = var.sg_tags
 }
 
 locals {
-  security_group_id = module.security.security_group_id
+  lb_security_group_id = module.security.lb_security_group_id
+  db_security_group_id = module.security.db_security_group_id
 }
 
 module "load_balancer" {
@@ -53,7 +55,7 @@ module "load_balancer" {
   deployment_name        = var.deployment_name
   vpc_id                 = local.vpc_id
   vpc_public_subnets     = local.vpc_public_subnets
-  security_group_id      = local.security_group_id
+  security_group_id      = local.lb_security_group_id
   create_ssl_cert        = var.create_ssl_cert
   alb_certificate_domain = var.alb_certificate_domain
   lb_internal            = var.lb_internal
@@ -71,7 +73,8 @@ module "eks" {
   k8s_control_subnets                 = []
   k8s_module_version                  = var.k8s_module_version
   k8s_cluster_version                 = var.k8s_cluster_version
-  ingress_security_group_id           = local.security_group_id
+  lb_security_group_id                = local.lb_security_group_id
+  db_security_group_id                = local.db_security_group_id
   self_managed_node_grp_instance_type = var.self_managed_node_grp_instance_type
   self_managed_node_grp_default       = var.self_managed_node_grp_default
   self_managed_node_grp               = var.self_managed_node_grp
@@ -94,6 +97,7 @@ module "eks" {
   aws_auth_accounts                   = var.aws_auth_accounts
   tags                                = var.tags
   backend_app_port                    = var.backend_app_port
+  rds_port                            = var.rds_port
 }
 
 module "database" {
@@ -121,7 +125,7 @@ module "database" {
   db_parameter_group_tags                  = var.db_parameter_group_tags
   db_subnet_group_tags                     = var.db_subnet_group_tags
   rds_extra_tags                           = var.rds_extra_tags
-  security_group_id                        = local.security_group_id
+  security_group_id                        = local.db_security_group_id
   db_extra_parameters                      = var.db_extra_parameters
 }
 

@@ -37,9 +37,14 @@ variable "k8s_cluster_version" {
   description = "Ref. https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
 }
 
-variable "ingress_security_group_id" {
+variable "lb_security_group_id" {
   type        = string
-  description = "The security group source to allow"
+  description = "The security group of the load balancer"
+}
+
+variable "db_security_group_id" {
+  type        = string
+  description = "The security group of the database"
 }
 
 variable "self_managed_node_grp_instance_type" {
@@ -96,4 +101,10 @@ variable "tags" {
 variable "backend_app_port" {
   type        = number
   description = "The target port to use for the backend services"
+}
+
+variable "rds_port" {
+  type        = number
+  default     = 5432
+  description = "RDS port"
 }

@@ -1,9 +1,18 @@
-# https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws
-module "sg" {
+module "db_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.3.0"
 
-  name   = "${var.deployment_name}-app"
+  name   = "${var.deployment_name}-db"
+  vpc_id = var.vpc_id
+
+  tags = var.sg_tags
+}
+
+module "load_balancer_sg" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.3.0"
+
+  name   = "${var.deployment_name}-lb"
   vpc_id = var.vpc_id
 
   ingress_with_cidr_blocks = concat(
@@ -20,37 +29,15 @@ module "sg" {
         cidr_blocks = join(",", sort(var.whitelisted_ingress_cidrs))
       }
       if var.ingress_enable_http_sg
-    ],
-    [
-      {
-         description = "Ingress for all in CIDR"
-         from_port   = 5432
-         to_port     = 5432
-         protocol    = "tcp"
-         cidr_blocks = var.vpc_cidr
-      }
     ]
   )
 
-  egress_with_cidr_blocks = concat([
-    {
-      rule        = "all-all"
-      cidr_blocks = join(",", sort(distinct(concat(var.whitelisted_egress_cidrs))))
-    }
-    ],
-    [
-      for enabled in [true] :
-      {
-        rule        = "dns-tcp"
-        cidr_blocks = join(",", sort(var.dns_egress_cidrs))
-      }
-      if length(var.dns_egress_cidrs) > 0
-    ],
+  egress_with_cidr_blocks = concat(
     [
       {
          description = "Egress for all in CIDR"
-         from_port   = 5432
-         to_port     = 5432
+         from_port   = var.backend_app_port
+         to_port     = var.backend_app_port
          protocol    = "tcp"
          cidr_blocks = var.vpc_cidr
       }

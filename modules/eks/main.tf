@@ -114,14 +114,42 @@ module "eks" {
   tags = var.tags
 }
 
-resource "aws_security_group_rule" "ingress" {
+resource "aws_security_group_rule" "lb_ingress" {
   type                     = "ingress"
   from_port                = var.backend_app_port
   to_port                  = var.backend_app_port
   protocol                 = "tcp"
-  source_security_group_id = var.ingress_security_group_id
+  source_security_group_id = var.lb_security_group_id
   security_group_id        = module.eks.node_security_group_id
   description              = "Allows traffic from LB to cluster nodes"
+
+  depends_on = [
+    module.eks
+  ]
+}
+
+resource "aws_security_group_rule" "db_ingress" {
+  type                     = "ingress"
+  from_port                = var.rds_port
+  to_port                  = var.rds_port
+  protocol                 = "tcp"
+  source_security_group_id = module.eks.node_security_group_id
+  security_group_id        = var.db_security_group_id
+  description              = "Allows traffic from cluster nodes to database"
+
+  depends_on = [
+    module.eks
+  ]
+}
+
+resource "aws_security_group_rule" "node_db_egress" {
+  type                     = "egress"
+  from_port                = var.rds_port
+  to_port                  = var.rds_port
+  protocol                 = "tcp"
+  source_security_group_id = var.db_security_group_id
+  security_group_id        = module.eks.node_security_group_id
+  description              = "Allows egress traffic to database"
 
   depends_on = [
     module.eks
