@@ -89,6 +89,19 @@ module "eks" {
             "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
             "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
         }
+        block_device_mappings = {
+          xvda = {
+            device_name = "/dev/xvda"
+            ebs = {
+              volume_size           = var.default_node_disk_size
+              volume_type           = "gp3"
+              iops                  = 3000
+              throughput            = 125
+              encrypted             = true
+              delete_on_termination = true
+            }
+          }
+        }
       })
   }
   create_aws_auth_configmap           = var.create_aws_auth_configmap
