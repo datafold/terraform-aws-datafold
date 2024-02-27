@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.1.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.1.1...v1.1.2) (2024-02-27)
+
+
+### Bug Fixes
+
+* Disk size setting on root volume ([70ad09b](https://github.com/datafold/terraform-aws-datafold/commit/70ad09b6ad2692f310714e1ec19a8954ef34630e))
+
 ### [1.1.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.1.0...v1.1.1) (2024-02-26)
 
 
