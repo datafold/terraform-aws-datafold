@@ -22,6 +22,7 @@ This deployment will create the following resources:
 * AWS external load balancer
 * AWS ACM certificate, unless preregistered and provided
 * Three EBS volumes for local data storage
+* AWS RDS Postgres database
 * An EKS cluster
 * Service accounts for the EKS cluster to perform actions outside of its cluster boundary:
   * Provisioning existing EBS volumes
