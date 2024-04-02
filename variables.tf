@@ -525,6 +525,12 @@ variable "aws_auth_accounts" {
   description = "List of account maps to add to the aws-auth configmap"
 }
 
+variable "aws_auth_roles" {
+  type    = list(any)
+  default = []
+  description = "List of role maps to add to the aws-auth configmap"
+}
+
 variable "tags" {
   type    = any
   default = {}
