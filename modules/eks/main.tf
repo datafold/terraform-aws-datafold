@@ -100,13 +100,13 @@ module "eks" {
   create_aws_auth_configmap = var.create_aws_auth_configmap
   manage_aws_auth_configmap = var.manage_aws_auth_configmap
 
-  aws_auth_roles = [
+  aws_auth_roles = concat([
     {
       rolearn  = aws_iam_role.eks_cluster_role.arn
       username = "eks_cluster_role"
       groups   = ["system:masters"]
     },
-  ]
+  ], var.aws_auth_roles)
 
   aws_auth_users    = var.aws_auth_users
   aws_auth_accounts = var.aws_auth_accounts

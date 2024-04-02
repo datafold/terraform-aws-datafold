@@ -93,6 +93,11 @@ variable "aws_auth_accounts" {
   default = []
 }
 
+variable "aws_auth_roles" {
+  type    = list(any)
+  default = []
+}
+
 variable "tags" {
   type    = any
   default = {}
