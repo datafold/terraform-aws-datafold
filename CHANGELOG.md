@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.2.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.1.2...v1.2.0) (2024-04-02)
+
+
+### Features
+
+* Add auth roles for authentication ([70d7ddf](https://github.com/datafold/terraform-aws-datafold/commit/70d7ddfd959a207d46bdbfa618f2c0816b66ebef))
+
 ### [1.1.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.1.1...v1.1.2) (2024-02-27)
 
 
