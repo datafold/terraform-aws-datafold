@@ -478,7 +478,7 @@ variable "self_managed_node_grp_default" {
   description = "Configuration for the self managed node group"
 }
 
-variable "self_managed_node_grp" {
+variable "self_managed_node_grps" {
   type    = any
   default = {}
   description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/self-managed-node-group"
@@ -490,8 +490,14 @@ variable "managed_node_grp_default" {
   description = "Ref. https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt"
 }
 
-variable "managed_node_grp" {
+variable "managed_node_grp1" {
   type = any
+  description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
+}
+
+variable "managed_node_grp2" {
+  type = any
+  default = null
   description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
 }
 

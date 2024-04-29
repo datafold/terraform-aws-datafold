@@ -63,6 +63,63 @@ module "load_balancer" {
   backend_app_port       = var.backend_app_port
 }
 
+locals {
+  default_node_pool = merge(var.managed_node_grp1,
+    {
+      subnet_ids = [local.vpc_private_subnets[0]]
+      disk_size  = var.default_node_disk_size
+      tags = {
+          "k8s.io/cluster-autoscaler/enabled"                  = "true"
+          "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+          "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+      }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = var.default_node_disk_size
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 125
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
+    })
+  optional_node_pool = merge(var.managed_node_grp2,
+    {
+      min_size     = 0
+      max_size     = 1
+      desired_size = 0
+
+      subnet_ids = [local.vpc_private_subnets[0]]
+      disk_size  = var.default_node_disk_size
+      tags = {
+          "k8s.io/cluster-autoscaler/enabled"                  = "true"
+          "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+          "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+      }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = var.default_node_disk_size
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 125
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
+    })
+  managed_node_groups = merge(
+    {"${var.deployment_name}-k8s": local.default_node_pool},
+    var.managed_node_grp2 != null ? {"${var.deployment_name}-k8s-small" : local.optional_node_pool} : {}
+  )
+}
+
 module "eks" {
   source = "./modules/eks"
 
@@ -77,33 +134,10 @@ module "eks" {
   db_security_group_id                = local.db_security_group_id
   self_managed_node_grp_instance_type = var.self_managed_node_grp_instance_type
   self_managed_node_grp_default       = var.self_managed_node_grp_default
-  self_managed_node_grp               = var.self_managed_node_grp
+  self_managed_node_grps              = var.self_managed_node_grps
   managed_node_grp_default            = var.managed_node_grp_default
-  managed_node_grp = {
-    "${var.deployment_name}-k8s"      = merge(var.managed_node_grp,
-      {
-        subnet_ids = [local.vpc_private_subnets[0]]
-        disk_size  = var.default_node_disk_size
-        tags = {
-            "k8s.io/cluster-autoscaler/enabled"                  = "true"
-            "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
-            "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
-        }
-        block_device_mappings = {
-          xvda = {
-            device_name = "/dev/xvda"
-            ebs = {
-              volume_size           = var.default_node_disk_size
-              volume_type           = "gp3"
-              iops                  = 3000
-              throughput            = 125
-              encrypted             = true
-              delete_on_termination = true
-            }
-          }
-        }
-      })
-  }
+  managed_node_grps                   = local.managed_node_groups
+
   create_aws_auth_configmap           = var.create_aws_auth_configmap
   manage_aws_auth_configmap           = var.manage_aws_auth_configmap
   aws_auth_users                      = var.aws_auth_users

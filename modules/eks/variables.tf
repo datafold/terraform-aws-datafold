@@ -58,7 +58,7 @@ variable "self_managed_node_grp_default" {
   default = {}
 }
 
-variable "self_managed_node_grp" {
+variable "self_managed_node_grps" {
   type    = any
   default = {}
 }
@@ -69,7 +69,7 @@ variable "managed_node_grp_default" {
   description = "Ref. https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt"
 }
 
-variable "managed_node_grp" {
+variable "managed_node_grps" {
   type = any
 }
 
