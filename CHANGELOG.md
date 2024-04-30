@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.3.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.2.0...v1.3.0) (2024-04-30)
+
+
+### Features
+
+* Add extra nodepool for spillover into smaller nodes ([38e8ea8](https://github.com/datafold/terraform-aws-datafold/commit/38e8ea84c95f5abf5aaac7953dfa42345bad57f6))
+
 ## [1.2.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.1.2...v1.2.0) (2024-04-02)
 
 
