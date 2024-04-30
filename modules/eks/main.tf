@@ -87,14 +87,14 @@ module "eks" {
   # Self Managed Node Group(s)
   self_managed_node_group_defaults = var.self_managed_node_grp_default
 
-  self_managed_node_groups = var.self_managed_node_grp
+  self_managed_node_groups = var.self_managed_node_grps
 
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
     instance_types = var.managed_node_grp_default
   }
 
-  eks_managed_node_groups = var.managed_node_grp
+  eks_managed_node_groups = var.managed_node_grps
 
   # aws-auth configmap
   create_aws_auth_configmap = var.create_aws_auth_configmap
