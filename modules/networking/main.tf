@@ -141,3 +141,42 @@ resource "aws_flow_log" "this" {
   traffic_type    = "ALL"
   vpc_id          = local.vpc_id
 }
+
+# ╻ ╻┏━┓┏━╸┏━╸
+# ┃┏┛┣━┛┃  ┣╸
+# ┗┛ ╹  ┗━╸┗━╸
+
+module "vpce_sg" {
+  for_each = var.vpce_details
+
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.3.0"
+
+  name   = "${var.deployment_name}-${each.key}"
+  vpc_id = local.vpc_id
+
+  ingress_with_cidr_blocks = each.value.input_rules
+  egress_with_cidr_blocks  = each.value.output_rules
+
+  tags = var.sg_tags
+}
+
+resource "aws_vpc_endpoint" "vpce" {
+  for_each          = var.vpce_details
+
+  vpc_id            = local.vpc_id
+  service_name      = each.value.vpces_service_name
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+      module.vpce_sg[each.key].security_group_id,
+  ]
+
+  subnet_ids          = [coalesce(each.value.subnet_id, local.vpc_private_subnets[0])]
+  private_dns_enabled = each.value.private_dns_enabled
+
+  depends_on = [
+    module.vpc,
+    data.aws_subnet.this
+  ]
+}

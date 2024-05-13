@@ -117,6 +117,29 @@ variable "deployment_name" {
   description = "Name of the current deployment."
 }
 
+variable "vpce_details" {
+  type = map(object({
+    vpces_service_name = string
+    subnet_id           = optional(string, "")
+    private_dns_enabled = optional(bool, true)
+    input_rules        = list(object({
+       description = string
+       from_port   = number
+       to_port     = number
+       protocol    = string
+       cidr_blocks = string
+    }))
+    output_rules      = list(object({
+       description = string
+       from_port   = number
+       to_port     = number
+       protocol    = string
+       cidr_blocks = string
+    }))
+  }))
+  description = "Endpoint names to define with security group rule definitions"
+}
+
 variable "private_subnet_tags" {
   type    = map(any)
   default = {}
@@ -128,6 +151,11 @@ variable "public_subnet_tags" {
 }
 
 variable "vpc_tags" {
+  type    = map(any)
+  default = {}
+}
+
+variable "sg_tags" {
   type    = map(any)
   default = {}
 }

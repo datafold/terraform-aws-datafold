@@ -49,7 +49,7 @@ module "aws" {
   # https://github.com/terraform-aws-modules/terraform-aws-eks/blob/v19.7.0/docs/compute_resources.md
   managed_node_grp_default = ["c6i.4xlarge"]
 
-  managed_node_grp = {
+  managed_node_grp1 = {
     min_size     = 1
     max_size     = 2
     desired_size = 1
@@ -61,5 +61,31 @@ module "aws" {
   }
 
   aws_auth_users = []
+
+  vpce_details = {"ssh": {
+    vpces_service_name  = "com.amazonaws.vpce.us-east-1.vpce-svc-abcdef"
+    # subnet_id           = "subnet-abcdef123456"  # optional
+    # private_dns_enabled = false  # optional
+    input_rules = [{
+       description = "Allow SSH traffic through"
+       from_port   = 22
+       to_port     = 22
+       protocol    = "TCP"
+       cidr_blocks = "10.0.0.0/16"
+    }]
+    output_rules = [{
+       description = "Allow all egress TCP"
+       from_port   = 0
+       to_port     = 65535
+       protocol    = "TCP"
+       cidr_blocks = "0.0.0.0/0"
+    },{
+       description = "Allow all egress UDP"
+       from_port   = 0
+       to_port     = 65535
+       protocol    = "UDP"
+       cidr_blocks = "0.0.0.0/0"
+    }]
+  }}
 }
 

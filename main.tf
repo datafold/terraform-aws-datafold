@@ -21,6 +21,8 @@ module "networking" {
   private_subnet_tags                = var.private_subnet_tags
   public_subnet_tags                 = var.public_subnet_tags
   vpc_tags                           = var.vpc_tags
+  sg_tags                            = var.sg_tags
+  vpce_details                       = var.vpce_details
 }
 
 locals {

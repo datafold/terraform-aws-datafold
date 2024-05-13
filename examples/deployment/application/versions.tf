@@ -12,5 +12,5 @@ terraform {
 }
 
 locals {
-  operator_version = "0.0.19"
+  operator_version = "1.0.0"
 }
