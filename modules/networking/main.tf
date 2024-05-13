@@ -13,11 +13,11 @@ locals {
   )
   vpc_public_subnets = coalesce(
     one(module.vpc[*].public_subnets),
-    one(data.aws_subnet.this[*][*].cidr_block)
+    one(data.aws_subnets.public[*].ids)
   )
   vpc_private_subnets = coalesce(
     one(module.vpc[*].private_subnets),
-    one(data.aws_subnet.this[*][*].cidr_block)
+    one(data.aws_subnets.private[*].ids)
   )
 }
 
@@ -108,17 +108,29 @@ data "aws_vpc" "this" {
   id    = var.vpc_id
 }
 
-data "aws_subnets" "this" {
+data "aws_subnets" "public" {
   count = var.vpc_id != "" ? 1 : 0
   filter {
     name   = "vpc-id"
     values = [var.vpc_id]
   }
+
+  tags = var.public_subnet_tags
+}
+
+data "aws_subnets" "private" {
+  count = var.vpc_id != "" ? 1 : 0
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
+
+  tags = var.private_subnet_tags
 }
 
 data "aws_subnet" "this" {
-  count = var.vpc_id != "" ? length(one(data.aws_subnets.this[*].ids)) : 0
-  id    = one(data.aws_subnets.this[*].ids[count.index])
+  count = var.vpc_id != "" ? length(one(data.aws_subnets.public[*].ids)) : 0
+  id    = one(data.aws_subnets.public[*].ids[count.index])
 }
 
 data "aws_vpc" "ensured_vpc" {

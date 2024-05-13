@@ -3,7 +3,7 @@ resource "helm_release" "datafold" {
   namespace  = local.namespace
   repository = "https://charts.datafold.com"
   chart      = "datafold"
-  version    = "0.5.12"
+  version    = local.helm_version
   wait       = false
 
   set {

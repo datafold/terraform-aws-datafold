@@ -26,7 +26,7 @@ module "alb_app" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.2.0"
 
-  name = "${var.deployment_name}-app"
+  name = var.lb_name_override == "" ? "${var.deployment_name}-app" : var.lb_name_override
 
   load_balancer_type = "application"
   internal           = var.lb_internal
@@ -40,6 +40,8 @@ module "alb_app" {
   # See:
   # https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html
   listener_ssl_policy_default = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06"
+  enable_cross_zone_load_balancing = true
+  enable_deletion_protection = var.lb_deletion_protection
 
   target_groups = [
     {
@@ -95,6 +97,8 @@ module "alb_app" {
       if var.alb_certificate_domain != ""
     ]
   )
+
+  access_logs = var.lb_access_logs
 }
 
 locals {

@@ -17,3 +17,9 @@ variable "clickhouse_s3_bucket" {
   default     = "clickhouse-backups-abcguo23"
   description = "Bucket for clickhouse backups."
 }
+
+variable "s3_backup_bucket_name_override" {
+  type        = string
+  default     = ""
+  description = "Bucket name override."
+}

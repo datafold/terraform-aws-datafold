@@ -86,6 +86,24 @@ variable "redis_data_size" {
   description = "Redis EBS volume size in GB"
 }
 
+variable "az_index" {
+  type        = number
+  default     = 0
+  description = "Index of the availability zone"
+}
+
+variable "public_subnet_index" {
+  type        = number
+  default     = 0
+  description = "Index of the public subnet"
+}
+
+variable "private_subnet_index" {
+  type        = number
+  default     = 0
+  description = "Index of the private subnet"
+}
+
 #  ┏━┓┏━┓┏━┓╻ ╻╻╺┳┓┏━╸┏━┓
 #  ┣━┛┣┳┛┃ ┃┃┏┛┃ ┃┃┣╸ ┣┳┛
 #  ╹  ╹┗╸┗━┛┗┛ ╹╺┻┛┗━╸╹┗╸
@@ -327,6 +345,24 @@ variable "backend_app_port" {
   description = "The target port to use for the backend services"
 }
 
+variable "lb_deletion_protection" {
+  type        = bool
+  default     = true
+  description = "Flag if the load balancer can be deleted or not."
+}
+
+variable "lb_name_override" {
+  type        = string
+  default     = ""
+  description = "An optional override for the name of the load balancer"
+}
+
+variable "lb_access_logs" {
+  type        = map(string)
+  default     = {}
+  description = "Load balancer access logs configuration."
+}
+
 #  ╺┳┓┏━┓╺┳╸┏━┓┏┓ ┏━┓┏━┓┏━╸
 #   ┃┃┣━┫ ┃ ┣━┫┣┻┓┣━┫┗━┓┣╸
 #  ╺┻┛╹ ╹ ╹ ╹ ╹┗━┛╹ ╹┗━┛┗━╸
@@ -337,16 +373,22 @@ variable "rds_username" {
   description = "Overrides the default RDS user name that is provisioned."
 }
 
+variable "rds_identifier" {
+  type        = string
+  default     = ""
+  description = "Name of the RDS instance"
+}
+
 variable "rds_instance" {
   type        = string
   default     = "db.t3.medium"
   description = <<-EOT
     EC2 insance type for PostgreSQL RDS database.
-    Available instance groups: t3, m4, m5.
+    Available instance groups: t3, m4, m5, r6i.
     Available instance classes: medium and higher.
   EOT
   validation {
-    condition     = can(regex("^db\\.(t3|m4|m5)\\..+$", var.rds_instance))
+    condition     = can(regex("^db\\.(t3|m4|m5|r6i)\\..+$", var.rds_instance))
     error_message = "Instance type for rds is not valid."
   }
 }
@@ -375,6 +417,24 @@ variable "rds_backups_replication_retention_period" {
   description = "RDS backup replication retention period"
 }
 
+variable "rds_maintenance_window" {
+  type        = string
+  default     = "Mon:00:00-Mon:03:00"
+  description = "RDS maintenance window"
+}
+
+variable "rds_backup_window" {
+  type        = string
+  default     = "03:00-06:00"
+  description = "RDS backup window"
+}
+
+variable "rds_multi_az" {
+  type        = bool
+  default     = false
+  description = "RDS instance in multiple AZ's"
+}
+
 variable "create_rds_kms_key" {
   type        = bool
   default     = true
@@ -397,6 +457,18 @@ variable "database_name" {
   type        = string
   default     = "datafold"
   description = "RDS database name"
+}
+
+variable "db_subnet_group_name" {
+  type        = string
+  default     = ""
+  description = "The specific subnet group name to use"
+}
+
+variable "db_parameter_group_name" {
+  type        = string
+  default     = ""
+  description = "The specific parameter group name to associate"
 }
 
 variable "rds_ro_username" {
@@ -427,6 +499,12 @@ variable "apply_major_upgrade" {
   type        = bool
   default     = false
   description = "Sets the flag to allow AWS to apply major upgrade on the maintenance plan schedule."
+}
+
+variable "rds_performance_insights_enabled" {
+  type        = bool
+  default     = false
+  description = "RDS performance insights enabled or not"
 }
 
 variable "db_extra_parameters" {
@@ -473,6 +551,12 @@ variable "ebs_throughput" {
   type        = number
   default     = 1000
   description = "Throughput of EBS volume"
+}
+
+variable "s3_backup_bucket_name_override" {
+  type        = string
+  default     = ""
+  description = "Bucket name override."
 }
 
 # ┏━╸╻┏ ┏━┓

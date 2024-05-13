@@ -63,12 +63,15 @@ module "load_balancer" {
   lb_internal            = var.lb_internal
   lb_idle_timeout        = var.lb_idle_timeout
   backend_app_port       = var.backend_app_port
+  lb_deletion_protection = var.lb_deletion_protection
+  lb_name_override       = var.lb_name_override
+  lb_access_logs         = var.lb_access_logs
 }
 
 locals {
   default_node_pool = merge(var.managed_node_grp1,
     {
-      subnet_ids = [local.vpc_private_subnets[0]]
+      subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
       disk_size  = var.default_node_disk_size
       tags = {
           "k8s.io/cluster-autoscaler/enabled"                  = "true"
@@ -95,7 +98,7 @@ locals {
       max_size     = 1
       desired_size = 0
 
-      subnet_ids = [local.vpc_private_subnets[0]]
+      subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
       disk_size  = var.default_node_disk_size
       tags = {
           "k8s.io/cluster-autoscaler/enabled"                  = "true"
@@ -154,6 +157,7 @@ module "database" {
   source = "./modules/database"
 
   deployment_name                          = var.deployment_name
+  rds_identifier                           = var.rds_identifier
   provider_region                          = var.provider_region
   vpc_private_subnets                      = local.vpc_private_subnets
   rds_username                             = var.rds_username
@@ -162,10 +166,14 @@ module "database" {
   rds_max_allocated_storage                = var.rds_max_allocated_storage
   rds_backups_replication_target_region    = var.rds_backups_replication_target_region
   rds_backups_replication_retention_period = var.rds_backups_replication_retention_period
+  rds_backup_window                        = var.rds_backup_window
+  rds_maintenance_window                   = var.rds_maintenance_window
   create_rds_kms_key                       = var.create_rds_kms_key
   rds_kms_key_alias                        = var.rds_kms_key_alias
   use_default_rds_kms_key                  = var.use_default_rds_kms_key
   database_name                            = var.database_name
+  db_subnet_group_name                     = var.db_subnet_group_name
+  db_parameter_group_name                  = var.db_parameter_group_name
   rds_ro_username                          = var.rds_ro_username
   rds_version                              = var.rds_version
   rds_port                                 = var.rds_port
@@ -177,18 +185,20 @@ module "database" {
   rds_extra_tags                           = var.rds_extra_tags
   security_group_id                        = local.db_security_group_id
   db_extra_parameters                      = var.db_extra_parameters
+  rds_multi_az                             = var.rds_multi_az
 }
 
 module "clickhouse_backup" {
   source = "./modules/clickhouse_backup"
 
-  deployment_name           = var.deployment_name
-  clickhouse_s3_bucket      = var.clickhouse_s3_bucket
-  s3_clickhouse_backup_tags = var.s3_clickhouse_backup_tags
+  deployment_name                = var.deployment_name
+  clickhouse_s3_bucket           = var.clickhouse_s3_bucket
+  s3_clickhouse_backup_tags      = var.s3_clickhouse_backup_tags
+  s3_backup_bucket_name_override = var.s3_backup_bucket_name_override
 }
 
 resource "aws_ebs_volume" "clickhouse_data" {
-  availability_zone = local.azs[0]
+  availability_zone = local.azs[var.az_index]
   size              = var.clickhouse_data_size
   encrypted         = true
   type              = var.ebs_type
@@ -201,29 +211,29 @@ resource "aws_ebs_volume" "clickhouse_data" {
 }
 
 resource "aws_ebs_volume" "clickhouse_logs" {
-  availability_zone = local.azs[0]
+  availability_zone = local.azs[var.az_index]
   size              = var.clickhouse_logs_size
   encrypted         = true
   type              = var.ebs_type
   iops              = var.ebs_type != "gp2" ? var.ebs_iops : null
   throughput        = var.ebs_type != "gp2" ? var.ebs_throughput : null
 
-  tags = merge({
+  tags = {
     Name = "${var.deployment_name}-clickhouse-logs"
-  }, var.ebs_extra_tags)
+  }
 }
 
 resource "aws_ebs_volume" "redis_data" {
-  availability_zone = local.azs[0]
+  availability_zone = local.azs[var.az_index]
   size              = var.redis_data_size
   encrypted         = true
   type              = var.ebs_type
   iops              = var.ebs_type != "gp2" ? var.ebs_iops : null
   throughput        = var.ebs_type != "gp2" ? var.ebs_throughput : null
 
-  tags = merge({
+  tags = {
     Name = "${var.deployment_name}-redis-data"
-  }, var.ebs_extra_tags)
+  }
 }
 
 resource "random_password" "clickhouse_password" {
