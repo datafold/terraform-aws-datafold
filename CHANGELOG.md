@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.4.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.3.0...v1.4.0) (2024-05-13)
+
+
+### Features
+
+* Add capability to deploy multiple VPC endpoints ([0c3cf6c](https://github.com/datafold/terraform-aws-datafold/commit/0c3cf6c5e726a087a8602e2d525f43c4ae7f8de4))
+
 ## [1.3.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.2.0...v1.3.0) (2024-04-30)
 
 
