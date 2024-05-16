@@ -37,10 +37,22 @@ variable "alb_certificate_domain" {
   EOT
 }
 
+variable "lb_name_override" {
+  type        = string
+  default     = ""
+  description = "An optional override for the name of the load balancer"
+}
+
 variable "lb_internal" {
   type        = bool
   default     = false
   description = "Flag if the application LB is internal, needed for some VPN setups."
+}
+
+variable "lb_deletion_protection" {
+  type        = bool
+  default     = true
+  description = "Flag if the load balancer can be deleted or not."
 }
 
 variable "lb_idle_timeout" {
@@ -53,4 +65,10 @@ variable "backend_app_port" {
   type        = number
   default     = 80
   description = "The target port to use for the backend services"
+}
+
+variable "lb_access_logs" {
+  type        = map(string)
+  default     = {}
+  description = "Load balancer access logs configuration."
 }

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "clickhouse_backup" {
-  bucket = "${var.deployment_name}-${var.clickhouse_s3_bucket}"
+  bucket = var.s3_backup_bucket_name_override == "" ? "${var.deployment_name}-${var.clickhouse_s3_bucket}" : var.s3_backup_bucket_name_override
   tags   = var.s3_clickhouse_backup_tags
 }
 

@@ -91,7 +91,7 @@ resource "helm_release" "datafold_crds" {
   namespace = local.namespace
   repository = "https://charts.datafold.com"
   chart = "datafold-crds"
-  version = "0.1.1"
+  version = local.crd_version
 }
 
 resource "helm_release" "datadog" {

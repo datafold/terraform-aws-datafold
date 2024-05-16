@@ -13,7 +13,7 @@ module "db" {
   count      = 1
   source     = "terraform-aws-modules/rds/aws"
   version    = "~> 6.0.0"
-  identifier = var.deployment_name
+  identifier = var.rds_identifier == "" ? var.deployment_name : var.rds_identifier
 
   # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
   engine               = "postgres"
@@ -39,14 +39,18 @@ module "db" {
   password                    = random_password.rds_master_password.result
   port                        = var.rds_port
 
-  multi_az               = false
-  create_db_subnet_group = true
-  subnet_ids             = var.vpc_private_subnets
-  vpc_security_group_ids = [var.security_group_id]
-
+  multi_az                        = var.rds_multi_az
+  create_db_subnet_group          = true
+  db_subnet_group_use_name_prefix = var.db_subnet_group_name == "" ? true : false
+  db_subnet_group_name            = var.db_subnet_group_name
+  subnet_ids                      = var.vpc_private_subnets
+  vpc_security_group_ids          = [var.security_group_id]
+  parameter_group_name            = var.db_parameter_group_name
+  parameter_group_use_name_prefix = var.db_parameter_group_name == "" ? true : false
+  create_db_parameter_group       = var.db_parameter_group_name == "" ? true : false
   apply_immediately               = true
-  maintenance_window              = "Mon:00:00-Mon:03:00"
-  backup_window                   = "03:00-06:00"
+  maintenance_window              = var.rds_maintenance_window
+  backup_window                   = var.rds_backup_window
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
   # Only uncomment this if ever a restore needs to happen
@@ -60,7 +64,7 @@ module "db" {
   skip_final_snapshot     = false
   deletion_protection     = true
 
-  performance_insights_enabled = false
+  performance_insights_enabled = var.rds_performance_insights_enabled
   create_monitoring_role       = false
 
   parameters = concat([
