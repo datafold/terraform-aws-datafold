@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.5.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.4.0...v1.5.0) (2024-05-16)
+
+
+### Features
+
+* Add more variables to support overrides and more ([261d97d](https://github.com/datafold/terraform-aws-datafold/commit/261d97d4bc0bb4575ffe0b6d9999c39566ab80f0))
+
 ## [1.4.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.3.0...v1.4.0) (2024-05-13)
 
 
