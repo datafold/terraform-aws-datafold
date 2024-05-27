@@ -44,11 +44,13 @@ module "security" {
   dns_egress_cidrs          = var.dns_egress_cidrs
   backend_app_port          = var.backend_app_port
   sg_tags                   = var.sg_tags
+  lb_deploy_nlb             = var.lb_deploy_nlb
 }
 
 locals {
   lb_security_group_id = module.security.lb_security_group_id
   db_security_group_id = module.security.db_security_group_id
+  vpces_sec_group_id   = module.security.vpces_sec_group_id
 }
 
 module "load_balancer" {
@@ -56,6 +58,7 @@ module "load_balancer" {
 
   deployment_name        = var.deployment_name
   vpc_id                 = local.vpc_id
+  vpc_cidr               = var.vpc_cidr
   vpc_public_subnets     = local.vpc_public_subnets
   security_group_id      = local.lb_security_group_id
   create_ssl_cert        = var.create_ssl_cert
@@ -66,6 +69,10 @@ module "load_balancer" {
   lb_deletion_protection = var.lb_deletion_protection
   lb_name_override       = var.lb_name_override
   lb_access_logs         = var.lb_access_logs
+  lb_deploy_nlb          = var.lb_deploy_nlb
+  lb_vpces_details       = var.lb_vpces_details
+
+  vpces_security_group_id = local.vpces_sec_group_id
 }
 
 locals {

@@ -3,8 +3,7 @@ output "target_group_arn" {
 }
 
 output "load_balancer_ips" {
-  value = jsonencode([for eni in data.aws_network_interface.lb_app : format("%s", eni.association[0].public_ip)])
-  # value = [for eni in data.aws_network_interface.lb_app : format("\"%s\"", eni.association[0].public_ip)]
+  value = local.lb_ips
 }
 
 output "domain_name" {

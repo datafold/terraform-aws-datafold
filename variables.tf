@@ -256,6 +256,7 @@ variable "vpce_details" {
   description = "Endpoint names to define with security group rule definitions"
 }
 
+
 #  ┏━┓┏━╸┏━╸╻ ╻┏━┓╻╺┳╸╻ ╻   ┏━╸┏━┓┏━┓╻ ╻┏━┓┏━┓
 #  ┗━┓┣╸ ┃  ┃ ┃┣┳┛┃ ┃ ┗┳┛   ┃╺┓┣┳┛┃ ┃┃ ┃┣━┛┗━┓
 #  ┗━┛┗━╸┗━╸┗━┛╹┗╸╹ ╹  ╹    ┗━┛╹┗╸┗━┛┗━┛╹  ┗━┛
@@ -361,6 +362,47 @@ variable "lb_access_logs" {
   type        = map(string)
   default     = {}
   description = "Load balancer access logs configuration."
+}
+
+variable "lb_deploy_nlb" {
+  type        = bool
+  default     = false
+  description = "Flag if the network load balancer should be deployed (usually for incoming private link)."
+}
+
+variable "lb_vpces_ingress_rules" {
+  default = []
+  type = list(object({
+       description = string
+       from_port   = number
+       to_port     = number
+       protocol    = string
+       cidr_blocks = string
+    }))
+  description = "Ingress security group rules"
+}
+
+variable "lb_vpces_egress_rules" {
+  default = []
+  type = list(object({
+       description = string
+       from_port   = number
+       to_port     = number
+       protocol    = string
+       cidr_blocks = string
+    }))
+  description = "Egress security group rules"
+}
+
+variable "lb_vpces_details" {
+  default = null
+  type = object({
+    allowed_principals  = list(string)
+    private_dns_name    = string
+
+    supported_ip_address_types = list(string)
+  })
+  description = "Endpoint service to define for internal traffic over private link"
 }
 
 #  ╺┳┓┏━┓╺┳╸┏━┓┏┓ ┏━┓┏━┓┏━╸

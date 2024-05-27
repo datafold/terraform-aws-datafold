@@ -70,3 +70,9 @@ variable "backend_app_port" {
   type        = number
   description = "The target port to use for the backend services"
 }
+
+variable "lb_deploy_nlb" {
+  type        = bool
+  default     = true
+  description = "Flag if the network load balancer should be deployed (usually for incoming private link)."
+}
