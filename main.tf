@@ -186,6 +186,11 @@ module "database" {
   security_group_id                        = local.db_security_group_id
   db_extra_parameters                      = var.db_extra_parameters
   rds_multi_az                             = var.rds_multi_az
+  rds_copy_tags_to_snapshot                = var.rds_copy_tags_to_snapshot
+  rds_performance_insights_enabled         = var.rds_performance_insights_enabled
+  rds_performance_insights_retention_period= var.rds_performance_insights_retention_period
+  rds_auto_minor_version_upgrade           = var.rds_auto_minor_version_upgrade
+  rds_monitoring_interval                  = var.rds_monitoring_interval
 }
 
 module "clickhouse_backup" {

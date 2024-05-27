@@ -24,6 +24,7 @@ module "db" {
   ca_cert_identifier   = "rds-ca-rsa2048-g1"
 
   allow_major_version_upgrade = var.apply_major_upgrade
+  auto_minor_version_upgrade  = var.rds_auto_minor_version_upgrade
 
   allocated_storage     = var.rds_allocated_storage
   max_allocated_storage = var.rds_max_allocated_storage
@@ -38,6 +39,7 @@ module "db" {
   manage_master_user_password = false
   password                    = random_password.rds_master_password.result
   port                        = var.rds_port
+  copy_tags_to_snapshot       = var.rds_copy_tags_to_snapshot
 
   multi_az                        = var.rds_multi_az
   create_db_subnet_group          = true
@@ -66,6 +68,9 @@ module "db" {
 
   performance_insights_enabled = var.rds_performance_insights_enabled
   create_monitoring_role       = false
+  monitoring_interval          = var.rds_monitoring_interval
+
+  performance_insights_retention_period = var.rds_performance_insights_retention_period
 
   parameters = concat([
     {

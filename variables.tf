@@ -384,11 +384,11 @@ variable "rds_instance" {
   default     = "db.t3.medium"
   description = <<-EOT
     EC2 insance type for PostgreSQL RDS database.
-    Available instance groups: t3, m4, m5, r6i.
+    Available instance groups: t3, m4, m5, r6i, m6i
     Available instance classes: medium and higher.
   EOT
   validation {
-    condition     = can(regex("^db\\.(t3|m4|m5|r6i)\\..+$", var.rds_instance))
+    condition     = can(regex("^db\\.(t3|m4|m5|r6i|m6i)\\..+$", var.rds_instance))
     error_message = "Instance type for rds is not valid."
   }
 }
@@ -511,6 +511,30 @@ variable "db_extra_parameters" {
   type        = list
   default     = []
   description = "List of map of extra variables to apply to the RDS database parameter group"
+}
+
+variable "rds_copy_tags_to_snapshot" {
+  type        = bool
+  default     = false
+  description = "To copy tags to snapshot or not"
+}
+
+variable "rds_performance_insights_retention_period" {
+  type        = number
+  default     = 7
+  description = "RDS performance insights retention period"
+}
+
+variable "rds_auto_minor_version_upgrade" {
+  type        = bool
+  default     = false
+  description = "Sets a flag to upgrade automatically all minor versions"
+}
+
+variable "rds_monitoring_interval" {
+  type        = number
+  default     = 0
+  description = "RDS monitoring interval"
 }
 
 #  ┏━╸╻  ╻┏━╸╻┏ ╻ ╻┏━┓╻ ╻┏━┓┏━╸
