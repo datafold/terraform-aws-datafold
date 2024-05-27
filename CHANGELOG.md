@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.5.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.5.0...v1.5.1) (2024-05-27)
+
+
+### Bug Fixes
+
+* Add missing RDS attributes ([2f25bcd](https://github.com/datafold/terraform-aws-datafold/commit/2f25bcdf9cba0f1023e78df3f29d377e831c765a))
+
 ## [1.5.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.4.0...v1.5.0) (2024-05-16)
 
 
