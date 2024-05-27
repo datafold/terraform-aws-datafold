@@ -13,6 +13,16 @@ variable "vpc_id" {
   description = "Provide ID of existing VPC if you want to omit creation of new one"
 }
 
+variable "vpc_cidr" {
+  type        = string
+  default     = "10.0.0.0/16"
+  description = "Network CIDR for VPC"
+  validation {
+    condition     = can(regex("^(?:(?:\\d{1,3}\\.?){4})\\/(\\d{1,2})$", var.vpc_cidr))
+    error_message = "Network CIDR must be a valid cidr."
+  }
+}
+
 variable "vpc_public_subnets" {
   type        = list(any)
   description = "List of private subnets to deploy the database in"
@@ -20,7 +30,7 @@ variable "vpc_public_subnets" {
 
 variable "security_group_id" {
   type        = string
-  description = "The security group to assign to the database"
+  description = "The security group to assign to the load balancer"
 }
 
 variable "create_ssl_cert" {
@@ -71,4 +81,51 @@ variable "lb_access_logs" {
   type        = map(string)
   default     = {}
   description = "Load balancer access logs configuration."
+}
+
+variable "lb_deploy_nlb" {
+  type        = bool
+  default     = false
+  description = "Flag if the network load balancer should be deployed (usually for incoming private link)."
+}
+
+variable "vpces_security_group_id" {
+  type        = string
+  default     = ""
+  description = "The security group to assign to the VPCES"
+}
+
+variable "lb_vpces_ingress_rules" {
+  default = []
+  type = list(object({
+       description = string
+       from_port   = number
+       to_port     = number
+       protocol    = string
+       cidr_blocks = string
+    }))
+  description = "Ingress security group rules"
+}
+
+variable "lb_vpces_egress_rules" {
+  default = []
+  type = list(object({
+       description = string
+       from_port   = number
+       to_port     = number
+       protocol    = string
+       cidr_blocks = string
+    }))
+  description = "Egress security group rules"
+}
+
+variable "lb_vpces_details" {
+  default = null
+  type = object({
+    allowed_principals  = list(string)
+    private_dns_name    = string
+
+    supported_ip_address_types = list(string)
+  })
+  description = "Endpoint service to define for internal traffic over private link"
 }

@@ -46,3 +46,24 @@ module "load_balancer_sg" {
 
   tags = var.sg_tags
 }
+
+module "vpces_sg" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.3.0"
+
+  name   = "${var.deployment_name}-nlb-sg"
+  vpc_id = var.vpc_id
+
+  tags = var.sg_tags
+}
+
+locals {
+  vpce_security_group_id = (
+    try(
+      module.vpces_sg[0].security_group_id,
+      ""
+    )
+  )
+}

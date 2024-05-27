@@ -1,3 +1,7 @@
+locals {
+  nlb_port = "443"
+}
+
 resource "aws_acm_certificate" "alb" {
   count = var.create_ssl_cert ? 1 : 0
 
@@ -117,4 +121,104 @@ data "aws_network_interface" "lb_app" {
     name   = "subnet-id"
     values = [split(",", local.vpc_public_subnets_joined)[count.index]]
   }
+}
+
+locals {
+  lb_ips = var.lb_internal ? jsonencode([for eni in data.aws_network_interface.lb_app : format("%s", eni.private_ip)]) : jsonencode([for eni in data.aws_network_interface.lb_app : format("%s", eni.association[0].public_ip)])
+}
+
+resource "aws_lb_target_group" "nlb_alb_target" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  name        = "${var.deployment_name}-nlb-to-alb"
+  target_type = "alb"
+  port        = local.nlb_port
+  protocol    = "TCP"
+  vpc_id      = var.vpc_id
+}
+
+resource "aws_lb" "vpces_nlb" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  name               = "${var.deployment_name}-nlb"
+  internal           = true
+  load_balancer_type = "network"
+  subnets            = var.vpc_public_subnets
+  security_groups    = [var.vpces_security_group_id]
+
+  enable_cross_zone_load_balancing = true
+  enable_deletion_protection = true
+
+  enforce_security_group_inbound_rules_on_private_link_traffic = "on"
+}
+
+resource "aws_lb_listener" "nlb_front_end" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  load_balancer_arn = aws_lb.vpces_nlb[0].arn
+  port              = local.nlb_port
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = resource.aws_lb_target_group.nlb_alb_target[0].arn
+  }
+}
+
+resource "aws_lb_target_group_attachment" "attachment-alb-nlb-tg" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  target_group_arn = aws_lb_target_group.nlb_alb_target[0].arn
+  target_id        = module.alb_app.lb_arn
+  port             = local.nlb_port
+}
+
+#  ┏━┓┏━╸┏━╸╻ ╻┏━┓╻╺┳╸╻ ╻
+#  ┗━┓┣╸ ┃  ┃ ┃┣┳┛┃ ┃ ┗┳┛
+#  ┗━┛┗━╸┗━╸┗━┛╹┗╸╹ ╹  ╹
+
+resource "aws_security_group_rule" "nlb_ingress" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  type                     = "ingress"
+  from_port                = local.nlb_port
+  to_port                  = local.nlb_port
+  protocol                 = "tcp"
+  security_group_id        = var.vpces_security_group_id
+  cidr_blocks              = [var.vpc_cidr]
+  description              = "Allows traffic from VPCES to ALB"
+
+  depends_on = [
+    resource.aws_lb.vpces_nlb[0]
+  ]
+}
+
+resource "aws_security_group_rule" "nlb_egress" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  type                     = "egress"
+  from_port                = local.nlb_port
+  to_port                  = local.nlb_port
+  protocol                 = "tcp"
+  security_group_id        = var.vpces_security_group_id
+  cidr_blocks              = [var.vpc_cidr]
+  description              = "Allows traffic from NLB to ALB"
+
+  depends_on = [
+    resource.aws_lb.vpces_nlb[0]
+  ]
+}
+
+# ╻ ╻┏━┓┏━╸┏━╸┏━┓
+# ┃┏┛┣━┛┃  ┣╸ ┗━┓
+# ┗┛ ╹  ┗━╸┗━╸┗━┛
+
+resource "aws_vpc_endpoint_service" "vpces" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  acceptance_required        = true
+  network_load_balancer_arns = [resource.aws_lb.vpces_nlb[0].arn]
+  allowed_principals         = var.lb_vpces_details.allowed_principals
+  private_dns_name           = var.lb_vpces_details.private_dns_name
+  supported_ip_address_types = var.lb_vpces_details.supported_ip_address_types
 }
