@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.6.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.5.1...v1.6.0) (2024-05-27)
+
+
+### Features
+
+* Set up privatelink to force traffic over VPCES ([2af562c](https://github.com/datafold/terraform-aws-datafold/commit/2af562c3b8a4af95bb6988a787b28a2ee1b941a6))
+
 ### [1.5.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.5.0...v1.5.1) (2024-05-27)
 
 
