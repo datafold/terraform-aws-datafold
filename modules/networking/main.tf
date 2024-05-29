@@ -184,7 +184,7 @@ resource "aws_vpc_endpoint" "vpce" {
       module.vpce_sg[each.key].security_group_id,
   ]
 
-  subnet_ids          = [coalesce(each.value.subnet_id, local.vpc_private_subnets[0])]
+  subnet_ids          = coalescelist(each.value.subnet_ids, local.vpc_private_subnets)
   private_dns_enabled = each.value.private_dns_enabled
 
   depends_on = [

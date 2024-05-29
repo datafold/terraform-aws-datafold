@@ -119,17 +119,17 @@ variable "deployment_name" {
 
 variable "vpce_details" {
   type = map(object({
-    vpces_service_name = string
-    subnet_id           = optional(string, "")
+    vpces_service_name  = string
+    subnet_ids          = optional(list(string), [])
     private_dns_enabled = optional(bool, true)
-    input_rules        = list(object({
+    input_rules         = list(object({
        description = string
        from_port   = number
        to_port     = number
        protocol    = string
        cidr_blocks = string
     }))
-    output_rules      = list(object({
+    output_rules        = list(object({
        description = string
        from_port   = number
        to_port     = number
