@@ -216,7 +216,7 @@ resource "aws_security_group_rule" "nlb_egress" {
 resource "aws_vpc_endpoint_service" "vpces" {
   count = var.lb_deploy_nlb ? 1 : 0
 
-  acceptance_required        = true
+  acceptance_required        = var.lb_vpces_details.acceptance_required
   network_load_balancer_arns = [resource.aws_lb.vpces_nlb[0].arn]
   allowed_principals         = var.lb_vpces_details.allowed_principals
   private_dns_name           = var.lb_vpces_details.private_dns_name
