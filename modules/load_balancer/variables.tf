@@ -95,30 +95,6 @@ variable "vpces_security_group_id" {
   description = "The security group to assign to the VPCES"
 }
 
-variable "lb_vpces_ingress_rules" {
-  default = []
-  type = list(object({
-       description = string
-       from_port   = number
-       to_port     = number
-       protocol    = string
-       cidr_blocks = string
-    }))
-  description = "Ingress security group rules"
-}
-
-variable "lb_vpces_egress_rules" {
-  default = []
-  type = list(object({
-       description = string
-       from_port   = number
-       to_port     = number
-       protocol    = string
-       cidr_blocks = string
-    }))
-  description = "Egress security group rules"
-}
-
 variable "lb_vpces_details" {
   default = null
   type = object({

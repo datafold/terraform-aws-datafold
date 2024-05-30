@@ -235,7 +235,7 @@ variable "vpce_details" {
   default = {}
   type = map(object({
     vpces_service_name  = string
-    subnet_id           = optional(string, "")
+    subnet_ids          = optional(list(string), [])
     private_dns_enabled = optional(bool, true)
 
     input_rules        = list(object({
@@ -368,30 +368,6 @@ variable "lb_deploy_nlb" {
   type        = bool
   default     = false
   description = "Flag if the network load balancer should be deployed (usually for incoming private link)."
-}
-
-variable "lb_vpces_ingress_rules" {
-  default = []
-  type = list(object({
-       description = string
-       from_port   = number
-       to_port     = number
-       protocol    = string
-       cidr_blocks = string
-    }))
-  description = "Ingress security group rules"
-}
-
-variable "lb_vpces_egress_rules" {
-  default = []
-  type = list(object({
-       description = string
-       from_port   = number
-       to_port     = number
-       protocol    = string
-       cidr_blocks = string
-    }))
-  description = "Egress security group rules"
 }
 
 variable "lb_vpces_details" {
