@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.1...v1.6.2) (2024-05-30)
+
+
+### Bug Fixes
+
+* Remove unneeded security rules for VPCES that are auto-generated ([70329e3](https://github.com/datafold/terraform-aws-datafold/commit/70329e36bb27e8c82bff0db1f7814cfc80f34254))
+
 ### [1.6.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.0...v1.6.1) (2024-05-30)
 
 
