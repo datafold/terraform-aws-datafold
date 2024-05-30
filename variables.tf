@@ -375,6 +375,7 @@ variable "lb_vpces_details" {
   type = object({
     allowed_principals  = list(string)
     private_dns_name    = string
+    acceptance_required = bool
 
     supported_ip_address_types = list(string)
   })
