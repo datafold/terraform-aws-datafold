@@ -30,6 +30,7 @@ locals {
   vpc_public_subnets  = module.networking.vpc_public_subnets
   vpc_private_subnets = module.networking.vpc_private_subnets
   azs                 = module.networking.azs
+  vpc_cidr            = module.networking.vpc_cidr
 }
 
 module "security" {
@@ -37,7 +38,7 @@ module "security" {
 
   deployment_name           = var.deployment_name
   vpc_id                    = local.vpc_id
-  vpc_cidr                  = var.vpc_cidr
+  vpc_cidr                  = local.vpc_cidr
   whitelisted_ingress_cidrs = var.whitelisted_ingress_cidrs
   whitelisted_egress_cidrs  = var.whitelisted_egress_cidrs
   ingress_enable_http_sg    = var.ingress_enable_http_sg
@@ -58,7 +59,7 @@ module "load_balancer" {
 
   deployment_name        = var.deployment_name
   vpc_id                 = local.vpc_id
-  vpc_cidr               = var.vpc_cidr
+  vpc_cidr               = local.vpc_cidr
   vpc_public_subnets     = local.vpc_public_subnets
   security_group_id      = local.lb_security_group_id
   create_ssl_cert        = var.create_ssl_cert
