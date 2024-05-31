@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.2...v1.6.3) (2024-05-31)
+
+
+### Bug Fixes
+
+* Use the correct CIDR block when creating sec rules ([d0cd6b8](https://github.com/datafold/terraform-aws-datafold/commit/d0cd6b86e7cf81bc30d61eecc70c2128786641b5))
+
 ### [1.6.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.1...v1.6.2) (2024-05-30)
 
 
