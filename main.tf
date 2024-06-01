@@ -23,6 +23,7 @@ module "networking" {
   vpc_tags                           = var.vpc_tags
   sg_tags                            = var.sg_tags
   vpce_details                       = var.vpce_details
+  vpc_exclude_az_ids                 = var.vpc_exclude_az_ids
 }
 
 locals {

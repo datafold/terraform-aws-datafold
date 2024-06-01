@@ -75,6 +75,37 @@ Setting up the infrastructure:
   * Check the settings made in the `main.tf` file. Maybe you want to set "datadog.install" to `false`. 
   * Check with your favourite kubernetes tool if you see the namespace and several datafold pods running there.
 
+## About subnets and where they get created
+
+The module by default deploys in two availability zones. This is because by default, the subnets
+for private and public CIDR ranges have a list of two cidr ranges specified.
+
+The AZ in which things get deployed depends on which AZ's get selected and in which order. This is an
+alphabetical ordering. In us-east this could be as many as 6 AZ's.
+
+What the module does is sort the AZs and then it will iteratively deploy a public / private subnet specifying
+it's AZ in the module. Thus:
+
+- [10.0.0.0/24] will get deployed in us-east-1a
+- [10.0.1.0/24] will get deployed in us-east-1b
+
+To deploy to three AZ's, you should override the public/private subnet settings. Then it will iterate across
+3 elements, but the order of the AZ's will be the same by default.
+
+You can add an "exclusion list" to the AZ ID's. The AZ ID is not the same as the AZ name. The AZ name on AWS
+is shuffled between their actual location across all AWS accounts. This means that your us-east-1a might be
+use1-az1 for you, but it might be use1-az4 for an account elsewhere. So if you need to match AZ's, you should
+match Availability zone ID's, not Availability zone names. The AZ ID is visible in the EC2 screen in the 
+"settings" screen. There you see a list of enabled AZ's, their ID and their name.
+
+To specifically select particular AZ ID's, exclude the ones you do not want in the az_id_exclude_filter. 
+This is a list. That way, you can restrict this to only AZ's you want. Unfortunately it is an exclude filter
+and not an include filter. That means if AWS adds additional AZ's, it could create replacements for a future AZ.
+
+Good news is that when there letters in use, I'd expect those letters to be maintained per AZ ID once they exist.
+Just for new accounts these can be shuffled all over again. So from terraform state perspective, things should
+be consistent at least.
+
 <!-- BEGIN_TF_DOCS -->
 
 ## Requirements

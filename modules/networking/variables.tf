@@ -159,3 +159,9 @@ variable "sg_tags" {
   type    = map(any)
   default = {}
 }
+
+variable "vpc_exclude_az_ids" {
+  type        = list(string)
+  default     = []
+  description = "AZ IDs to exclude from availability zones"
+}

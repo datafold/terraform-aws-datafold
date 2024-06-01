@@ -27,6 +27,8 @@ locals {
 
 data "aws_availability_zones" "available" {
   state = "available"
+
+  exclude_zone_ids = var.vpc_exclude_az_ids
 }
 
 resource "aws_eip" "nat_gateway" {

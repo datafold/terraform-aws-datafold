@@ -256,6 +256,11 @@ variable "vpce_details" {
   description = "Endpoint names to define with security group rule definitions"
 }
 
+variable "vpc_exclude_az_ids" {
+  type        = list(string)
+  default     = []
+  description = "AZ IDs to exclude from availability zones"
+}
 
 #  ┏━┓┏━╸┏━╸╻ ╻┏━┓╻╺┳╸╻ ╻   ┏━╸┏━┓┏━┓╻ ╻┏━┓┏━┓
 #  ┗━┓┣╸ ┃  ┃ ┃┣┳┛┃ ┃ ┗┳┛   ┃╺┓┣┳┛┃ ┃┃ ┃┣━┛┗━┓
