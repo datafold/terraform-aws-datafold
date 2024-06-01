@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.3...v1.6.4) (2024-06-01)
+
+
+### Bug Fixes
+
+* Use specific AZ's when VPC endpoints are in use ([cf88927](https://github.com/datafold/terraform-aws-datafold/commit/cf889278212d0d356f1f9c0b5407aaf22914c57d))
+
 ### [1.6.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.2...v1.6.3) (2024-05-31)
 
 
