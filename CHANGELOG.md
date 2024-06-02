@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.4...v1.6.5) (2024-06-02)
+
+
+### Bug Fixes
+
+* Adds variables to set EBS volume attributes separately. ([ea1aec9](https://github.com/datafold/terraform-aws-datafold/commit/ea1aec9227688db98d623eb640a3dfb480723d34))
+
 ### [1.6.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.3...v1.6.4) (2024-06-01)
 
 
