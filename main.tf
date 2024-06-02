@@ -216,8 +216,8 @@ resource "aws_ebs_volume" "clickhouse_data" {
   size              = var.clickhouse_data_size
   encrypted         = true
   type              = var.ebs_type
-  iops              = var.ebs_type != "gp2" ? var.ebs_iops : null
-  throughput        = var.ebs_type != "gp2" ? var.ebs_throughput : null
+  iops              = var.ebs_type != "gp2" ? var.ch_data_ebs_iops : null
+  throughput        = var.ebs_type != "gp2" ? var.ch_data_ebs_throughput : null
 
   tags = merge({
     Name = "${var.deployment_name}-clickhouse-data"
@@ -229,8 +229,8 @@ resource "aws_ebs_volume" "clickhouse_logs" {
   size              = var.clickhouse_logs_size
   encrypted         = true
   type              = var.ebs_type
-  iops              = var.ebs_type != "gp2" ? var.ebs_iops : null
-  throughput        = var.ebs_type != "gp2" ? var.ebs_throughput : null
+  iops              = var.ebs_type != "gp2" ? var.ch_logs_ebs_iops : null
+  throughput        = var.ebs_type != "gp2" ? var.ch_logs_ebs_throughput : null
 
   tags = {
     Name = "${var.deployment_name}-clickhouse-logs"
@@ -242,8 +242,8 @@ resource "aws_ebs_volume" "redis_data" {
   size              = var.redis_data_size
   encrypted         = true
   type              = var.ebs_type
-  iops              = var.ebs_type != "gp2" ? var.ebs_iops : null
-  throughput        = var.ebs_type != "gp2" ? var.ebs_throughput : null
+  iops              = var.ebs_type != "gp2" ? var.redis_ebs_iops : null
+  throughput        = var.ebs_type != "gp2" ? var.redis_ebs_throughput : null
 
   tags = {
     Name = "${var.deployment_name}-redis-data"

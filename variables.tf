@@ -586,18 +586,30 @@ variable "clickhouse_logs_size" {
 variable "ebs_type" {
   type        = string
   default     = "gp3"
-  description = "Type of EBS volume"
+  description = "Type for all EBS volumes"
 }
 
-variable "ebs_iops" {
+variable "ch_data_ebs_iops" {
   type        = number
   default     = 3000
   description = "IOPS of EBS volume"
 }
 
-variable "ebs_throughput" {
+variable "ch_data_ebs_throughput" {
   type        = number
   default     = 1000
+  description = "Throughput of EBS volume"
+}
+
+variable "ch_logs_ebs_iops" {
+  type        = number
+  default     = 3000
+  description = "IOPS of EBS volume"
+}
+
+variable "ch_logs_ebs_throughput" {
+  type        = number
+  default     = 250
   description = "Throughput of EBS volume"
 }
 
@@ -605,6 +617,22 @@ variable "s3_backup_bucket_name_override" {
   type        = string
   default     = ""
   description = "Bucket name override."
+}
+
+# ┏━┓┏━╸╺┳┓╻┏━┓
+# ┣┳┛┣╸  ┃┃┃┗━┓
+# ╹┗╸┗━╸╺┻┛╹┗━┛
+
+variable "redis_ebs_iops" {
+  type        = number
+  default     = 3000
+  description = "IOPS of EBS redis volume"
+}
+
+variable "redis_ebs_throughput" {
+  type        = number
+  default     = 125
+  description = "Throughput of EBS redis volume"
 }
 
 # ┏━╸╻┏ ┏━┓
