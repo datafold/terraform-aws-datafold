@@ -135,6 +135,11 @@ resource "aws_lb_target_group" "nlb_alb_target" {
   port        = local.nlb_port
   protocol    = "TCP"
   vpc_id      = var.vpc_id
+
+  health_check {
+    enabled = true
+    protocol = "HTTPS"
+  }
 }
 
 resource "aws_lb" "vpces_nlb" {
@@ -185,7 +190,7 @@ resource "aws_security_group_rule" "nlb_ingress" {
   to_port                  = local.nlb_port
   protocol                 = "tcp"
   security_group_id        = var.vpces_security_group_id
-  cidr_blocks              = [var.vpc_cidr]
+  cidr_blocks              = ["0.0.0.0/0"]
   description              = "Allows traffic from VPCES to ALB"
 
   depends_on = [
