@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.6](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.5...v1.6.6) (2024-06-04)
+
+
+### Bug Fixes
+
+* Allow dns_name for vpces to be optional ([e38ef0e](https://github.com/datafold/terraform-aws-datafold/commit/e38ef0e6c1e9cd39354329022493a60c4ca7cd8c))
+
 ### [1.6.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.4...v1.6.5) (2024-06-02)
 
 
