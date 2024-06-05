@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.7](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.6...v1.6.7) (2024-06-05)
+
+
+### Bug Fixes
+
+* Fixes health check and filter rule from VPCES to NLB ([5d1c3e4](https://github.com/datafold/terraform-aws-datafold/commit/5d1c3e471e2d8f2ad80e711c4f586185a2c35b08))
+
 ### [1.6.6](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.5...v1.6.6) (2024-06-04)
 
 
