@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.8](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.7...v1.6.8) (2024-06-06)
+
+
+### Bug Fixes
+
+* Authenticate through API only ([bfc8d11](https://github.com/datafold/terraform-aws-datafold/commit/bfc8d11a3e3a7f68ae52a7b3d62440213a030e2a))
+
 ### [1.6.7](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.6...v1.6.7) (2024-06-05)
 
 
