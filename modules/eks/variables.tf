@@ -73,31 +73,6 @@ variable "managed_node_grps" {
   type = any
 }
 
-variable "create_aws_auth_configmap" {
-  type    = bool
-  default = false
-}
-
-variable "manage_aws_auth_configmap" {
-  type    = bool
-  default = false
-}
-
-variable "aws_auth_users" {
-  type    = list(any)
-  default = []
-}
-
-variable "aws_auth_accounts" {
-  type    = list(any)
-  default = []
-}
-
-variable "aws_auth_roles" {
-  type    = list(any)
-  default = []
-}
-
 variable "tags" {
   type    = any
   default = {}

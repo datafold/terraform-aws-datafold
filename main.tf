@@ -152,11 +152,6 @@ module "eks" {
   managed_node_grp_default            = var.managed_node_grp_default
   managed_node_grps                   = local.managed_node_groups
 
-  create_aws_auth_configmap           = var.create_aws_auth_configmap
-  manage_aws_auth_configmap           = var.manage_aws_auth_configmap
-  aws_auth_users                      = var.aws_auth_users
-  aws_auth_accounts                   = var.aws_auth_accounts
-  aws_auth_roles                      = var.aws_auth_roles
   tags                                = var.tags
   backend_app_port                    = var.backend_app_port
   rds_port                            = var.rds_port

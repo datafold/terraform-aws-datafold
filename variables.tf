@@ -692,36 +692,6 @@ variable "default_node_disk_size" {
   description = "Disk size for a node in GB"
 }
 
-variable "create_aws_auth_configmap" {
-  type    = bool
-  default = false
-  description = "Whether to create the AWS authentication configmap"
-}
-
-variable "manage_aws_auth_configmap" {
-  type    = bool
-  default = false
-  description = "Determines whether to manage the aws-auth configmap"
-}
-
-variable "aws_auth_users" {
-  type    = list(any)
-  default = []
-  description = "List of user maps to add to the aws-auth configmap"
-}
-
-variable "aws_auth_accounts" {
-  type    = list(any)
-  default = []
-  description = "List of account maps to add to the aws-auth configmap"
-}
-
-variable "aws_auth_roles" {
-  type    = list(any)
-  default = []
-  description = "List of role maps to add to the aws-auth configmap"
-}
-
 variable "tags" {
   type    = any
   default = {}
