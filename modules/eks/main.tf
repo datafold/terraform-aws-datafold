@@ -47,7 +47,7 @@ module "eks" {
   # https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/docs
 
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.21.0"
+  version = "~> 20.13.1"
   # version = var.eks_module_version
 
   cluster_name    = var.deployment_name
@@ -83,6 +83,7 @@ module "eks" {
   vpc_id                   = var.k8s_vpc
   subnet_ids               = var.k8s_subnets
   control_plane_subnet_ids = var.k8s_control_subnets
+  authentication_mode      = "API"
 
   # Self Managed Node Group(s)
   self_managed_node_group_defaults = var.self_managed_node_grp_default
@@ -96,20 +97,22 @@ module "eks" {
 
   eks_managed_node_groups = var.managed_node_grps
 
-  # aws-auth configmap
-  create_aws_auth_configmap = var.create_aws_auth_configmap
-  manage_aws_auth_configmap = var.manage_aws_auth_configmap
-
-  aws_auth_roles = concat([
-    {
-      rolearn  = aws_iam_role.eks_cluster_role.arn
-      username = "eks_cluster_role"
-      groups   = ["system:masters"]
-    },
-  ], var.aws_auth_roles)
-
-  aws_auth_users    = var.aws_auth_users
-  aws_auth_accounts = var.aws_auth_accounts
+#  access_entries = {
+#    allow_support_access = {
+#      kubernetes_groups = []
+#      principal_arn     = resource.aws_iam_role.eks_support_role.arn  (# from cloud-infra)
+#
+#      policy_associations = {
+#        single = {
+#          policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+#          access_scope = {
+#            namespaces = []
+#            type       = "cluster"
+#          }
+#        }
+#      }
+#    }
+#  }
 
   tags = var.tags
 }
