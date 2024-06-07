@@ -88,3 +88,8 @@ variable "rds_port" {
   default     = 5432
   description = "RDS port"
 }
+
+variable "k8s_public_access_cidrs" {
+  type        = list(string)
+  description = "List of CIDRs that are allowed to connect to the EKS control plane"
+}

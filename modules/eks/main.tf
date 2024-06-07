@@ -54,6 +54,7 @@ module "eks" {
   cluster_version = var.k8s_cluster_version
 
   cluster_endpoint_public_access = true
+  cluster_endpoint_public_access_cidrs = var.k8s_public_access_cidrs
 
   enable_irsa = true
 

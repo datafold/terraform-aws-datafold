@@ -697,3 +697,8 @@ variable "tags" {
   default = {}
   description = "Tags to apply to the general module"
 }
+
+variable "k8s_public_access_cidrs" {
+  type        = list(string)
+  description = "List of CIDRs that are allowed to connect to the EKS control plane"
+}
