@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.9](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.8...v1.6.9) (2024-06-07)
+
+
+### Bug Fixes
+
+* Restrict IP access to control plane ([e3ef854](https://github.com/datafold/terraform-aws-datafold/commit/e3ef8542938e28c70dfa89a31c39925133481af1))
+
 ### [1.6.8](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.7...v1.6.8) (2024-06-06)
 
 
