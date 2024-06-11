@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.10](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.9...v1.6.10) (2024-06-11)
+
+
+### Bug Fixes
+
+* Set correct name for bucket ([f218995](https://github.com/datafold/terraform-aws-datafold/commit/f218995cd59ba7509476a26fb27cd5a17eb8424a))
+
 ### [1.6.9](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.8...v1.6.9) (2024-06-07)
 
 
