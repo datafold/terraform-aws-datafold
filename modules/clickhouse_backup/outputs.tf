@@ -1,5 +1,5 @@
 output "clickhouse_s3_bucket" {
-  value = "${var.deployment_name}-${var.clickhouse_s3_bucket}"
+  value =  resource.aws_s3_bucket.clickhouse_backup.id
 }
 
 output "clickhouse_s3_region" {
