@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.11](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.10...v1.6.11) (2024-06-24)
+
+
+### Bug Fixes
+
+* Enable network policies by default ([25bf397](https://github.com/datafold/terraform-aws-datafold/commit/25bf397e0c9839d816b079dcd68144b245cc1100))
+
 ### [1.6.10](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.9...v1.6.10) (2024-06-11)
 
 
