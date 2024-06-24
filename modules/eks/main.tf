@@ -67,6 +67,10 @@ module "eks" {
     },
     vpc-cni = {
       most_recent = true
+
+      configuration_values = jsonencode({
+        enableNetworkPolicy : "true",
+      })
     },
     aws-ebs-csi-driver = {
       service_account_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.deployment_name}-ebs-csi-controller"
