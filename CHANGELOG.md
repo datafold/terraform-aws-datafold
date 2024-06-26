@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.6.12](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.11...v1.6.12) (2024-06-26)
+
+
+### Bug Fixes
+
+* Apply a modern security policy to eliminate weak ciphers ([3d8b254](https://github.com/datafold/terraform-aws-datafold/commit/3d8b254f2fdf8661322575f80568ec210e15f501))
+
 ### [1.6.11](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.10...v1.6.11) (2024-06-24)
 
 
