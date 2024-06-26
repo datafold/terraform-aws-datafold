@@ -43,7 +43,7 @@ module "alb_app" {
 
   # See:
   # https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html
-  listener_ssl_policy_default = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06"
+  listener_ssl_policy_default = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
   enable_cross_zone_load_balancing = true
   enable_deletion_protection = var.lb_deletion_protection
 
