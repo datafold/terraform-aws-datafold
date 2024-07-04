@@ -137,8 +137,8 @@ locals {
 module "eks" {
   source = "./modules/eks"
 
-  deployment_name = var.deployment_name
-  k8s_vpc         = local.vpc_id
+  deployment_name                     = var.deployment_name
+  k8s_vpc                             = local.vpc_id
   # https://aws.github.io/aws-eks-best-practices/networking/subnets/
   k8s_subnets                         = local.vpc_private_subnets
   k8s_control_subnets                 = []
@@ -156,6 +156,11 @@ module "eks" {
   backend_app_port                    = var.backend_app_port
   rds_port                            = var.rds_port
   k8s_public_access_cidrs             = var.k8s_public_access_cidrs
+}
+
+locals {
+  cluster_name        = module.eks.cluster_name
+  control_plane_sg_id = module.eks.control_plane_security_group_id
 }
 
 module "database" {
@@ -205,6 +210,20 @@ module "clickhouse_backup" {
   clickhouse_s3_bucket           = var.clickhouse_s3_bucket
   s3_clickhouse_backup_tags      = var.s3_clickhouse_backup_tags
   s3_backup_bucket_name_override = var.s3_backup_bucket_name_override
+}
+
+module "private_access" {
+  count = var.deploy_private_access ? 1 : 0
+  source = "./modules/private_access"
+
+  allowed_principals  = var.allowed_principals
+  deployment_name     = var.deployment_name
+  vpc_id              = local.vpc_id
+  vpc_private_subnets = [local.vpc_private_subnets[0]]
+  eks_cluster_name    = local.cluster_name
+  tags                = var.tags
+  control_plane_sg_id = local.control_plane_sg_id
+  vpn_cidr            = var.vpn_cidr
 }
 
 resource "aws_ebs_volume" "clickhouse_data" {
