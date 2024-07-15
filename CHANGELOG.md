@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.7.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.12...v1.7.0) (2024-07-15)
+
+
+### Features
+
+* Add PL and NLB to deployment ([c4c9330](https://github.com/datafold/terraform-aws-datafold/commit/c4c9330b45dbea503b19978f770a57efa59ab1c7))
+
 ### [1.6.12](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.11...v1.6.12) (2024-06-26)
 
 
