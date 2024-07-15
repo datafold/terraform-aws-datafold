@@ -13,3 +13,7 @@ output "cluster_scaler_role_arn" {
 output "control_plane_security_group_id" {
   value = module.eks.cluster_security_group_id
 }
+
+output "cluster_endpoint" {
+  value = module.eks.cluster_endpoint
+}

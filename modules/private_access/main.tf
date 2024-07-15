@@ -31,6 +31,10 @@ resource "aws_security_group_rule" "nlb_ingress" {
   description              = "Allows traffic from NLB to CP"
 }
 
+data "aws_subnet" "private_access_az" {
+  id = var.vpc_private_subnets[0]
+}
+
 # This internal NLB connects to the control plane
 module "nlb" {
   source  = "terraform-aws-modules/alb/aws"
@@ -65,10 +69,6 @@ module "nlb" {
 
   tags = var.tags
 }
-
-#data "dns_a_record_set" "nlb" {
-#  host = module.nlb.lb_dns_name
-#}
 
 resource "aws_vpc_endpoint_service" "pl_control_plane" {
   acceptance_required        = true
