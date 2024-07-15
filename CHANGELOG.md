@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.7.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.1...v1.7.2) (2024-07-15)
+
+
+### Bug Fixes
+
+* Coalesce fix for private access ([46126c0](https://github.com/datafold/terraform-aws-datafold/commit/46126c0e37227ddb29834eafb06c44782f0d6d16))
+
 ### [1.7.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.0...v1.7.1) (2024-07-15)
 
 
