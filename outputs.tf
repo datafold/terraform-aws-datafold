@@ -139,7 +139,7 @@ output "clickhouse_secret_key" {
 }
 
 output "private_access_vpces_name" {
-  value = coalesce(one(module.private_access[*].private_vpces_name), "")
+  value = coalesce(one(module.private_access[*].private_vpces_name), "not active")
   description = "Name of the VPCE service that allows private access to the cluster endpoint"
 }
 
@@ -154,6 +154,6 @@ output "redis_data_volume_id" {
 }
 
 output "vpces_azs" {
-  value = coalesce(one(module.private_access[*].private_access_az), "")
+  value = coalesce(one(module.private_access[*].private_access_az), "not active")
   description = "Set of availability zones where the VPCES is available."
 }
