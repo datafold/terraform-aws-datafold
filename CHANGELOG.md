@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.7.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.0...v1.7.1) (2024-07-15)
+
+
+### Bug Fixes
+
+* Add outputs to automate flow more ([5c4d810](https://github.com/datafold/terraform-aws-datafold/commit/5c4d810f8273a11a7900779bad7b85de28262212))
+
 ## [1.7.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.6.12...v1.7.0) (2024-07-15)
 
 
