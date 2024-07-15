@@ -702,3 +702,25 @@ variable "k8s_public_access_cidrs" {
   type        = list(string)
   description = "List of CIDRs that are allowed to connect to the EKS control plane"
 }
+
+# ┏━┓┏━┓╻╻ ╻┏━┓╺┳╸┏━╸   ┏━┓┏━╸┏━╸┏━╸┏━┓┏━┓
+# ┣━┛┣┳┛┃┃┏┛┣━┫ ┃ ┣╸    ┣━┫┃  ┃  ┣╸ ┗━┓┗━┓
+# ╹  ╹┗╸╹┗┛ ╹ ╹ ╹ ┗━╸╺━╸╹ ╹┗━╸┗━╸┗━╸┗━┛┗━┛
+
+variable "deploy_private_access" {
+  type        = bool
+  default     = false
+  description = "Determines that the cluster should be 100% private"
+}
+
+variable "allowed_principals" {
+  type        = list(string)
+  default     = []
+  description = "List of allowed principals allowed to connect to this endpoint."
+}
+
+variable "vpn_cidr" {
+  type        = string
+  description = "CIDR range for administrative access"
+  default     = ""
+}

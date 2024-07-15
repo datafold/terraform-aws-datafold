@@ -25,7 +25,7 @@ variable "vpc_cidr" {
 
 variable "vpc_public_subnets" {
   type        = list(any)
-  description = "List of private subnets to deploy the database in"
+  description = "List of public subnets to deploy the load balancer in"
 }
 
 variable "security_group_id" {
