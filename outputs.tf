@@ -78,6 +78,11 @@ output "cluster_scaler_role_arn" {
   description = "The ARN of the role that is able to scale the EKS cluster nodes."
 }
 
+output "cluster_endpoint" {
+  value = module.eks.cluster_endpoint
+  description = "The URL to the EKS cluster endpoint"
+}
+
 output "vpc_cidr" {
   value = module.networking.vpc_cidr
   description = "The CIDR of the entire VPC"
@@ -133,6 +138,11 @@ output "clickhouse_secret_key" {
   description = "The secret key of the IAM user doing the clickhouse backups."
 }
 
+output "private_access_vpces_name" {
+  value = coalesce(one(module.private_access[*].private_vpces_name), "")
+  description = "Name of the VPCE service that allows private access to the cluster endpoint"
+}
+
 output "redis_data_size" {
   value = var.redis_data_size
   description = "The size in GB of the Redis data volume."
@@ -141,4 +151,9 @@ output "redis_data_size" {
 output "redis_data_volume_id" {
   value = resource.aws_ebs_volume.redis_data.id
   description = "The EBS volume ID of the Redis data volume."
+}
+
+output "vpces_azs" {
+  value = coalesce(one(module.private_access[*].private_access_az), "")
+  description = "Set of availability zones where the VPCES is available."
 }
