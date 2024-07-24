@@ -1,5 +1,6 @@
 locals {
   versionfile    = "version.txt"
+  config_yaml    = yamldecode(file("${path.module}/config.yaml"))
   releasechannel = data.sops_file.secrets.data["global.operator.releaseChannel"]
   namespace      = local.deployment_name
   dockerconfigjson = {

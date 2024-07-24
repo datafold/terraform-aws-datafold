@@ -12,7 +12,9 @@ resource "helm_release" "datafold" {
   }
 
   values = [
-    "${data.sops_file.infra.raw}"
+    "${data.sops_file.infra.raw}",
+    "${file("config.yaml")}",
+    "${data.sops_file.secrets.raw}"
   ]
 
   set {
@@ -24,12 +26,8 @@ resource "helm_release" "datafold" {
     value = "prod"
   }
   set {
-    name  = "clickhouse.movedata"
-    value = "false"
-  }
-  set {
     name  = "global.datadog.install"
-    value = true
+    value = false
   }
   set {
     name  = "global.deployment"
@@ -40,44 +38,12 @@ resource "helm_release" "datafold" {
     value = trimspace("${data.local_file.current_version.content}")
   }
   set {
-    name  = "global.operator.allowRollback"
-    value = data.sops_file.secrets.data["global.operator.allowRollback"]
+    name  = "secrets.clickhouse.password"
+    value = random_password.clickhouse_password.result
   }
   set {
-    name  = "global.operator.releaseChannel"
-    value = data.sops_file.secrets.data["global.operator.releaseChannel"]
-  }
-  set {
-    name  = "global.operator.backupCronSchedule"
-    value = data.sops_file.secrets.data["global.operator.backupCronSchedule"]
-  }
-  set {
-    name  = "global.operator.maintenanceWindow"
-    value = data.sops_file.secrets.data["global.operator.maintenanceWindow"]
-  }
-  set {
-    name  = "postgres.install"
-    value = false
-  }
-  set {
-    name  = "secrets.clickhouse.user"
-    value = "default"
-  }
-  set {
-    name  = "secrets.freshpaint.url"
-    value = "https://api.perfalytics.com/track"
-  }
-  set {
-    name  = "secrets.installMePassword"
-    value = data.sops_file.secrets.data["secrets.installMePassword"]
-  }
-  set {
-    name  = "secrets.mail.defaultSender"
-    value = data.sops_file.secrets.data["secrets.mail.defaultSender"]
-  }
-  set {
-    name  = "secrets.mail.server"
-    value = data.sops_file.secrets.data["secrets.mail.server"]
+    name  = "secrets.redis.password"
+    value = random_password.redis_password.result
   }
 
   depends_on = [
@@ -88,4 +54,17 @@ resource "helm_release" "datafold" {
     resource.helm_release.datadog,
     data.local_file.current_version,
   ]
+}
+
+resource "random_password" "clickhouse_password" {
+  length           = 16
+  min_upper        = 2
+  min_lower        = 2
+  min_numeric      = 2
+  special          = false
+}
+
+resource "random_password" "redis_password" {
+  length           = 12
+  special          = false
 }
