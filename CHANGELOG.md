@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.7.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.2...v1.7.3) (2024-07-24)
+
+
+### Bug Fixes
+
+* Update example deployment ([0082596](https://github.com/datafold/terraform-aws-datafold/commit/00825963681dfec23af5df24de6543a3b89dca2e))
+
 ### [1.7.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.1...v1.7.2) (2024-07-15)
 
 
