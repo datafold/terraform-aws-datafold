@@ -1,0 +1,11 @@
+global:
+  datadog:
+    env: prod
+    install: false
+  operator:
+    allowRollback: false
+    releaseChannel: stable
+    backupCronSchedule: 0 1 * * *
+    maintenanceWindow: ""
+postgres:
+  install: false

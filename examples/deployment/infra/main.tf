@@ -2,6 +2,12 @@
 #  ┃┃┃┣━┫┃┃┗┫
 #  ╹ ╹╹ ╹╹╹ ╹
 
+locals {
+  proxy_host_cidrs = [
+    "1.2.3.4/32"
+  ]
+}
+
 #  ┏━┓╻ ╻┏━┓
 #  ┣━┫┃╻┃┗━┓
 #  ╹ ╹┗┻┛┗━┛
@@ -9,7 +15,7 @@
 module "aws" {
   count   = 1
   source  = "datafold/datafold/aws"
-  version = "1.1.2"
+  version = "1.7.2"
 
   providers = {
     aws = aws
@@ -37,14 +43,16 @@ module "aws" {
   deploy_vpc_flow_logs = true
 
   # Clickhouse
-  ebs_iops       = 3000
-  ebs_throughput = 125
+  ch_data_ebs_iops       = 3000
+  ch_data_ebs_throughput = 125
 
   # Database
-  use_default_rds_kms_key = true
-  apply_major_upgrade     = false
+  use_default_rds_kms_key   = true
+  apply_major_upgrade       = false
+  rds_max_allocated_storage = 400
 
   # K8S
+  k8s_public_access_cidrs = local.proxy_host_cidrs
 
   # https://github.com/terraform-aws-modules/terraform-aws-eks/blob/v19.7.0/docs/compute_resources.md
   managed_node_grp_default = ["c6i.4xlarge"]
@@ -58,34 +66,9 @@ module "aws" {
     capacity_type   = "ON_DEMAND"
     use_name_prefix = false
     name            = "datafold-nodegroup"
+
+    force_update_version = true
+    update_config        = { "max_unavailable_percentage" : 50 }
   }
-
-  aws_auth_users = []
-
-  vpce_details = {"ssh": {
-    vpces_service_name  = "com.amazonaws.vpce.us-east-1.vpce-svc-abcdef"
-    # subnet_id           = "subnet-abcdef123456"  # optional
-    # private_dns_enabled = false  # optional
-    input_rules = [{
-       description = "Allow SSH traffic through"
-       from_port   = 22
-       to_port     = 22
-       protocol    = "TCP"
-       cidr_blocks = "10.0.0.0/16"
-    }]
-    output_rules = [{
-       description = "Allow all egress TCP"
-       from_port   = 0
-       to_port     = 65535
-       protocol    = "TCP"
-       cidr_blocks = "0.0.0.0/0"
-    },{
-       description = "Allow all egress UDP"
-       from_port   = 0
-       to_port     = 65535
-       protocol    = "UDP"
-       cidr_blocks = "0.0.0.0/0"
-    }]
-  }}
 }
 

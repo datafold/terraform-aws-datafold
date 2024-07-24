@@ -36,26 +36,8 @@ nginx:
     loadBalancerIps: ${load_balancer_ips}
 
 secrets:
-  clickhouse:
-    password: ${clickhouse_password}
-  database:
-    encryptionKey: "${db_encryption_key}"
-  datadog:
-    apiKey: ${dd_api_key}
-    appKey: ${dd_app_key}
-    applicationId: ${dd_application_id}
-    clientToken: ${dd_client_token}
-  freshpaint:
-    avoToken: ${freshpaint_avo_token}
-    backendToken: ${freshpaint_backend_token}
-    frontendToken: ${freshpaint_frontend_token}
-  mail:
-    username: ${mail_username}
-    password: ${mail_password}
   postgres:
     database: ${postgres_database}
     password: ${postgres_password}
     port: ${postgres_port}
     user: ${postgres_user}
-  redis:
-    password: ${redis_password}
