@@ -103,10 +103,6 @@ locals {
     })
   optional_node_pool = merge(var.managed_node_grp2,
     {
-      min_size     = 0
-      max_size     = 1
-      desired_size = 0
-
       subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
       disk_size  = var.default_node_disk_size
       tags = {
