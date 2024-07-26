@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.7.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.3...v1.7.4) (2024-07-26)
+
+
+### Bug Fixes
+
+* Do not override the nodepool sizes to 0 ([42fdac4](https://github.com/datafold/terraform-aws-datafold/commit/42fdac4f9bdce6729e3a3419380310e52bc2b8cb))
+
 ### [1.7.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.2...v1.7.3) (2024-07-24)
 
 
