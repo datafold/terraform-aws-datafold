@@ -9,3 +9,15 @@ global:
     maintenanceWindow: ""
 postgres:
   install: false
+worker:
+  resources:
+    limits:
+      memory: 8000Mi
+    requests:
+      memory: 8000Mi
+worker-catalog:
+  resources:
+    limits:
+      memory: 19000Mi
+    requests:
+      memory: 19000Mi

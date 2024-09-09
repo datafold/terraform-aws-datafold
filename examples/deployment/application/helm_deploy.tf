@@ -1,8 +1,11 @@
 locals {
   versionfile    = "version.txt"
   config_yaml    = yamldecode(file("${path.module}/config.yaml"))
-  releasechannel = data.sops_file.secrets.data["global.operator.releaseChannel"]
+  releasechannel = local.config_yaml["global"]["operator"]["releaseChannel"]
   namespace      = local.deployment_name
+  portal_url     = data.sops_file.secrets.data["secrets.operator.portalUrl"]
+  portal_api_key = data.sops_file.secrets.data["secrets.operator.apiKey"]
+
   dockerconfigjson = {
     "auths" : {
       "https://us-docker.pkg.dev" = {
@@ -51,7 +54,12 @@ resource "kubernetes_secret" "gcr-imagepullsecret" {
 resource "null_resource" "get_current_release" {
   triggers = { always_run = "${timestamp()}" }
   provisioner "local-exec" {
-    command = "curl --insecure 'http://releases.datafold.com/${local.releasechannel}/releases.json' | jq -r '.[0].version' > ${path.module}/${local.versionfile}"
+    command = <<-EOT
+curl -L ${local.portal_url}/operator/v1/config \
+     --header "Content: application/json" \
+     --header "Authorization: Bearer ${local.portal_api_key}" \
+     | jq -r '.version' > ${path.module}/${local.versionfile}
+EOT
   }
 
   depends_on = [

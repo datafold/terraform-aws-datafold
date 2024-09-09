@@ -12,7 +12,7 @@ terraform {
 }
 
 locals {
-  operator_version = "1.0.0"
-  helm_version     = "0.6.16"
+  operator_version = "1.1.4"
+  helm_version     = "0.6.27"
   crd_version      = "0.1.1"
 }

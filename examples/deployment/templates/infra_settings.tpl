@@ -3,6 +3,8 @@ clickhouse:
     gcs_bucket: ${clickhouse_gcs_bucket}
     s3_bucket: ${clickhouse_s3_bucket}
     s3_region: ${clickhouse_s3_region}
+    azblob_account_name: ${clickhouse_azblob_account_name}
+    azblob_container: ${clickhouse_azblob_container}
   storage:
     dataSize: ${clickhouse_data_size}
     dataVolumeId: ${clickhouse_data_volume_id}
@@ -10,8 +12,9 @@ clickhouse:
     logVolumeId: ${clickhouse_log_volume_id}
   secrets:
     access_key: ${clickhouse_access_key}
-    clickhouse_backup_sa: ${clickhouse_backup_sa}
     secret_key: ${clickhouse_secret_key}
+    clickhouse_backup_sa: ${clickhouse_backup_sa}
+    azblob_account_key: ${clickhouse_azblob_account_key}
 
 redis:
   storage:
@@ -33,7 +36,10 @@ global:
 
 nginx:
   service:
-    loadBalancerIps: ${load_balancer_ips}
+    loadBalancerIps:
+%{ for ip in load_balancer_ips ~}
+      - ${ip}
+%{ endfor ~}
 
 secrets:
   postgres:
