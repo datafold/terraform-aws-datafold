@@ -87,16 +87,10 @@ resource "helm_release" "cluster-autoscaler" {
 }
 
 resource "helm_release" "datafold_crds" {
-  name      = "datafold-crds"
-  namespace = local.namespace
+  name       = "datafold-crds"
+  namespace  = local.namespace
   repository = "https://charts.datafold.com"
-  chart = "datafold-crds"
-  version = local.crd_version
+  chart      = "datafold-crds"
+  version    = local.crd_version
 }
 
-resource "helm_release" "datadog" {
-  name       = "datafold-datadog-operator"
-  namespace  = local.namespace
-  repository = "https://helm.datadoghq.com"
-  chart      = "datadog-operator"
-}

@@ -51,20 +51,19 @@ resource "helm_release" "datafold" {
     resource.kubernetes_service_account_v1.aws_lb_controller,
     resource.helm_release.aws_lb_controller,
     resource.helm_release.datafold_crds,
-    resource.helm_release.datadog,
     data.local_file.current_version,
   ]
 }
 
 resource "random_password" "clickhouse_password" {
-  length           = 16
-  min_upper        = 2
-  min_lower        = 2
-  min_numeric      = 2
-  special          = false
+  length      = 16
+  min_upper   = 2
+  min_lower   = 2
+  min_numeric = 2
+  special     = false
 }
 
 resource "random_password" "redis_password" {
-  length           = 12
-  special          = false
+  length  = 12
+  special = false
 }

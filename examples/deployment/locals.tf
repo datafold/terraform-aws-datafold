@@ -6,7 +6,9 @@ locals {
   # Create this symmetric encryption key in advance (manually)
   # It is used for encrypting / decrypting the secrets files.
   kms_key         = "arn:aws:kms:us-west-2:1234567890:alias/acme-datafold"
+  customer_name   = "acme"
   deployment_name = "acme-datafold"
+
   # Common tags to be assigned to all resources
   common_tags = {
     Terraform   = true
