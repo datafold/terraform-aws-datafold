@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.8.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.4...v1.8.0) (2024-09-12)
+
+
+### Features
+
+* Enable bedrock access for cluster ([5b88a11](https://github.com/datafold/terraform-aws-datafold/commit/5b88a110d2d204d22f88756f9d133ca948733556))
+
 ### [1.7.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.3...v1.7.4) (2024-07-26)
 
 
