@@ -724,3 +724,19 @@ variable "vpn_cidr" {
   description = "CIDR range for administrative access"
   default     = ""
 }
+
+# ┏┓ ┏━╸╺┳┓┏━┓┏━┓┏━╸╻┏
+# ┣┻┓┣╸  ┃┃┣┳┛┃ ┃┃  ┣┻┓
+# ┗━┛┗━╸╺┻┛╹┗╸┗━┛┗━╸╹ ╹
+
+variable "k8s_access_bedrock" {
+  type        = bool
+  default     = false
+  description = "Allow cluster to access bedrock in this region"
+}
+
+variable "bedrock_model_arn" {
+  type        = string
+  default     = ""
+  description = "See ARN for bedrock model"
+}
