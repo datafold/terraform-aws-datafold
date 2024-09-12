@@ -43,6 +43,24 @@ module "cluster_autoscaler_role" {
   }
 }
 
+module "bedrock_invoker_role" {
+  count              = var.k8s_access_bedrock ? 1 : 0
+
+  source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  role_name = "${var.deployment_name}-bedrock-invoke-model"
+
+  role_policy_arns = {
+    policy = aws_iam_policy.bedrock_access_policy[0].arn
+  }
+
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.deployment_name}:bedrock-invoke-model"]
+    }
+  }
+}
+
 module "eks" {
   # https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/docs
 

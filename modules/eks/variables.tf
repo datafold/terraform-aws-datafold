@@ -93,3 +93,15 @@ variable "k8s_public_access_cidrs" {
   type        = list(string)
   description = "List of CIDRs that are allowed to connect to the EKS control plane"
 }
+
+variable "k8s_access_bedrock" {
+  type        = bool
+  default     = false
+  description = "Allow cluster to access bedrock in this region"
+}
+
+variable "bedrock_model_arn" {
+  type        = string
+  default     = ""
+  description = "See ARN for bedrock model"
+}

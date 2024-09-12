@@ -152,6 +152,9 @@ module "eks" {
   backend_app_port                    = var.backend_app_port
   rds_port                            = var.rds_port
   k8s_public_access_cidrs             = var.k8s_public_access_cidrs
+
+  k8s_access_bedrock                  = var.k8s_access_bedrock
+  bedrock_model_arn                   = var.bedrock_model_arn
 }
 
 locals {
