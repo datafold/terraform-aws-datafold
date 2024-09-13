@@ -78,7 +78,7 @@ module "load_balancer" {
 }
 
 locals {
-  default_node_pool = merge(var.managed_node_grp1,
+  default_node_pool = merge(
     {
       subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
       disk_size  = var.default_node_disk_size
@@ -100,8 +100,8 @@ locals {
           }
         }
       }
-    })
-  optional_node_pool = merge(var.managed_node_grp2,
+    }, var.managed_node_grp1)
+  second_node_pool = merge(
     {
       subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
       disk_size  = var.default_node_disk_size
@@ -123,10 +123,34 @@ locals {
           }
         }
       }
-    })
+    }, var.managed_node_grp2)
+  third_node_pool = merge(
+    {
+      subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
+      disk_size  = var.default_node_disk_size
+      tags = {
+          "k8s.io/cluster-autoscaler/enabled"                  = "true"
+          "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+          "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+      }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = var.default_node_disk_size
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 125
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
+    }, var.managed_node_grp3)
   managed_node_groups = merge(
     {"${var.deployment_name}-k8s": local.default_node_pool},
-    var.managed_node_grp2 != null ? {"${var.deployment_name}-k8s-small" : local.optional_node_pool} : {}
+    var.managed_node_grp2 != null ? {"${var.deployment_name}-k8s-two" : local.second_node_pool} : {},
+    var.managed_node_grp3 != null ? {"${var.deployment_name}-k8s-three" : local.third_node_pool} : {}
   )
 }
 
