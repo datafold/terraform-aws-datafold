@@ -686,6 +686,12 @@ variable "managed_node_grp2" {
   description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
 }
 
+variable "managed_node_grp3" {
+  type = any
+  default = null
+  description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
+}
+
 variable "default_node_disk_size" {
   type        = number
   default     = 40
