@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.9.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.8.0...v1.9.0) (2024-09-13)
+
+
+### Features
+
+* Add a third node pool ([9da629c](https://github.com/datafold/terraform-aws-datafold/commit/9da629c72eb3af991a0a7fa329b825c22088fb7f))
+
 ## [1.8.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.7.4...v1.8.0) (2024-09-12)
 
 
