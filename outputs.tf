@@ -157,3 +157,8 @@ output "vpces_azs" {
   value = coalesce(one(module.private_access[*].private_access_az), "not active")
   description = "Set of availability zones where the VPCES is available."
 }
+
+output "github_reverse_proxy_url" {
+  value = coalesce(one(module.github_reverse_proxy[*].api_gateway_url), "not active")
+  description = "The URL of the API Gateway that acts as a reverse proxy to the GitHub API"
+}

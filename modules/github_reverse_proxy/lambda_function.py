@@ -1,63 +1,44 @@
 import json
-import hashlib
-import hmac
+import logging
 import os
 import urllib3
 
-def verify_github_signature(headers, body, secret):
-    """
-    Verifies the GitHub webhook signature using the provided secret.
-    """
-    signature = headers.get('X-Hub-Signature-256')
+from datadog_lambda.logger import initialize_logging
 
-    if not signature:
-        print("No signature found in headers.")
-        return False
 
-    # Create the HMAC digest
-    hmac_gen = hmac.new(key=secret.encode(), msg=body, digestmod=hashlib.sha256)
-    expected_signature = f'sha256={hmac_gen.hexdigest()}'
+initialize_logging(__name__)
+logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
 
-    return hmac.compare_digest(signature, expected_signature)
 
-def forward_to_private_system(data, private_endpoint):
+def forward_to_private_system(data, private_endpoint, headers):
     """
     Forward the data to the private system endpoint.
     """
-    http = urllib3.PoolManager()
-    headers = {'Content-Type': 'application/json'}
-
-    response = http.request('POST', private_endpoint, body=json.dumps(data), headers=headers)
-
+    http = urllib3.PoolManager(cert_reqs='CERT_NONE')  # Disable SSL certificate verification
+    response = http.request(
+        'POST', private_endpoint, body=data, headers=headers, assert_same_host=False
+    )
     return response.status, response.data
 
 def lambda_handler(event, context):
-    github_secret = os.getenv('GITHUB_SECRET')
     private_system_endpoint = os.getenv('PRIVATE_SYSTEM_ENDPOINT')
+    logger.info(f"Private system endpoint: {private_system_endpoint}")
 
-    headers = event.get('headers', {})
     body = event.get('body', '')
-
-    # Verify GitHub signature
-    if not verify_github_signature(headers, body.encode('utf-8'), github_secret):
-        print("Signature verification failed.")
-        return {
-            'statusCode': 403,
-            'body': json.dumps('Forbidden: Signature verification failed')
-        }
-
-    # Parse the body as JSON
-    try:
-        payload = json.loads(body)
-    except json.JSONDecodeError as e:
-        print(f"JSON parsing error: {e}")
+    if not body:
+        logger.error("No body found in the event")
         return {
             'statusCode': 400,
-            'body': json.dumps('Bad Request: Invalid JSON payload')
+            'body': json.dumps('Bad Request: No payload found')
         }
+    incoming_headers = event.get('headers', {})
 
-    # Forward the payload to the private system
-    status, response = forward_to_private_system(payload, private_system_endpoint)
+    logger.info("Starting to forward the payload")
+    status, response = forward_to_private_system(
+        body, private_system_endpoint, incoming_headers
+    )
+    logger.info(f"Forwarding status: {status}")
 
     if status == 200:
         return {
@@ -65,7 +46,7 @@ def lambda_handler(event, context):
             'body': json.dumps('Webhook processed and forwarded')
         }
     else:
-        print(f"Error forwarding to private system: {response}")
+        logger.error(f"Error forwarding to private system ({status}): {response}")
         return {
             'statusCode': 500,
             'body': json.dumps('Internal Server Error: Failed to forward webhook')

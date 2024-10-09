@@ -746,3 +746,26 @@ variable "bedrock_model_arn" {
   default     = ""
   description = "See ARN for bedrock model"
 }
+
+# ┏━╸╻╺┳╸╻ ╻╻ ╻┏┓    ┏━┓┏━╸╻ ╻┏━╸┏━┓┏━┓┏━╸   ┏━┓┏━┓┏━┓╻ ╻╻ ╻
+# ┃╺┓┃ ┃ ┣━┫┃ ┃┣┻┓   ┣┳┛┣╸ ┃┏┛┣╸ ┣┳┛┗━┓┣╸    ┣━┛┣┳┛┃ ┃┏╋┛┗┳┛
+# ┗━┛╹ ╹ ╹ ╹┗━┛┗━┛   ╹┗╸┗━╸┗┛ ┗━╸╹┗╸┗━┛┗━╸   ╹  ╹┗╸┗━┛╹ ╹ ╹
+
+variable "deploy_github_reverse_proxy" {
+  type        = bool
+  default     = false
+  description = "Determines that the github reverse proxy should be deployed"
+}
+
+variable "github_cidrs" {
+  type        = list(string)
+  default     = []
+  description = "List of CIDRs that are allowed to connect to the github reverse proxy"
+}
+
+variable "datadog_api_key" {
+  type        = string
+  default     = "not_set"
+  description = "The API key for Datadog"
+  sensitive   = true
+}

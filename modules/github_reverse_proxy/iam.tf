@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 resource "aws_iam_role" "lambda_role" {
   name = "${var.deployment_name}-lambda-github-webhook-role"
 
@@ -13,6 +11,26 @@ resource "aws_iam_role" "lambda_role" {
       }
     }]
   })
+}
+
+resource "aws_iam_policy" "lambda_secrets_policy" {
+  name   = "lambda-secrets-policy"
+  policy = jsonencode({
+    Version: "2012-10-17",
+    Statement: [
+      {
+        Effect: "Allow",
+        Action: "secretsmanager:GetSecretValue",
+        Resource: aws_secretsmanager_secret.datadog_api_key.arn
+      }
+    ]
+  })
+}
+
+# Attach the policy to the Lambda execution role
+resource "aws_iam_role_policy_attachment" "lambda_secrets_policy_attachment" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.lambda_secrets_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_vpc_access_policy" {
@@ -68,7 +86,7 @@ resource "aws_iam_policy" "lambda_deny_ec2_policy" {
         Condition = {
           "ArnEquals": {
             "lambda:SourceFunctionArn": [
-              "arn:aws:lambda:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_function.github_webhook_handler.function_name}"
+              "arn:aws:lambda:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_alias.prod_alias.function_name}"
             ]
           }
         }

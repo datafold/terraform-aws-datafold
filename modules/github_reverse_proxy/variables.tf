@@ -41,12 +41,24 @@ variable "security_group_ids" {
   default     = []
 }
 
-variable "github_secret" {
-  description = "GitHub webhook secret"
-  type        = string
+variable "github_cidrs" {
+  description = "List of GitHub CIDRs to allow traffic from"
+  type        = list(string)
 }
 
 variable "private_system_endpoint" {
   description = "Private system endpoint to forward the webhook"
   type        = string
+}
+
+variable "datadog_api_key" {
+  description = "The API key for Datadog"
+  type        = string
+  sensitive   = true
+}
+
+variable "use_private_egress" {
+  description = "Whether to allow Lambda to access private systems"
+  type        = bool
+  default     = true
 }
