@@ -2,6 +2,15 @@
 
 See this file for notable changes between versions.
 
+## [1.10.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.9.0...v1.10.0) (2024-10-14)
+
+
+### Features
+
+* Add GitHub reverse proxy support ([a58e390](https://github.com/datafold/terraform-aws-datafold/commit/a58e390e83a0dd1f76ed8108d604701f8af9cf7d))
+* Make Lambda DataDog monitoring optional ([5a7e5a5](https://github.com/datafold/terraform-aws-datafold/commit/5a7e5a532fe7368a019cd1903c69e2cf3c676efa))
+* Use DataDog to monitor lambda for proxy and limit API Gateway access only to GitHub CIDRs ([89c4d04](https://github.com/datafold/terraform-aws-datafold/commit/89c4d0499563f6c4ad6c6a69add72b559901fc56))
+
 ## [1.9.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.8.0...v1.9.0) (2024-09-13)
 
 
