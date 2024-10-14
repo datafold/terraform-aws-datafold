@@ -3,12 +3,14 @@ import logging
 import os
 import urllib3
 
-from datadog_lambda.logger import initialize_logging
 
-
-initialize_logging(__name__)
-logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
+if os.environ.get('DATADOG_MONITORING_ENABLED', None):
+    from datadog_lambda.logger import initialize_logging
+    initialize_logging(__name__)
+    logger = logging.getLogger(__name__)
+else:
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
 
 
 def forward_to_private_system(data, private_endpoint, headers):

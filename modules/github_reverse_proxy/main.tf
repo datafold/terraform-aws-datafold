@@ -1,22 +1,11 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-# resource "null_resource" "zip_lambda_function" {
-#   provisioner "local-exec" {
-#     command = "zip -j ${path.module}/lambda_function.zip ${path.module}/lambda_function.py"
-#   }
-
-#   triggers = {
-#     py_source = filemd5("${path.module}/lambda_function.py")
-#   }
-# }
-
 data "archive_file" "zip_lambda_function" {
   type        = "zip"
   source_file = "${path.module}/lambda_function.py"
   output_path = "${path.module}/lambda_function.zip"
 }
-
 
 resource "aws_secretsmanager_secret" "datadog_api_key" {
   name        = "datadog_api_key"
@@ -28,21 +17,40 @@ resource "aws_secretsmanager_secret_version" "datadog_api_key_version" {
   secret_string = var.datadog_api_key  # This should be the Datadog API key (input as a variable)
 }
 
-module "lambda_datadog" {
-  source  = "DataDog/lambda-datadog/aws"
-  version = "1.4.0"
-
+locals {
   function_name = "${var.deployment_name}-github-webhook-handler"
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.12"
   memory_size   = 256
   timeout       = 30
-
-  publish = true
+  publish       = true
 
   filename         = data.archive_file.zip_lambda_function.output_path
   source_code_hash = data.archive_file.zip_lambda_function.output_base64sha256
+
+  private_system_endpoint = "https://${var.private_system_endpoint}/integrations/github/v1/app_hook"
+
+  subnet_ids         = var.vpc_private_subnets
+  security_group_ids = length(var.security_group_ids) > 0 ? var.security_group_ids : [aws_security_group.lambda_sg.id]
+}
+
+module "lambda_datadog" {
+  count = var.monitor_lambda_datadog ? 1 : 0
+
+  source  = "DataDog/lambda-datadog/aws"
+  version = "1.4.0"
+
+  function_name = local.function_name
+  role          = local.role
+  handler       = local.handler
+  runtime       = local.runtime
+  memory_size   = local.memory_size
+  timeout       = local.timeout
+  publish       = local.publish
+
+  filename         = local.filename
+  source_code_hash = local.source_code_hash
 
   environment_variables = {
     "DD_API_KEY_SECRET_ARN" : aws_secretsmanager_secret.datadog_api_key.arn
@@ -54,11 +62,12 @@ module "lambda_datadog" {
     "DD_SERVERLESS_LOGS_ENABLED": "true"
     "DD_LOG_LEVEL": "INFO"
     "DD_TAGS": "deployment:${var.deployment_name}"
-    "PRIVATE_SYSTEM_ENDPOINT" : "https://${var.private_system_endpoint}/integrations/github/v1/app_hook"
+    "PRIVATE_SYSTEM_ENDPOINT" : local.private_system_endpoint
+    "DATADOG_MONITORING_ENABLED": "true"
   }
 
-  vpc_config_subnet_ids         = var.vpc_private_subnets
-  vpc_config_security_group_ids = length(var.security_group_ids) > 0 ? var.security_group_ids : [aws_security_group.lambda_sg.id]
+  vpc_config_subnet_ids         = local.subnet_ids
+  vpc_config_security_group_ids = local.security_group_ids
 
   datadog_extension_layer_version = 63
   datadog_python_layer_version = 98
@@ -67,10 +76,43 @@ module "lambda_datadog" {
   depends_on = [data.archive_file.zip_lambda_function]
 }
 
+resource "aws_lambda_function" "github_webhook_handler" {
+  count = var.monitor_lambda_datadog ? 0 : 1
+
+  function_name = local.function_name
+  role          = local.role
+  handler       = local.handler
+  runtime       = local.runtime
+  memory_size   = local.memory_size
+  timeout       = local.timeout
+  publish       = local.publish
+
+  filename         = local.filename
+  source_code_hash = local.source_code_hash
+
+  environment {
+    variables = {
+      PRIVATE_SYSTEM_ENDPOINT = local.private_system_endpoint
+    }
+  }
+
+  vpc_config {
+    subnet_ids         = local.subnet_ids
+    security_group_ids = local.security_group_ids
+  }
+
+  # Depend on the zip operation
+  depends_on = [data.archive_file.zip_lambda_function]
+}
+
+locals {
+  function_version = coalesce(concat(module.lambda_datadog[*].version, aws_lambda_function.github_webhook_handler[*].version)...)
+}
+
 resource "aws_lambda_alias" "prod_alias" {
   name             = "prod"
-  function_name    = module.lambda_datadog.function_name
-  function_version = module.lambda_datadog.version
+  function_name    = local.function_name
+  function_version = local.function_version
 }
 
 resource "aws_lambda_provisioned_concurrency_config" "example" {

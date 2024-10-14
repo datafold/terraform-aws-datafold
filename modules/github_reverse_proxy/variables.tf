@@ -51,10 +51,22 @@ variable "private_system_endpoint" {
   type        = string
 }
 
+variable "monitor_lambda_datadog" {
+  description = "Whether to monitor the Lambda with Datadog"
+  type        = bool
+  default     = true
+}
+
 variable "datadog_api_key" {
   description = "The API key for Datadog"
   type        = string
+  default     = ""
   sensitive   = true
+
+  validation {
+    condition     = var.monitor_lambda_datadog ? length(var.datadog_api_key) > 0 : true
+    error_message = "Datadog API key must be provided when monitoring Lambda with Datadog"
+  }
 }
 
 variable "use_private_egress" {
