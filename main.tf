@@ -300,3 +300,21 @@ resource "random_password" "redis_password" {
   length           = 12
   special          = false
 }
+
+module "github_reverse_proxy" {
+  count = var.deploy_github_reverse_proxy ? 1 : 0
+
+  source = "./modules/github_reverse_proxy"
+
+  deployment_name          = var.deployment_name
+  environment              = var.environment
+  region                   = var.provider_region
+  vpc_cidr                 = local.vpc_cidr
+  vpc_id                   = local.vpc_id
+  vpc_private_subnets      = local.vpc_private_subnets
+  github_cidrs             = var.github_cidrs
+  datadog_api_key          = var.datadog_api_key
+  use_private_egress       = var.lb_internal
+
+  private_system_endpoint  = module.load_balancer.load_balancer_dns
+}

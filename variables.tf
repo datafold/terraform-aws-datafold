@@ -746,3 +746,37 @@ variable "bedrock_model_arn" {
   default     = ""
   description = "See ARN for bedrock model"
 }
+
+# ┏━╸╻╺┳╸╻ ╻╻ ╻┏┓    ┏━┓┏━╸╻ ╻┏━╸┏━┓┏━┓┏━╸   ┏━┓┏━┓┏━┓╻ ╻╻ ╻
+# ┃╺┓┃ ┃ ┣━┫┃ ┃┣┻┓   ┣┳┛┣╸ ┃┏┛┣╸ ┣┳┛┗━┓┣╸    ┣━┛┣┳┛┃ ┃┏╋┛┗┳┛
+# ┗━┛╹ ╹ ╹ ╹┗━┛┗━┛   ╹┗╸┗━╸┗┛ ┗━╸╹┗╸┗━┛┗━╸   ╹  ╹┗╸┗━┛╹ ╹ ╹
+
+variable "deploy_github_reverse_proxy" {
+  type        = bool
+  default     = false
+  description = "Determines that the github reverse proxy should be deployed"
+}
+
+variable "github_cidrs" {
+  type        = list(string)
+  default     = []
+  description = "List of CIDRs that are allowed to connect to the github reverse proxy"
+}
+
+variable "monitor_lambda_datadog" {
+  description = "Whether to monitor the Lambda with Datadog"
+  type        = bool
+  default     = true
+}
+
+variable "datadog_api_key" {
+  description = "The API key for Datadog"
+  type        = string
+  default     = ""
+  sensitive   = true
+
+  validation {
+    condition     = var.monitor_lambda_datadog ? length(var.datadog_api_key) > 0 : true
+    error_message = "Datadog API key must be provided when monitoring Lambda with Datadog"
+  }
+}
