@@ -335,5 +335,8 @@ module "vpc_peering" {
   peer_vpc_additional_whitelisted_ingress_cidrs = var.peer_vpc_additional_whitelisted_ingress_cidrs
   ingress_enable_http_sg                        = var.ingress_enable_http_sg
 
-  lb_security_group_id = module.security.lb_security_group_id
+  lb_security_group_id       = module.security.lb_security_group_id
+  vpc_main_route_table_id    = module.networking.vpc_main_route_table_id
+  vpc_private_route_table_id = module.networking.vpc_private_route_table_id
+  vpc_public_route_table_id  = module.networking.vpc_public_route_table_id
 }

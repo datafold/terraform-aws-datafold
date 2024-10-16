@@ -19,6 +19,9 @@ locals {
     one(module.vpc[*].private_subnets),
     one(data.aws_subnets.private[*].ids)
   )
+  vpc_main_route_table_id = data.aws_vpc.ensured_vpc.main_route_table_id
+  vpc_private_route_table_id = one(data.aws_route_tables.ensured_private_subnet_route_table.ids)
+  vpc_public_route_table_id = one(data.aws_route_tables.ensured_public_subnet_route_table.ids)
 }
 
 #  ┏┓╻┏━╸╻ ╻   ╻ ╻┏━┓┏━╸
@@ -137,6 +140,24 @@ data "aws_subnet" "this" {
 
 data "aws_vpc" "ensured_vpc" {
   id = local.vpc_id
+}
+
+data "aws_route_tables" "ensured_private_subnet_route_table" {
+  vpc_id = local.vpc_id
+
+  filter {
+    name = "tag:Name"
+    values = ["${var.deployment_name}-private"]
+  }
+}
+
+data "aws_route_tables" "ensured_public_subnet_route_table" {
+  vpc_id = local.vpc_id
+
+  filter {
+    name = "tag:Name"
+    values = ["${var.deployment_name}-public"]
+  }
 }
 
 #  ╻ ╻┏━┓┏━╸   ┏━╸╻  ┏━┓╻ ╻   ╻  ┏━┓┏━╸┏━┓
