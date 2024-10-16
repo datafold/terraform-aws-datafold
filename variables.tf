@@ -780,3 +780,44 @@ variable "datadog_api_key" {
     error_message = "Datadog API key must be provided when monitoring Lambda with Datadog"
   }
 }
+
+# ╻ ╻┏━┓┏━╸   ┏━┓┏━╸┏━╸┏━┓╻┏┓╻┏━╸
+# ┃┏┛┣━┛┃     ┣━┛┣╸ ┣╸ ┣┳┛┃┃┗┫┃╺┓
+# ┗┛ ╹  ┗━╸   ╹  ┗━╸┗━╸╹┗╸╹╹ ╹┗━┛
+
+variable "deploy_vpc_peering" {
+  type        = bool
+  default     = false
+  description = "Determines that the VPC peering should be deployed"
+}
+
+variable "peer_vpc_id" {
+  type        = string
+  default     = ""
+  description = "The VPC ID to peer with"
+}
+
+variable "peer_vpc_cidr_block" {
+  type        = string
+  default     = ""
+  description = "The CIDR block of the peer VPC"
+}
+
+variable "peer_vpc_additional_whitelisted_ingress_cidrs" {
+  type        = set(string)
+  default     = []
+  description = "List of CIDRs that can pass through the load balancer"
+}
+
+variable "peer_vpc_owner_id" {
+  type        = string
+  default     = ""
+  description = "The AWS account ID of the owner of the peer VPC"
+}
+
+variable "peer_region" {
+  type        = string
+  default     = ""
+  description = "The region of the peer VPC"
+}
+

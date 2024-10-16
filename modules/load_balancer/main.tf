@@ -36,7 +36,7 @@ module "alb_app" {
   internal           = var.lb_internal
 
   vpc_id          = var.vpc_id
-  subnets         = var.vpc_public_subnets
+  subnets         = var.vpc_subnets
   security_groups = [var.security_group_id]
 
   idle_timeout = var.lb_idle_timeout
@@ -106,11 +106,11 @@ module "alb_app" {
 }
 
 locals {
-  vpc_public_subnets_joined = join(",", var.vpc_public_subnets)
+  vpc_subnets_joined = join(",", var.vpc_subnets)
 }
 
 data "aws_network_interface" "lb_app" {
-  count = length(var.vpc_public_subnets)
+  count = length(var.vpc_subnets)
 
   filter {
     name   = "description"
@@ -119,8 +119,10 @@ data "aws_network_interface" "lb_app" {
 
   filter {
     name   = "subnet-id"
-    values = [split(",", local.vpc_public_subnets_joined)[count.index]]
+    values = [split(",", local.vpc_subnets_joined)[count.index]]
   }
+
+  depends_on = [ module.alb_app ]
 }
 
 locals {
@@ -148,7 +150,7 @@ resource "aws_lb" "vpces_nlb" {
   name               = "${var.deployment_name}-nlb"
   internal           = true
   load_balancer_type = "network"
-  subnets            = var.vpc_public_subnets
+  subnets            = var.vpc_subnets
   security_groups    = [var.vpces_security_group_id]
 
   enable_cross_zone_load_balancing = true

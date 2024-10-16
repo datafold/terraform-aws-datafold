@@ -62,7 +62,7 @@ variable "dns_egress_cidrs" {
 }
 
 variable "sg_tags" {
-  type    = map(any)
+  type    = map(string)
   default = {}
 }
 
