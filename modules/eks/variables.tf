@@ -105,3 +105,9 @@ variable "bedrock_model_arn" {
   default     = ""
   description = "See ARN for bedrock model"
 }
+
+variable "k8s_api_access_roles" {
+  type        = set(string)
+  default     = []
+  description = "Set of roles that can access the EKS API"
+}

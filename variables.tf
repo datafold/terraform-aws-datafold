@@ -709,6 +709,12 @@ variable "k8s_public_access_cidrs" {
   description = "List of CIDRs that are allowed to connect to the EKS control plane"
 }
 
+variable "k8s_api_access_roles" {
+  type        = set(string)
+  default     = []
+  description = "Set of roles that are allowed to access the EKS API"
+}
+
 # ┏━┓┏━┓╻╻ ╻┏━┓╺┳╸┏━╸   ┏━┓┏━╸┏━╸┏━╸┏━┓┏━┓
 # ┣━┛┣┳┛┃┃┏┛┣━┫ ┃ ┣╸    ┣━┫┃  ┃  ┣╸ ┗━┓┗━┓
 # ╹  ╹┗╸╹┗┛ ╹ ╹ ╹ ┗━╸╺━╸╹ ╹┗━╸┗━╸┗━╸┗━┛┗━┛

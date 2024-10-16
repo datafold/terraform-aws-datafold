@@ -171,6 +171,7 @@ module "eks" {
   self_managed_node_grps              = var.self_managed_node_grps
   managed_node_grp_default            = var.managed_node_grp_default
   managed_node_grps                   = local.managed_node_groups
+  k8s_api_access_roles                = var.k8s_api_access_roles
 
   tags                                = var.tags
   backend_app_port                    = var.backend_app_port
