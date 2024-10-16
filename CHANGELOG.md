@@ -2,6 +2,14 @@
 
 See this file for notable changes between versions.
 
+## [1.11.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.10.0...v1.11.0) (2024-10-16)
+
+
+### Features
+
+* Add option to VPC Peer and make load balancer fully private ([6b2c106](https://github.com/datafold/terraform-aws-datafold/commit/6b2c10695b2cceee53543cd6050d11ed8251b5d2))
+* Output VPC ID for peering connections ([0702198](https://github.com/datafold/terraform-aws-datafold/commit/0702198fe71c95808df2ac821db7c8431a999169))
+
 ## [1.10.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.9.0...v1.10.0) (2024-10-14)
 
 
