@@ -61,7 +61,7 @@ module "load_balancer" {
   deployment_name        = var.deployment_name
   vpc_id                 = local.vpc_id
   vpc_cidr               = local.vpc_cidr
-  vpc_public_subnets     = local.vpc_public_subnets
+  vpc_subnets            = var.lb_internal ? local.vpc_private_subnets : local.vpc_public_subnets
   security_group_id      = local.lb_security_group_id
   create_ssl_cert        = var.create_ssl_cert
   alb_certificate_domain = var.alb_certificate_domain
@@ -317,4 +317,22 @@ module "github_reverse_proxy" {
   use_private_egress       = var.lb_internal
 
   private_system_endpoint  = module.load_balancer.load_balancer_dns
+}
+
+module "vpc_peering" {
+  count = var.deploy_vpc_peering ? 1 : 0
+
+  source = "./modules/vpc_peering"
+
+  deployment_name                               = var.deployment_name
+  vpc_id                                        = local.vpc_id
+  vpc_subnets                                   = var.lb_internal ? local.vpc_private_subnets : local.vpc_public_subnets
+  peer_vpc_id                                   = var.peer_vpc_id
+  peer_region                                   = var.peer_region != "" ? var.peer_region : var.provider_region
+  peer_owner_id                                 = var.peer_vpc_owner_id
+  peer_vpc_cidr_block                           = var.peer_vpc_cidr_block
+  peer_vpc_additional_whitelisted_ingress_cidrs = var.peer_vpc_additional_whitelisted_ingress_cidrs
+  ingress_enable_http_sg                        = var.ingress_enable_http_sg
+
+  lb_security_group_id = module.security.lb_security_group_id
 }

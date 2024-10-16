@@ -88,6 +88,11 @@ output "vpc_cidr" {
   description = "The CIDR of the entire VPC"
 }
 
+output "vpc_id" {
+  value = module.networking.vpc_id
+  description = "The ID of the VPC"
+}
+
 output "clickhouse_password" {
   value = resource.random_password.clickhouse_password.result
   description = "The generated clickhouse password to be used in the application deployment"
