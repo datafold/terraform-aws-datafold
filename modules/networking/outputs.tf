@@ -17,3 +17,15 @@ output "vpc_cidr" {
 output "azs" {
   value = local.azs
 }
+
+output "vpc_main_route_table_id" {
+  value = local.vpc_main_route_table_id
+}
+
+output "vpc_private_route_table_id" {
+  value = local.vpc_private_route_table_id
+}
+
+output "vpc_public_route_table_id" {
+  value = local.vpc_public_route_table_id
+}
