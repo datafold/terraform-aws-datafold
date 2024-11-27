@@ -204,3 +204,21 @@ resource "aws_autoscaling_group_tag" "managed_node_grp" {
     module.eks
   ]
 }
+
+resource "aws_eks_access_entry" "admin_role" {
+  for_each      = var.k8s_api_access_roles
+  cluster_name  = module.eks.cluster_name
+  principal_arn = each.value
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "admin_role" {
+  for_each      = aws_eks_access_entry.admin_role
+  cluster_name  = module.eks.cluster_name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = each.value.principal_arn
+
+  access_scope {
+    type = "cluster"
+  }
+}

@@ -171,6 +171,7 @@ module "eks" {
   self_managed_node_grps              = var.self_managed_node_grps
   managed_node_grp_default            = var.managed_node_grp_default
   managed_node_grps                   = local.managed_node_groups
+  k8s_api_access_roles                = var.k8s_api_access_roles
 
   tags                                = var.tags
   backend_app_port                    = var.backend_app_port
@@ -334,5 +335,8 @@ module "vpc_peering" {
   peer_vpc_additional_whitelisted_ingress_cidrs = var.peer_vpc_additional_whitelisted_ingress_cidrs
   ingress_enable_http_sg                        = var.ingress_enable_http_sg
 
-  lb_security_group_id = module.security.lb_security_group_id
+  lb_security_group_id       = module.security.lb_security_group_id
+  vpc_main_route_table_id    = module.networking.vpc_main_route_table_id
+  vpc_private_route_table_id = module.networking.vpc_private_route_table_id
+  vpc_public_route_table_id  = module.networking.vpc_public_route_table_id
 }

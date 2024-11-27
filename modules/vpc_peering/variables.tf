@@ -48,3 +48,18 @@ variable "vpc_subnets" {
   description = "The subnets of the VPC"
   type        = list(any)
 }
+
+variable "vpc_main_route_table_id" {
+  description = "The main route table ID of the VPC"
+  type        = string
+}
+
+variable "vpc_private_route_table_id" {
+  description = "The private route table ID of the VPC"
+  type        = string
+}
+
+variable "vpc_public_route_table_id" {
+  description = "The public route table ID of the VPC"
+  type        = string
+}
