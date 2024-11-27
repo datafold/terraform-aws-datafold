@@ -2,6 +2,18 @@
 
 See this file for notable changes between versions.
 
+## [1.12.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.11.0...v1.12.0) (2024-11-27)
+
+
+### Features
+
+* Allow EKS API access for specific roles ([97ac33b](https://github.com/datafold/terraform-aws-datafold/commit/97ac33b383d03a943129d1d375f4c02009599238))
+
+
+### Bug Fixes
+
+* VPC Peering routes ([cb0031f](https://github.com/datafold/terraform-aws-datafold/commit/cb0031f288b828c9d6d2612ddcf289cbbbdabdaf))
+
 ## [1.11.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.10.0...v1.11.0) (2024-10-16)
 
 
