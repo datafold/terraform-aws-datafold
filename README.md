@@ -106,6 +106,19 @@ Good news is that when there letters in use, I'd expect those letters to be main
 Just for new accounts these can be shuffled all over again. So from terraform state perspective, things should
 be consistent at least.
 
+### Initializing the application
+
+The databases aren't created yet. The very first time, establish a shell into the `<deployment>-dfshell` 
+container. It is likely that the scheduler and server containers are crashing in a loop.
+
+All we need to do is create two databases:
+
+1. `./manage.py clickhouse create-tables`
+2. `./manage.py database create-or-upgrade`
+3. `./manage.py installation set-new-deployment-params`
+
+Now all containers should be up and running.
+
 <!-- BEGIN_TF_DOCS -->
 
 ## Requirements
