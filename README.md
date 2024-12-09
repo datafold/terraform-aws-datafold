@@ -108,10 +108,25 @@ be consistent at least.
 
 ### Initializing the application
 
-The databases aren't created yet. The very first time, establish a shell into the `<deployment>-dfshell` 
-container. It is likely that the scheduler and server containers are crashing in a loop.
+The deployment is created and the initjob should have created the databases and done the 
+initialization of the site settings.
 
-All we need to do is create two databases:
+If that didn't complete successfully, try to restart the job. 
+
+Once the deployment is complete and the initjob succeeded, we can set the install to that for false in config.yaml:
+
+```
+initjob:
+  install: false
+```
+
+Alternatively, here are the manual
+steps to achieve the same:
+
+Establish a shell into the `<deployment>-dfshell` container. 
+It is likely that the scheduler and server containers are crashing in a loop.
+
+All we need to is to run these commands:
 
 1. `./manage.py clickhouse create-tables`
 2. `./manage.py database create-or-upgrade`

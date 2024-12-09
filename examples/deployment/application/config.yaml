@@ -21,3 +21,5 @@ worker-catalog:
       memory: 19000Mi
     requests:
       memory: 19000Mi
+initjob:
+  install: true
