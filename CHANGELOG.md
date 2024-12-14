@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.12.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.0...v1.12.1) (2024-12-14)
+
+
+### Bug Fixes
+
+* Cannot refer to other var in validation ([fd0ecd6](https://github.com/datafold/terraform-aws-datafold/commit/fd0ecd68fcefc38730dc29d7b47cdf3bd435e596))
+
 ## [1.12.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.11.0...v1.12.0) (2024-11-27)
 
 
