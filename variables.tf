@@ -772,7 +772,7 @@ variable "github_cidrs" {
 variable "monitor_lambda_datadog" {
   description = "Whether to monitor the Lambda with Datadog"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "datadog_api_key" {
