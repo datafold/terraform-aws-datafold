@@ -62,11 +62,6 @@ variable "datadog_api_key" {
   type        = string
   default     = ""
   sensitive   = true
-
-  validation {
-    condition     = var.monitor_lambda_datadog ? length(var.datadog_api_key) > 0 : true
-    error_message = "Datadog API key must be provided when monitoring Lambda with Datadog"
-  }
 }
 
 variable "use_private_egress" {
