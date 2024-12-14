@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.12.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.2...v1.12.3) (2024-12-14)
+
+
+### Bug Fixes
+
+* Fix variable in module as well ([dbcf8cf](https://github.com/datafold/terraform-aws-datafold/commit/dbcf8cf97d78809dfbbef03a675d8082edda9698))
+
 ### [1.12.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.1...v1.12.2) (2024-12-14)
 
 
