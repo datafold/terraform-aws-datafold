@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.12.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.1...v1.12.2) (2024-12-14)
+
+
+### Bug Fixes
+
+* Set default monitor lambda to false ([4c13a92](https://github.com/datafold/terraform-aws-datafold/commit/4c13a92a11570846cb0d501c8663e6ab8a19ab2b))
+
 ### [1.12.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.0...v1.12.1) (2024-12-14)
 
 
