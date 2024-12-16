@@ -375,6 +375,12 @@ variable "lb_deploy_nlb" {
   description = "Flag if the network load balancer should be deployed (usually for incoming private link)."
 }
 
+variable "lb_nlb_internal" {
+  type        = bool
+  default     = true
+  description = "Set to true to make the load balancer internal and not exposed to the internet."
+}
+
 variable "lb_vpces_details" {
   default = null
   type = object({
