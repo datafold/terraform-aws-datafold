@@ -150,7 +150,7 @@ resource "aws_lb" "vpces_nlb" {
   name               = "${var.deployment_name}-nlb"
   internal           = true
   load_balancer_type = "network"
-  subnets            = var.vpc_subnets
+  subnets            = var.lb_nlb_subnets
   security_groups    = [var.vpces_security_group_id]
 
   enable_cross_zone_load_balancing = true

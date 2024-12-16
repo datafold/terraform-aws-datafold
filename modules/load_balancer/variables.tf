@@ -89,6 +89,11 @@ variable "lb_deploy_nlb" {
   description = "Flag if the network load balancer should be deployed (usually for incoming private link)."
 }
 
+variable "lb_nlb_subnets" {
+  type        = list(any)
+  description = "List of subnets to deploy the load balancer in"
+}
+
 variable "vpces_security_group_id" {
   type        = string
   default     = ""
