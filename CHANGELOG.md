@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.12.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.3...v1.12.4) (2024-12-16)
+
+
+### Bug Fixes
+
+* Allow nlb to be in public subnets ([ded9f4b](https://github.com/datafold/terraform-aws-datafold/commit/ded9f4b4f6b4df2b35281968de17d93b8d963c90))
+
 ### [1.12.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.2...v1.12.3) (2024-12-14)
 
 
