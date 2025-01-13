@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.12.6](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.5...v1.12.6) (2025-01-13)
+
+
+### Bug Fixes
+
+* Issue with for_each on not-yet-applied resource ([c3b8ef1](https://github.com/datafold/terraform-aws-datafold/commit/c3b8ef174817f6fc5bceb033460e5e7b3d79f36d))
+
 ### [1.12.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.4...v1.12.5) (2025-01-13)
 
 
