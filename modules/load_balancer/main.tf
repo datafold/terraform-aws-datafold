@@ -119,8 +119,8 @@ data "aws_network_interfaces" "lb_app" {
 }
 
 data "aws_network_interface" "lb_app" {
-  for_each = toset(data.aws_network_interfaces.lb_app.ids)
-  id       = each.value
+  count = length(data.aws_network_interfaces.lb_app.ids)
+  id    = data.aws_network_interfaces.lb_app.ids[count.index]
 }
 
 locals {
