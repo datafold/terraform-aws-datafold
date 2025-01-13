@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.12.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.4...v1.12.5) (2025-01-13)
+
+
+### Bug Fixes
+
+* Fix LB IP collector and VPA adm. controller ([084ac30](https://github.com/datafold/terraform-aws-datafold/commit/084ac30b18b121a0e46ab8cf259d2bae1eee2925))
+
 ### [1.12.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.3...v1.12.4) (2024-12-16)
 
 
