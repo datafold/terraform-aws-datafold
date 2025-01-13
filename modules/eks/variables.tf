@@ -83,6 +83,12 @@ variable "backend_app_port" {
   description = "The target port to use for the backend services"
 }
 
+variable "vpa_port" {
+  type        = number
+  default     = 8000
+  description = "The port for the VPA admission controller"
+}
+
 variable "rds_port" {
   type        = number
   default     = 5432

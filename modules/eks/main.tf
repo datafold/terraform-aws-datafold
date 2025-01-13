@@ -154,6 +154,20 @@ resource "aws_security_group_rule" "lb_ingress" {
   ]
 }
 
+resource "aws_security_group_rule" "vpa_ingress" {
+  type                     = "ingress"
+  from_port                = var.vpa_port
+  to_port                  = var.vpa_port
+  protocol                 = "tcp"
+  source_security_group_id = module.eks.cluster_security_group_id
+  security_group_id        = module.eks.node_security_group_id
+  description              = "Allows traffic from cluster control plane to VPA admission controller"
+
+  depends_on = [
+    module.eks
+  ]
+}
+
 resource "aws_security_group_rule" "db_ingress" {
   type                     = "ingress"
   from_port                = var.rds_port
