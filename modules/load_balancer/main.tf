@@ -109,20 +109,18 @@ locals {
   vpc_subnets_joined = join(",", var.vpc_subnets)
 }
 
-data "aws_network_interface" "lb_app" {
-  count = length(var.vpc_subnets)
-
+data "aws_network_interfaces" "lb_app" {
   filter {
     name   = "description"
     values = ["ELB ${module.alb_app.lb_arn_suffix}"]
   }
 
-  filter {
-    name   = "subnet-id"
-    values = [split(",", local.vpc_subnets_joined)[count.index]]
-  }
-
   depends_on = [ module.alb_app ]
+}
+
+data "aws_network_interface" "lb_app" {
+  for_each = toset(data.aws_network_interfaces.lb_app.ids)
+  id       = each.value
 }
 
 locals {
