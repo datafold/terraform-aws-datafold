@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.12.7](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.6...v1.12.7) (2025-01-18)
+
+
+### Bug Fixes
+
+* Enable KMS key rotation ([7f9a1bb](https://github.com/datafold/terraform-aws-datafold/commit/7f9a1bb45f7a4b03bd27dd1eb78d99b2bfe420e6))
+
 ### [1.12.6](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.5...v1.12.6) (2025-01-13)
 
 
