@@ -1,8 +1,9 @@
 # KMS key for encrypting RDS instance
 resource "aws_kms_key" "rds" {
-  count        = var.create_rds_kms_key ? 1 : 0
-  multi_region = true
-  description  = "KMS key for RDS"
+  count               = var.create_rds_kms_key ? 1 : 0
+  multi_region        = true
+  description         = "KMS key for RDS"
+  enable_key_rotation = true
 }
 
 resource "aws_kms_alias" "rds" {
