@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.12.8](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.7...v1.12.8) (2025-02-28)
+
+
+### Bug Fixes
+
+* Reduce timeouts ([37ccb5c](https://github.com/datafold/terraform-aws-datafold/commit/37ccb5c4be253c7aeb28485a4daafc51700d68e1))
+
 ### [1.12.7](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.6...v1.12.7) (2025-01-18)
 
 
