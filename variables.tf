@@ -34,13 +34,13 @@ variable "ebs_extra_tags" {
 
 variable "private_subnet_tags" {
   type    = map(any)
-  default = {}
+  default = {Tier="private"}
   description = "The extra tags to be applied to the private subnets"
 }
 
 variable "public_subnet_tags" {
   type    = map(any)
-  default = {}
+  default = {Tier="public"}
   description = "The extra tags to be applied to the public subnets"
 }
 

@@ -57,10 +57,10 @@ module "alb_app" {
       health_check = {
         healthy_threshold   = 2
         unhealthy_threshold = 2
-        timeout             = 10
+        timeout             = 3
         port                = var.backend_app_port
         path                = "/nginx-health"
-        interval            = 30
+        interval            = 5
       }
     }
   ]
