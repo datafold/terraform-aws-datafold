@@ -142,12 +142,12 @@ variable "vpce_details" {
 
 variable "private_subnet_tags" {
   type    = map(any)
-  default = {}
+  default = {Tier="private"}
 }
 
 variable "public_subnet_tags" {
   type    = map(any)
-  default = {}
+  default = {Tier="public"}
 }
 
 variable "vpc_tags" {
