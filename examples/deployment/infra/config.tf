@@ -32,6 +32,32 @@ resource "local_file" "infra_config" {
       redis_data_volume_id           = module.aws[0].redis_data_volume_id,
       server_name                    = module.aws[0].domain_name,
       vpc_cidr                       = module.aws[0].vpc_cidr,
+
+      # service accounts vars
+      dfshell_role_arn                           = module.aws[0].dfshell_role_arn,
+      dfshell_service_account_name               = module.aws[0].dfshell_service_account_name,
+      worker_portal_role_arn                     = module.aws[0].worker_portal_role_arn,
+      worker_portal_service_account_name         = module.aws[0].worker_portal_service_account_name,
+      operator_role_arn                          = module.aws[0].operator_role_arn,
+      operator_service_account_name              = module.aws[0].operator_service_account_name,
+      server_role_arn                            = module.aws[0].server_role_arn,
+      server_service_account_name                = module.aws[0].server_service_account_name,
+      scheduler_role_arn                         = module.aws[0].scheduler_role_arn,
+      scheduler_service_account_name             = module.aws[0].scheduler_service_account_name,
+      worker_role_arn                            = module.aws[0].worker_role_arn,
+      worker_service_account_name                = module.aws[0].worker_service_account_name,
+      worker_catalog_role_arn                    = module.aws[0].worker_catalog_role_arn,
+      worker_catalog_service_account_name        = module.aws[0].worker_catalog_service_account_name,
+      worker_interactive_role_arn                = module.aws[0].worker_interactive_role_arn,
+      worker_interactive_service_account_name    = module.aws[0].worker_interactive_service_account_name,
+      worker_singletons_role_arn                 = module.aws[0].worker_singletons_role_arn,
+      worker_singletons_service_account_name     = module.aws[0].worker_singletons_service_account_name,
+      worker_lineage_role_arn                    = module.aws[0].worker_lineage_role_arn,
+      worker_lineage_service_account_name        = module.aws[0].worker_lineage_service_account_name,
+      worker_monitor_role_arn                    = module.aws[0].worker_monitor_role_arn,
+      worker_monitor_service_account_name        = module.aws[0].worker_monitor_service_account_name,
+      storage_worker_role_arn                    = module.aws[0].storage_worker_role_arn,
+      storage_worker_service_account_name        = module.aws[0].storage_worker_service_account_name,
     }
   )
 

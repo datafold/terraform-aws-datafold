@@ -167,3 +167,123 @@ output "github_reverse_proxy_url" {
   value = coalesce(one(module.github_reverse_proxy[*].api_gateway_url), "not active")
   description = "The URL of the API Gateway that acts as a reverse proxy to the GitHub API"
 }
+
+# dfshell
+output "dfshell_role_arn" {
+  value = module.eks.dfshell_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "dfshell_service_account_name" {
+  value = module.eks.dfshell_service_account_name
+  description = "The name of the service account for dfshell"
+}
+
+# worker_portal
+output "worker_portal_role_arn" {
+  value = module.eks.worker_portal_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "worker_portal_service_account_name" {
+  value = module.eks.worker_portal_service_account_name
+  description = "The name of the service account for worker_portal"
+}
+
+# operator
+output "operator_role_arn" {
+  value = module.eks.operator_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "operator_service_account_name" {
+  value = module.eks.operator_service_account_name
+  description = "The name of the service account for operator"
+}
+
+# server
+output "server_role_arn" {
+  value = module.eks.server_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "server_service_account_name" {
+  value = module.eks.server_service_account_name
+  description = "The name of the service account for server"
+}
+
+# scheduler
+output "scheduler_role_arn" {
+  value = module.eks.scheduler_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "scheduler_service_account_name" {
+  value = module.eks.scheduler_service_account_name
+  description = "The name of the service account for scheduler"
+}
+
+# worker, worker1, worker2 etc.
+output "worker_role_arn" {
+  value = module.eks.worker_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "worker_service_account_name" {
+  value = module.eks.worker_service_account_name
+  description = "The name of the service account for worker"
+}
+
+# worker_catalog
+output "worker_catalog_role_arn" {
+  value = module.eks.worker_catalog_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "worker_catalog_service_account_name" {
+  value = module.eks.worker_catalog_service_account_name
+  description = "The name of the service account for worker_catalog"
+}
+
+# worker_interactive
+output "worker_interactive_role_arn" {
+  value = module.eks.worker_interactive_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "worker_interactive_service_account_name" {
+  value = module.eks.worker_interactive_service_account_name
+  description = "The name of the service account for worker_interactive"
+}
+
+# worker_singletons
+output "worker_singletons_role_arn" {
+  value = module.eks.worker_singletons_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "worker_singletons_service_account_name" {
+  value = module.eks.worker_singletons_service_account_name
+  description = "The name of the service account for worker_singletons"
+}
+
+# worker_lineage
+output "worker_lineage_role_arn" {
+  value = module.eks.worker_lineage_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "worker_lineage_service_account_name" {
+  value = module.eks.worker_lineage_service_account_name
+  description = "The name of the service account for worker_lineage"
+}
+
+# worker_monitor
+output "worker_monitor_role_arn" {
+  value = module.eks.worker_monitor_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "worker_monitor_service_account_name" {
+  value = module.eks.worker_monitor_service_account_name
+  description = "The name of the service account for worker_monitor"
+}
+
+# storage_worker
+output "storage_worker_role_arn" {
+  value = module.eks.storage_worker_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "storage_worker_service_account_name" {
+  value = module.eks.storage_worker_service_account_name
+  description = "The name of the service account for storage_worker"
+}
