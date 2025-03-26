@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.13.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.8...v1.13.0) (2025-03-26)
+
+
+### Features
+
+* Add service accounts, roles individual policies ([069aacb](https://github.com/datafold/terraform-aws-datafold/commit/069aacbef64da9a7174c53ad7eb79bc3e36b7b2c))
+
 ### [1.12.8](https://github.com/datafold/terraform-aws-datafold/compare/v1.12.7...v1.12.8) (2025-02-28)
 
 
