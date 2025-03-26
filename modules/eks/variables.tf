@@ -106,14 +106,86 @@ variable "k8s_access_bedrock" {
   description = "Allow cluster to access bedrock in this region"
 }
 
-variable "bedrock_model_arn" {
-  type        = string
-  default     = ""
-  description = "See ARN for bedrock model"
-}
-
 variable "k8s_api_access_roles" {
   type        = set(string)
   default     = []
   description = "Set of roles that can access the EKS API"
+}
+
+variable "sg_tags" {
+  description = "Tags to apply to security groups and related resources"
+  type        = map(string)
+  default     = {}
+}
+
+variable "dfshell_service_account_name" {
+  type        = string
+  default     = "datafold-dfshell"
+  description = "Name of the service account for dfshell"
+}
+
+variable "worker_portal_service_account_name" {
+  type        = string
+  default     = "datafold-worker-portal"
+  description = "Name of the service account for worker_portal"
+}
+
+variable "operator_service_account_name" {
+  type        = string
+  default     = "datafold-operator"
+  description = "Name of the service account for operator"
+}
+
+variable "server_service_account_name" {
+  type        = string
+  default     = "datafold-server"
+  description = "Name of the service account for server"
+}
+
+variable "scheduler_service_account_name" {
+  type        = string
+  default     = "datafold-scheduler"
+  description = "Name of the service account for scheduler"
+}
+
+variable "worker_service_account_name" {
+  type        = string
+  default     = "datafold-worker"
+  description = "Name of the service account for worker"
+}
+
+variable "worker_catalog_service_account_name" {
+  type        = string
+  default     = "datafold-worker-catalog"
+  description = "Name of the service account for worker_catalog"
+}
+
+variable "worker_interactive_service_account_name" {
+  type        = string
+  default     = "datafold-worker-interactive"
+  description = "Name of the service account for worker_interactive"
+}
+
+variable "worker_singletons_service_account_name" {
+  type        = string
+  default     = "datafold-worker-singletons"
+  description = "Name of the service account for worker_singletons"
+}
+
+variable "worker_lineage_service_account_name" {
+  type        = string
+  default     = "datafold-worker-lineage"
+  description = "Name of the service account for worker_lineage"
+}
+
+variable "worker_monitor_service_account_name" {
+  type        = string
+  default     = "datafold-worker-monitor"
+  description = "Name of the service account for worker_monitor"
+}
+
+variable "storage_worker_service_account_name" {
+  type        = string
+  default     = "datafold-storage-worker"
+  description = "Name of the service account for storage_worker"
 }
