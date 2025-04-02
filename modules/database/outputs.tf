@@ -7,7 +7,7 @@ output "postgres_username" {
 }
 
 output "postgres_password" {
-  value = random_password.rds_master_password.result
+  value = local.rds_password
 }
 
 output "postgres_database_name" {

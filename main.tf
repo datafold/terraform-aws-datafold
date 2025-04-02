@@ -74,6 +74,7 @@ module "load_balancer" {
   lb_access_logs         = var.lb_access_logs
   lb_deploy_nlb          = var.lb_deploy_nlb
   lb_vpces_details       = var.lb_vpces_details
+  initial_apply_complete = var.initial_apply_complete
 
   vpces_security_group_id = local.vpces_sec_group_id
 }
@@ -195,6 +196,7 @@ module "database" {
   provider_region                          = var.provider_region
   vpc_private_subnets                      = local.vpc_private_subnets
   rds_username                             = var.rds_username
+  rds_password_override                    = var.rds_password_override
   rds_instance                             = var.rds_instance
   rds_allocated_storage                    = var.rds_allocated_storage
   rds_max_allocated_storage                = var.rds_max_allocated_storage
@@ -223,6 +225,7 @@ module "database" {
   rds_copy_tags_to_snapshot                = var.rds_copy_tags_to_snapshot
   rds_performance_insights_enabled         = var.rds_performance_insights_enabled
   rds_performance_insights_retention_period= var.rds_performance_insights_retention_period
+  rds_monitoring_role_arn                  = var.rds_monitoring_role_arn
   rds_auto_minor_version_upgrade           = var.rds_auto_minor_version_upgrade
   rds_monitoring_interval                  = var.rds_monitoring_interval
 }
@@ -339,4 +342,31 @@ module "vpc_peering" {
   vpc_main_route_table_id    = module.networking.vpc_main_route_table_id
   vpc_private_route_table_id = module.networking.vpc_private_route_table_id
   vpc_public_route_table_id  = module.networking.vpc_public_route_table_id
+}
+
+resource "null_resource" "deployment_check" {
+  triggers = {
+    initial_apply_complete = var.initial_apply_complete
+  }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      # Get the load balancer IPs value
+      LB_IPS="${module.load_balancer.load_balancer_ips}"
+
+      echo $LB_IPS
+
+      # Check if it's empty, null, or just "[]"
+      if [ -z "$LB_IPS" ] || [ "$LB_IPS" = "[]" ] || [ "$LB_IPS" = "[\"\"]" ]|| [ "$LB_IPS" = "null" ]; then
+        echo "\n\nERROR: Initial deployment complete. Set 'initial_apply_complete = true' to resolve load balancer IP dependencies.\n\n"
+        exit 1
+      fi
+    EOT
+    interpreter = ["/bin/bash", "-c"]
+    quiet       = true
+  }
+
+  depends_on = [
+    module.load_balancer
+  ]
 }

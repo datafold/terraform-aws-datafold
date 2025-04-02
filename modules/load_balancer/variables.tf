@@ -111,3 +111,9 @@ variable "lb_vpces_details" {
   })
   description = "Endpoint service to define for internal traffic over private link"
 }
+
+variable "initial_apply_complete" {
+  type        = bool
+  default     = false
+  description = "Indicates if this infra is deployed or not. Helps to resolve dependencies."
+}

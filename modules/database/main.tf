@@ -37,7 +37,7 @@ module "db" {
   db_name                     = var.database_name
   username                    = var.rds_username
   manage_master_user_password = false
-  password                    = random_password.rds_master_password.result
+  password                    = local.rds_password
   port                        = var.rds_port
   copy_tags_to_snapshot       = var.rds_copy_tags_to_snapshot
 
@@ -68,6 +68,7 @@ module "db" {
 
   performance_insights_enabled = var.rds_performance_insights_enabled
   create_monitoring_role       = false
+  monitoring_role_arn          = var.rds_monitoring_role_arn
   monitoring_interval          = var.rds_monitoring_interval
 
   performance_insights_retention_period = var.rds_performance_insights_retention_period
@@ -101,7 +102,9 @@ module "db" {
 
 locals {
   log_rds_automated_backups_replication_path = "${path.module}/../../logs/rds_automated_backups_replication.log"
+  rds_password = var.rds_password_override != null ? var.rds_password_override : random_password.rds_master_password.result
 }
+
 # https://docs.aws.amazon.com/cli/latest/reference/rds/start-db-instance-automated-backups-replication.html
 resource "null_resource" "rds-automated-backups-replication" {
   count = var.rds_backups_replication_target_region != null ? 1 : 0

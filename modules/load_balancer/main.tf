@@ -28,7 +28,7 @@ data "aws_acm_certificate" "alb" {
 # https://registry.terraform.io/modules/terraform-aws-modules/alb/aws/latest
 module "alb_app" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 6.2.0"
+  version = "~> 8.7.0"
 
   name = var.lb_name_override == "" ? "${var.deployment_name}-app" : var.lb_name_override
 
@@ -109,22 +109,29 @@ locals {
   vpc_subnets_joined = join(",", var.vpc_subnets)
 }
 
-data "aws_network_interfaces" "lb_app" {
+data "aws_network_interface" "lb_app" {
+  count  = var.initial_apply_complete ? length(var.vpc_subnets) : 0
+  
   filter {
-    name   = "description"
+    name = "description"
     values = ["ELB ${module.alb_app.lb_arn_suffix}"]
+  }
+
+  filter {
+    name   = "subnet-id"
+    values = [var.vpc_subnets[count.index]]
   }
 
   depends_on = [ module.alb_app ]
 }
 
-data "aws_network_interface" "lb_app" {
-  count = length(data.aws_network_interfaces.lb_app.ids)
-  id    = data.aws_network_interfaces.lb_app.ids[count.index]
-}
-
 locals {
-  lb_ips = var.lb_internal ? jsonencode([for eni in data.aws_network_interface.lb_app : format("%s", eni.private_ip)]) : jsonencode([for eni in data.aws_network_interface.lb_app : format("%s", eni.association[0].public_ip)])
+  lb_ips = jsonencode(var.initial_apply_complete ? (
+    var.lb_internal ? 
+        [for eni in data.aws_network_interface.lb_app : format("%s", eni.private_ip)] : 
+        [for eni in data.aws_network_interface.lb_app : format("%s", eni.association[0].public_ip)]
+    ) : [""]
+  )
 }
 
 resource "aws_lb_target_group" "nlb_alb_target" {
