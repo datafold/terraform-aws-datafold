@@ -34,6 +34,12 @@ variable "rds_username" {
   description = "RDS username"
 }
 
+variable "rds_password_override" {
+  type        = string
+  default     = null
+  description = "Password override"
+}
+
 variable "rds_instance" {
   type        = string
   default     = "db.t3.medium"
@@ -198,6 +204,12 @@ variable "rds_performance_insights_retention_period" {
   type        = number
   default     = 7
   description = "RDS performance insights retention period"
+}
+
+variable "rds_monitoring_role_arn" {
+  type        = string
+  description = "The IAM role allowed to send RDS metrics to cloudwatch"
+  default     = null
 }
 
 variable "rds_auto_minor_version_upgrade" {

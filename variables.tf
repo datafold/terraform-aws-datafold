@@ -104,6 +104,12 @@ variable "private_subnet_index" {
   description = "Index of the private subnet"
 }
 
+variable "initial_apply_complete" {
+  type        = bool
+  default     = false
+  description = "Indicates if this infra is deployed or not. Helps to resolve dependencies."
+}
+
 #  ┏━┓┏━┓┏━┓╻ ╻╻╺┳┓┏━╸┏━┓
 #  ┣━┛┣┳┛┃ ┃┃┏┛┃ ┃┃┣╸ ┣┳┛
 #  ╹  ╹┗╸┗━┛┗┛ ╹╺┻┛┗━╸╹┗╸
@@ -403,6 +409,12 @@ variable "rds_username" {
   description = "Overrides the default RDS user name that is provisioned."
 }
 
+variable "rds_password_override" {
+  type        = string
+  default     = null
+  description = "Password override"
+}
+
 variable "rds_identifier" {
   type        = string
   default     = ""
@@ -535,6 +547,12 @@ variable "rds_performance_insights_enabled" {
   type        = bool
   default     = false
   description = "RDS performance insights enabled or not"
+}
+
+variable "rds_monitoring_role_arn" {
+  type        = string
+  description = "The IAM role allowed to send RDS metrics to cloudwatch"
+  default     = null
 }
 
 variable "db_extra_parameters" {

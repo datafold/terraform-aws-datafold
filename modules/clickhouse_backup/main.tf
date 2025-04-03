@@ -20,6 +20,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "clickhouse_backup" {
     expiration {
       days = 14
     }
+    filter {}
     status = "Enabled"
   }
 }
