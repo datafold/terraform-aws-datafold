@@ -39,6 +39,11 @@ module "aws" {
   create_ssl_cert        = false
   backend_app_port       = var.backend_app_port
 
+  # Set this to true after the initial deploy.
+  # it is used to resolve data block dependencies on resources that
+  # don't exist yet.
+  initial_apply_complete = false
+
   # Security Groups / Virtual Private Cloud
   whitelisted_ingress_cidrs = ["0.0.0.0/0"]
   whitelisted_egress_cidrs = concat(
