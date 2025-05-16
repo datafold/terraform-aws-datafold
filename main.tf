@@ -61,8 +61,8 @@ module "load_balancer" {
   deployment_name        = var.deployment_name
   vpc_id                 = local.vpc_id
   vpc_cidr               = local.vpc_cidr
-  vpc_subnets            = var.lb_internal ? local.vpc_private_subnets : local.vpc_public_subnets
-  lb_nlb_subnets         = var.lb_nlb_internal ? local.vpc_private_subnets : local.vpc_public_subnets
+  vpc_subnets            = length(var.lb_subnets_override) > 0 ? var.lb_subnets_override : (var.lb_internal ? local.vpc_private_subnets : local.vpc_public_subnets)
+  lb_nlb_subnets         = length(var.lb_subnets_override) > 0 ? var.lb_subnets_override : (var.lb_nlb_internal ? local.vpc_private_subnets : local.vpc_public_subnets)
   security_group_id      = local.lb_security_group_id
   create_ssl_cert        = var.create_ssl_cert
   alb_certificate_domain = var.alb_certificate_domain

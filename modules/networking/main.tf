@@ -35,7 +35,7 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_eip" "nat_gateway" {
-  count = var.nat_gateway_public_ip != "" ? 0 : 1
+  count = var.nat_gateway_public_ip != "" && var.vpc_id == "" ? 0 : 1
   vpc   = true
 
   tags = {
@@ -44,7 +44,7 @@ resource "aws_eip" "nat_gateway" {
 }
 
 data "aws_eip" "nat_gateway" {
-  count     = var.nat_gateway_public_ip != "" ? 1 : 0
+  count     = var.nat_gateway_public_ip != "" && var.vpc_id == "" ? 1 : 0
   public_ip = var.nat_gateway_public_ip
 }
 
