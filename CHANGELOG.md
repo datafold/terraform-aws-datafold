@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.13.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.1...v1.13.2) (2025-05-16)
+
+
+### Bug Fixes
+
+* Add bedrock acccess to interactive worker ([e37676e](https://github.com/datafold/terraform-aws-datafold/commit/e37676e1ba2230e78725da649c8430bc5e830140))
+
 ### [1.13.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.0...v1.13.1) (2025-04-03)
 
 
