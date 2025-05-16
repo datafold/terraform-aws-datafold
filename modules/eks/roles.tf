@@ -219,3 +219,9 @@ resource "aws_iam_role_policy_attachment" "bedrock_worker_attachment" {
   policy_arn = aws_iam_policy.bedrock_access_policy[0].arn
 }
 
+resource "aws_iam_role_policy_attachment" "bedrock_worker_interactive_attachment" {
+  count      = var.k8s_access_bedrock ? 1 : 0
+  role       = module.worker_interactive_role[0].iam_role_name
+  policy_arn = aws_iam_policy.bedrock_access_policy[0].arn
+}
+
