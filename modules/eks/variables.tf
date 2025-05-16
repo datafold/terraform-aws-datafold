@@ -189,3 +189,9 @@ variable "storage_worker_service_account_name" {
   default     = "datafold-storage-worker"
   description = "Name of the service account for storage_worker"
 }
+
+variable "dma_service_account_name" {
+  type        = string
+  default     = "datafold-dma"
+  description = "Name of the service account for dma pods"
+}

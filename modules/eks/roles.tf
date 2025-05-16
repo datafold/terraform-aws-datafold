@@ -200,6 +200,20 @@ module "storage_worker_role" {
   }
 }
 
+# dma
+module "dma_role" {
+  count              = 1
+  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  role_name          = "${var.deployment_name}-${var.dma_service_account_name}"
+
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.deployment_name}:${var.dma_service_account_name}"]
+    }
+  }
+}
+
 # Policy Attachments
 resource "aws_iam_role_policy_attachment" "bedrock_dfshell_attachment" {
   count      = var.k8s_access_bedrock ? 1 : 0
@@ -216,6 +230,12 @@ resource "aws_iam_role_policy_attachment" "bedrock_server_attachment" {
 resource "aws_iam_role_policy_attachment" "bedrock_worker_attachment" {
   count      = var.k8s_access_bedrock ? 1 : 0
   role       = module.worker_role[0].iam_role_name
+  policy_arn = aws_iam_policy.bedrock_access_policy[0].arn
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_dma_attachment" {
+  count      = var.k8s_access_bedrock ? 1 : 0
+  role       = module.dma_role[0].iam_role_name
   policy_arn = aws_iam_policy.bedrock_access_policy[0].arn
 }
 

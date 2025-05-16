@@ -287,3 +287,13 @@ output "storage_worker_service_account_name" {
   value = module.eks.storage_worker_service_account_name
   description = "The name of the service account for storage_worker"
 }
+
+# dma
+output "dma_role_arn" {
+  value = module.eks.dma_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "dma_service_account_name" {
+  value = module.eks.dma_service_account_name
+  description = "The name of the service account for dma"
+}

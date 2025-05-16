@@ -137,3 +137,13 @@ output "storage_worker_service_account_name" {
   value = var.storage_worker_service_account_name
   description = "The name of the service account for storage_worker"
 }
+
+# dma
+output "dma_role_arn" {
+  value = module.dma_role[0].iam_role_arn
+  description = "The ARN of the AWS Bedrock role"
+}
+output "dma_service_account_name" {
+  value = var.dma_service_account_name
+  description = "The name of the service account for dma"
+}
