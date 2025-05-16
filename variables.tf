@@ -324,6 +324,12 @@ variable "create_ssl_cert" {
   description = "Creates an SSL certificate if set."
 }
 
+variable "lb_subnets_override" {
+  description = "Override subnets to deploy ALB into, otherwise use default logic."
+  type        = list(string)
+  default     = []
+}
+
 variable "alb_certificate_domain" {
   type        = string
   description = <<-EOT
