@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.13.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.2...v1.13.3) (2025-05-16)
+
+
+### Bug Fixes
+
+* Add capabilities to deploy LB/NAT gateway ([f750436](https://github.com/datafold/terraform-aws-datafold/commit/f750436392f87ba9ffef9a2be559d66fdd73b631))
+
 ### [1.13.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.1...v1.13.2) (2025-05-16)
 
 
