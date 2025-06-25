@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.13.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.3...v1.13.4) (2025-06-25)
+
+
+### Bug Fixes
+
+* Upgrade versions because of AWS API deprecation ([3ffe9b9](https://github.com/datafold/terraform-aws-datafold/commit/3ffe9b9f472cbc172e771bbdaa1efa52dcc6f153))
+
 ### [1.13.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.2...v1.13.3) (2025-05-16)
 
 
