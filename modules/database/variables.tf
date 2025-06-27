@@ -140,7 +140,7 @@ variable "rds_ro_username" {
 
 variable "rds_version" {
   type        = string
-  default     = "11.19"
+  default     = "15.12"
   description = "Override RDS version"
 }
 
