@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.13.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.4...v1.13.5) (2025-06-27)
+
+
+### Bug Fixes
+
+* Fix flow logs ([78fd082](https://github.com/datafold/terraform-aws-datafold/commit/78fd08208d060d1b9f0236438a871785d750dd3c))
+
 ### [1.13.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.3...v1.13.4) (2025-06-25)
 
 
