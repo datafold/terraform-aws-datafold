@@ -156,6 +156,19 @@ locals {
   )
 }
 
+module "clickhouse_backup" {
+  source = "./modules/clickhouse_backup"
+
+  deployment_name                = var.deployment_name
+  clickhouse_s3_bucket           = var.clickhouse_s3_bucket
+  s3_clickhouse_backup_tags      = var.s3_clickhouse_backup_tags
+  s3_backup_bucket_name_override = var.s3_backup_bucket_name_override
+}
+
+locals {
+  clickhouse_backup_bucket_arn  = module.clickhouse_backup.clickhouse_s3_bucket_arn
+}
+
 module "eks" {
   source = "./modules/eks"
 
@@ -181,11 +194,12 @@ module "eks" {
   k8s_public_access_cidrs             = var.k8s_public_access_cidrs
 
   k8s_access_bedrock                  = var.k8s_access_bedrock
+  clickhouse_backup_bucket_arn        = local.clickhouse_backup_bucket_arn
 }
 
 locals {
-  cluster_name        = module.eks.cluster_name
-  control_plane_sg_id = module.eks.control_plane_security_group_id
+cluster_name        = module.eks.cluster_name
+control_plane_sg_id = module.eks.control_plane_security_group_id
 }
 
 module "database" {
@@ -230,15 +244,6 @@ module "database" {
   rds_monitoring_interval                  = var.rds_monitoring_interval
 }
 
-module "clickhouse_backup" {
-  source = "./modules/clickhouse_backup"
-
-  deployment_name                = var.deployment_name
-  clickhouse_s3_bucket           = var.clickhouse_s3_bucket
-  s3_clickhouse_backup_tags      = var.s3_clickhouse_backup_tags
-  s3_backup_bucket_name_override = var.s3_backup_bucket_name_override
-}
-
 module "private_access" {
   count = var.deploy_private_access ? 1 : 0
   source = "./modules/private_access"
@@ -263,7 +268,7 @@ resource "aws_ebs_volume" "clickhouse_data" {
 
   tags = merge({
     Name = "${var.deployment_name}-clickhouse-data"
-  }, var.ebs_extra_tags)
+    }, var.ebs_extra_tags)
 }
 
 resource "aws_ebs_volume" "clickhouse_logs" {
