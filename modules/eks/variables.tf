@@ -118,6 +118,17 @@ variable "sg_tags" {
   default     = {}
 }
 
+variable "clickhouse_backup_service_account_name" {
+  type        = string
+  default     = "datafold-clickhouse"
+  description = "Name of the service account for clickhouse backup"
+}
+
+variable "clickhouse_backup_bucket_arn" {
+  type        = string
+  description = "ARN of the backup bucket"
+}
+
 variable "dfshell_service_account_name" {
   type        = string
   default     = "datafold-dfshell"

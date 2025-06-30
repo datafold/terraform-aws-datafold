@@ -133,14 +133,9 @@ output "clickhouse_s3_region" {
   description = "The region where the S3 bucket is created"
 }
 
-output "clickhouse_access_key" {
-  value = module.clickhouse_backup.clickhouse_access_key
-  description = "The access key of the IAM user doing the clickhouse backups."
-}
-
-output "clickhouse_secret_key" {
-  value = module.clickhouse_backup.clickhouse_secret_key
-  description = "The secret key of the IAM user doing the clickhouse backups."
+output "clickhouse_backup_role_name" {
+  value = module.eks.clickhouse_backup_role_name
+  description = "The name of the role for clickhouse backups"
 }
 
 output "private_access_vpces_name" {

@@ -28,7 +28,37 @@ resource "aws_iam_policy" "bedrock_access_policy" {
   tags = var.sg_tags
 }
 
-# 
+resource "aws_iam_policy" "clickhouse_backup_policy" {
+  name        = "${var.deployment_name}-clickhouse-backup-policy"
+  description = "Policy that allows clickhouse to make backups"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:ListBucket",
+        ],
+        Resource = [var.clickhouse_backup_bucket_arn]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:DeleteObject"
+        ],
+        Resource = [
+          "${var.clickhouse_backup_bucket_arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+#
 # Roles
 # 
 
@@ -200,6 +230,18 @@ module "storage_worker_role" {
   }
 }
 
+module "clickhouse_backup_role" {
+  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  role_name          = "${var.deployment_name}-${var.clickhouse_backup_service_account_name}"
+
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.deployment_name}:${var.clickhouse_backup_service_account_name}"]
+    }
+  }
+}
+
 # Policy Attachments
 resource "aws_iam_role_policy_attachment" "bedrock_dfshell_attachment" {
   count      = var.k8s_access_bedrock ? 1 : 0
@@ -223,5 +265,10 @@ resource "aws_iam_role_policy_attachment" "bedrock_worker_interactive_attachment
   count      = var.k8s_access_bedrock ? 1 : 0
   role       = module.worker_interactive_role[0].iam_role_name
   policy_arn = aws_iam_policy.bedrock_access_policy[0].arn
+}
+
+resource "aws_iam_role_policy_attachment" "clickhouse_backup_attachment" {
+  role       = module.clickhouse_backup_role.iam_role_name
+  policy_arn = aws_iam_policy.clickhouse_backup_policy.arn
 }
 

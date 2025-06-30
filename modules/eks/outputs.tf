@@ -137,3 +137,9 @@ output "storage_worker_service_account_name" {
   value = var.storage_worker_service_account_name
   description = "The name of the service account for storage_worker"
 }
+
+# Clickhouse backup
+output "clickhouse_backup_role_name" {
+  value = module.clickhouse_backup_role.iam_role_arn
+  description = "The name of the role for clickhouse backups"
+}
