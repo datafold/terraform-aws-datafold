@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.14.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.5...v1.14.0) (2025-06-30)
+
+
+### Features
+
+* Use IRSA for backups ([9b38821](https://github.com/datafold/terraform-aws-datafold/commit/9b3882110297b9f598fe2df52635ca44ee477143))
+
 ### [1.13.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.4...v1.13.5) (2025-06-27)
 
 
