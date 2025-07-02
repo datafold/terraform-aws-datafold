@@ -1,7 +1,7 @@
 resource "local_file" "infra_config" {
   filename = "${path.module}/../application/infra.dec.yaml"
   content = templatefile(
-    "${path.module}/../../../../../../templates/datafold/infra_settings_v3.tpl",
+    "${path.module}/../templates/datafold/infra_settings.tpl",
     {
       aws_target_group_arn           = module.aws[0].target_group_arn,
       clickhouse_backup_sa           = "",
@@ -69,6 +69,6 @@ resource "local_file" "infra_config" {
   }
 
   depends_on = [
-    module.aws[0]
+    module.aws
   ]
 }
