@@ -1,18 +1,3 @@
-resource "kubernetes_storage_class" "example" {
-  metadata {
-    name = "sc-datafold-aws"
-  }
-  storage_provisioner = "kubernetes.io/aws-ebs"
-  reclaim_policy      = "Retain"
-  parameters = {
-    type      = "gp2"
-    fsType    = "ext4"
-    encrypted = "true"
-  }
-  allow_volume_expansion = "true"
-  volume_binding_mode    = "WaitForFirstConsumer"
-}
-
 resource "kubernetes_service_account_v1" "aws_lb_controller" {
   metadata {
     name      = "aws-load-balancer-controller"
