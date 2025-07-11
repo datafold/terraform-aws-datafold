@@ -23,7 +23,7 @@ locals {
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.12"
   memory_size   = 256
-  timeout       = 30
+  timeout       = 120
   publish       = true
 
   filename         = data.archive_file.zip_lambda_function.output_path
@@ -63,7 +63,8 @@ module "lambda_datadog" {
     "DD_LOG_LEVEL": "INFO"
     "DD_TAGS": "deployment:${var.deployment_name}"
     "PRIVATE_SYSTEM_ENDPOINT" : local.private_system_endpoint
-    "DATADOG_MONITORING_ENABLED": "true"
+    "DATADOG_MONITORING_ENABLED": "false",
+    "DD_TRACE_ENABLED": "false",
   }
 
   vpc_config_subnet_ids         = local.subnet_ids
