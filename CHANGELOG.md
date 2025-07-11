@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.0...v1.14.1) (2025-07-11)
+
+
+### Bug Fixes
+
+* Improve github proxy timeout and settings ([75a89a7](https://github.com/datafold/terraform-aws-datafold/commit/75a89a7baa2ec7f83da1318647c7c74e5018bfa9))
+
 ## [1.14.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.13.5...v1.14.0) (2025-06-30)
 
 
