@@ -677,7 +677,7 @@ variable "k8s_module_version" {
 
 variable "k8s_cluster_version" {
   type        = string
-  default     = "1.29"
+  default     = "1.33"
   description = "Ref. https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
 }
 
@@ -687,22 +687,10 @@ variable "self_managed_node_grp_instance_type" {
   description = "Ref. https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt"
 }
 
-variable "self_managed_node_grp_default" {
-  type    = any
-  default = {}
-  description = "Configuration for the self managed node group"
-}
-
 variable "self_managed_node_grps" {
   type    = any
   default = {}
   description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/self-managed-node-group"
-}
-
-variable "managed_node_grp_default" {
-  type        = list(any)
-  default     = []
-  description = "Ref. https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt"
 }
 
 variable "managed_node_grp1" {

@@ -33,7 +33,7 @@ variable "k8s_module_version" {
 
 variable "k8s_cluster_version" {
   type        = string
-  default     = "1.29"
+  default     = "1.33"
   description = "Ref. https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
 }
 
@@ -53,20 +53,9 @@ variable "self_managed_node_grp_instance_type" {
   description = "Ref. https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt"
 }
 
-variable "self_managed_node_grp_default" {
-  type    = any
-  default = {}
-}
-
 variable "self_managed_node_grps" {
   type    = any
   default = {}
-}
-
-variable "managed_node_grp_default" {
-  type        = list(any)
-  default     = []
-  description = "Ref. https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt"
 }
 
 variable "managed_node_grps" {
@@ -120,7 +109,7 @@ variable "sg_tags" {
 
 variable "clickhouse_backup_service_account_name" {
   type        = string
-  default     = "datafold-clickhouse"
+  default     = "clickhouse"
   description = "Name of the service account for clickhouse backup"
 }
 
@@ -131,72 +120,72 @@ variable "clickhouse_backup_bucket_arn" {
 
 variable "dfshell_service_account_name" {
   type        = string
-  default     = "datafold-dfshell"
+  default     = "dfshell"
   description = "Name of the service account for dfshell"
 }
 
 variable "worker_portal_service_account_name" {
   type        = string
-  default     = "datafold-worker-portal"
+  default     = "worker-portal"
   description = "Name of the service account for worker_portal"
 }
 
 variable "operator_service_account_name" {
   type        = string
-  default     = "datafold-operator"
+  default     = "operator"
   description = "Name of the service account for operator"
 }
 
 variable "server_service_account_name" {
   type        = string
-  default     = "datafold-server"
+  default     = "server"
   description = "Name of the service account for server"
 }
 
 variable "scheduler_service_account_name" {
   type        = string
-  default     = "datafold-scheduler"
+  default     = "scheduler"
   description = "Name of the service account for scheduler"
 }
 
 variable "worker_service_account_name" {
   type        = string
-  default     = "datafold-worker"
+  default     = "worker"
   description = "Name of the service account for worker"
 }
 
 variable "worker_catalog_service_account_name" {
   type        = string
-  default     = "datafold-worker-catalog"
+  default     = "worker-catalog"
   description = "Name of the service account for worker_catalog"
 }
 
 variable "worker_interactive_service_account_name" {
   type        = string
-  default     = "datafold-worker-interactive"
+  default     = "worker-interactive"
   description = "Name of the service account for worker_interactive"
 }
 
 variable "worker_singletons_service_account_name" {
   type        = string
-  default     = "datafold-worker-singletons"
+  default     = "worker-singletons"
   description = "Name of the service account for worker_singletons"
 }
 
 variable "worker_lineage_service_account_name" {
   type        = string
-  default     = "datafold-worker-lineage"
+  default     = "worker-lineage"
   description = "Name of the service account for worker_lineage"
 }
 
 variable "worker_monitor_service_account_name" {
   type        = string
-  default     = "datafold-worker-monitor"
+  default     = "worker-monitor"
   description = "Name of the service account for worker_monitor"
 }
 
 variable "storage_worker_service_account_name" {
   type        = string
-  default     = "datafold-storage-worker"
+  default     = "storage-worker"
   description = "Name of the service account for storage_worker"
 }

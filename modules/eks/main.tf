@@ -1,9 +1,9 @@
 data "aws_caller_identity" "current" {}
 
 module "ebs_csi_irsa_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
 
-  role_name             = "${var.deployment_name}-ebs-csi-controller"
+  name             = "${var.deployment_name}-ebs-csi-controller"
   attach_ebs_csi_policy = true
 
   oidc_providers = {
@@ -15,9 +15,9 @@ module "ebs_csi_irsa_role" {
 }
 
 module "k8s_load_balancer_controller_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
 
-  role_name                              = "${var.deployment_name}-lb-controller"
+  name                              = "${var.deployment_name}-lb-controller"
   attach_load_balancer_controller_policy = true
 
   oidc_providers = {
@@ -29,9 +29,9 @@ module "k8s_load_balancer_controller_role" {
 }
 
 module "cluster_autoscaler_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
 
-  role_name                        = "${var.deployment_name}-cluster-autoscaler"
+  name                        = "${var.deployment_name}-cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
   cluster_autoscaler_cluster_names = [module.eks.cluster_name]
 
@@ -47,18 +47,18 @@ module "eks" {
   # https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/docs
 
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.37.1"
+  version = "~> 21.1.0"
   # version = var.eks_module_version
 
-  cluster_name    = var.deployment_name
-  cluster_version = var.k8s_cluster_version
+  name               = var.deployment_name
+  kubernetes_version = var.k8s_cluster_version
 
-  cluster_endpoint_public_access = true
-  cluster_endpoint_public_access_cidrs = var.k8s_public_access_cidrs
+  endpoint_public_access = true
+  endpoint_public_access_cidrs = var.k8s_public_access_cidrs
 
   enable_irsa = true
 
-  cluster_addons = {
+  addons = {
     coredns = {
       most_recent = true
     },
@@ -91,15 +91,7 @@ module "eks" {
   authentication_mode      = "API"
 
   # Self Managed Node Group(s)
-  self_managed_node_group_defaults = var.self_managed_node_grp_default
-
   self_managed_node_groups = var.self_managed_node_grps
-
-  # EKS Managed Node Group(s)
-  eks_managed_node_group_defaults = {
-    instance_types = var.managed_node_grp_default
-  }
-
   eks_managed_node_groups = var.managed_node_grps
 
 #  access_entries = {

@@ -134,6 +134,61 @@ All we need to is to run these commands:
 
 Now all containers should be up and running.
 
+### Upgrading to 1.15+
+
+In this version the terraform providers were upgraded to newer versions and this introduces
+role name changes and a lot of other things. This means that after the upgrade, you can expect
+issues with certain kube-system pods in a crashloop. 
+
+The reason this happens is that the role names have changed that infra creates. They're using a 
+prefix and a suffix now.
+
+AWS authenticates the service accounts for certain kube-system pods like aws-loadbalancer-controller,
+but after this change that role mapping breaks.
+
+There are ways to fix that manually:
+* Apply the application again after applying the infra. This should fix the role names for two pods.
+* Go to the service account of the aws-load-balancer-controller pod.
+* The service account has a forward mapping to the role ARN they need to assume on the cloud in the annotations
+* Update that annotation.
+
+Example:
+
+```yaml
+apiVersion: v1
+automountServiceAccountToken: true
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::1234567889:role/datafold-lb-controller-2025082013431968900000001  <-- This role ARN should correspond to the role.
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+  name: aws-load-balancer-controller
+  namespace: kube-system
+```
+
+Check kubernetes for any failing pods in the kube-system namespace, possibly these need updating in the same
+way if the pods continue in the crashloop backoff phase.
+
+* In the newest version of Amazon Linux 3, Datadog cannot determine the local hostname, which it needs for tagging. Updating to the most recent datadog operator solves this issue:
+
+```bash
+> helm repo add datadog https://helm.datadoghq.com
+> helm repo udpate datadog
+> helm update datafold-datadog-operator datadog/datadog-operator
+```
+
+* The default version of kubernetes is now 1.33. Nodes will be replaced if you execute this upgrade.
+* The AWS LB controller must make calls to the metadata servers. But doing this from a pod means that the hop limit that is in place
+  needs to be increased to 2. This avoids having explicit VPC ID's or regions in the configuration of the LB controller, but comes at a 
+  limited security impact: 
+
+https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service/
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html#imds-considerations
+
+
 <!-- BEGIN_TF_DOCS -->
 
 ## Requirements

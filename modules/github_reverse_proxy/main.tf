@@ -173,9 +173,14 @@ resource "aws_api_gateway_integration" "lambda_integration" {
 # Deployment of API Gateway
 resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = aws_api_gateway_rest_api.webhook_api.id
-  stage_name  = "prod"
 
   depends_on = [aws_api_gateway_integration.lambda_integration]
+}
+
+resource "aws_api_gateway_stage" "stage" {
+  deployment_id = aws_api_gateway_deployment.api_deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.webhook_api.id
+  stage_name    = "prod"
 }
 
 resource "aws_api_gateway_rest_api_policy" "github_ip_restriction" {
@@ -188,13 +193,13 @@ resource "aws_api_gateway_rest_api_policy" "github_ip_restriction" {
         Effect: "Allow",
         Principal: "*",
         Action: "execute-api:Invoke",
-        Resource: "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.webhook_api.id}/*/POST/*",
+        Resource: "arn:aws:execute-api:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.webhook_api.id}/*/POST/*",
       },
       {
         Effect: "Deny",
         Principal: "*",
         Action: "execute-api:Invoke",
-        Resource: "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.webhook_api.id}/*/POST/*",
+        Resource: "arn:aws:execute-api:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.webhook_api.id}/*/POST/*",
         Condition: {
           "NotIpAddress": {
             "aws:SourceIp": var.github_cidrs
