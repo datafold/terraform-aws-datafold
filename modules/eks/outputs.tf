@@ -3,11 +3,11 @@ output "cluster_name" {
 }
 
 output "k8s_load_balancer_controller_role_arn" {
-  value = module.k8s_load_balancer_controller_role.iam_role_arn
+  value = module.k8s_load_balancer_controller_role.arn
 }
 
 output "cluster_scaler_role_arn" {
-  value = module.cluster_autoscaler_role.iam_role_arn
+  value = module.cluster_autoscaler_role.arn
 }
 
 output "control_plane_security_group_id" {
@@ -20,7 +20,7 @@ output "cluster_endpoint" {
 
 # dfshell
 output "dfshell_role_arn" {
-  value = module.dfshell_role[0].iam_role_arn
+  value = module.dfshell_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "dfshell_service_account_name" {
@@ -30,7 +30,7 @@ output "dfshell_service_account_name" {
 
 # worker_portal
 output "worker_portal_role_arn" {
-  value = module.worker_portal_role[0].iam_role_arn
+  value = module.worker_portal_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_portal_service_account_name" {
@@ -40,7 +40,7 @@ output "worker_portal_service_account_name" {
 
 # operator
 output "operator_role_arn" {
-  value = module.operator_role[0].iam_role_arn
+  value = module.operator_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "operator_service_account_name" {
@@ -50,7 +50,7 @@ output "operator_service_account_name" {
 
 # server
 output "server_role_arn" {
-  value = module.server_role[0].iam_role_arn
+  value = module.server_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "server_service_account_name" {
@@ -60,7 +60,7 @@ output "server_service_account_name" {
 
 # scheduler
 output "scheduler_role_arn" {
-  value = module.scheduler_role[0].iam_role_arn
+  value = module.scheduler_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "scheduler_service_account_name" {
@@ -70,7 +70,7 @@ output "scheduler_service_account_name" {
 
 # worker, worker1, worker2 etc.
 output "worker_role_arn" {
-  value = module.worker_role[0].iam_role_arn
+  value = module.worker_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_service_account_name" {
@@ -80,7 +80,7 @@ output "worker_service_account_name" {
 
 # worker_catalog
 output "worker_catalog_role_arn" {
-  value = module.worker_catalog_role[0].iam_role_arn
+  value = module.worker_catalog_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_catalog_service_account_name" {
@@ -90,7 +90,7 @@ output "worker_catalog_service_account_name" {
 
 # worker_interactive
 output "worker_interactive_role_arn" {
-  value = module.worker_interactive_role[0].iam_role_arn
+  value = module.worker_interactive_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_interactive_service_account_name" {
@@ -100,7 +100,7 @@ output "worker_interactive_service_account_name" {
 
 # worker_singletons
 output "worker_singletons_role_arn" {
-  value = module.worker_singletons_role[0].iam_role_arn
+  value = module.worker_singletons_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_singletons_service_account_name" {
@@ -110,7 +110,7 @@ output "worker_singletons_service_account_name" {
 
 # worker_lineage
 output "worker_lineage_role_arn" {
-  value = module.worker_lineage_role[0].iam_role_arn
+  value = module.worker_lineage_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_lineage_service_account_name" {
@@ -120,7 +120,7 @@ output "worker_lineage_service_account_name" {
 
 # worker_monitor
 output "worker_monitor_role_arn" {
-  value = module.worker_monitor_role[0].iam_role_arn
+  value = module.worker_monitor_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_monitor_service_account_name" {
@@ -130,7 +130,7 @@ output "worker_monitor_service_account_name" {
 
 # storage_worker
 output "storage_worker_role_arn" {
-  value = module.storage_worker_role[0].iam_role_arn
+  value = module.storage_worker_role[0].arn
   description = "The ARN of the AWS Bedrock role"
 }
 output "storage_worker_service_account_name" {
@@ -140,6 +140,6 @@ output "storage_worker_service_account_name" {
 
 # Clickhouse backup
 output "clickhouse_backup_role_name" {
-  value = module.clickhouse_backup_role.iam_role_arn
+  value = module.clickhouse_backup_role.arn
   description = "The name of the role for clickhouse backups"
 }

@@ -102,6 +102,9 @@ locals {
           }
         }
       }
+      metadata_options = {
+        http_put_response_hop_limit = 2
+      }
     }, var.managed_node_grp1)
   second_node_pool = merge(
     {
@@ -125,6 +128,9 @@ locals {
           }
         }
       }
+      metadata_options = {
+        http_put_response_hop_limit = 2
+      }
     }, var.managed_node_grp2)
   third_node_pool = merge(
     {
@@ -147,6 +153,9 @@ locals {
             delete_on_termination = true
           }
         }
+      }
+      metadata_options = {
+        http_put_response_hop_limit = 2
       }
     }, var.managed_node_grp3)
   managed_node_groups = merge(
@@ -182,9 +191,7 @@ module "eks" {
   lb_security_group_id                = local.lb_security_group_id
   db_security_group_id                = local.db_security_group_id
   self_managed_node_grp_instance_type = var.self_managed_node_grp_instance_type
-  self_managed_node_grp_default       = var.self_managed_node_grp_default
   self_managed_node_grps              = var.self_managed_node_grps
-  managed_node_grp_default            = var.managed_node_grp_default
   managed_node_grps                   = local.managed_node_groups
   k8s_api_access_roles                = var.k8s_api_access_roles
 
