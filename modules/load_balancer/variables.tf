@@ -7,6 +7,12 @@ variable "deployment_name" {
   description = "Name of the current deployment."
 }
 
+variable "deploy_lb" {
+  type        = bool
+  default     = true
+  description = "Allows a deploy without a load balancer"
+}
+
 variable "vpc_id" {
   type        = string
   default     = ""

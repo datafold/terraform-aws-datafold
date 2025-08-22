@@ -1,5 +1,5 @@
 output "target_group_arn" {
-  value = module.alb_app.target_group_arns[0]
+  value = var.deploy_lb ? module.alb_app[0].target_group_arns[0] : "not_deployed"
 }
 
 output "load_balancer_ips" {
@@ -7,7 +7,7 @@ output "load_balancer_ips" {
 }
 
 output "load_balancer_dns" {
-  value = module.alb_app.lb_dns_name
+  value = var.deploy_lb ? module.alb_app[0].lb_dns_name : "not_deployed"
 }
 
 output "domain_name" {

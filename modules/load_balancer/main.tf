@@ -30,6 +30,8 @@ module "alb_app" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.7.0"
 
+  count = var.deploy_lb ? 1 : 0
+
   name = var.lb_name_override == "" ? "${var.deployment_name}-app" : var.lb_name_override
 
   load_balancer_type = "application"
@@ -110,11 +112,11 @@ locals {
 }
 
 data "aws_network_interface" "lb_app" {
-  count  = var.initial_apply_complete ? length(var.vpc_subnets) : 0
+  count  = var.initial_apply_complete && var.deploy_lb ? length(var.vpc_subnets) : 0
   
   filter {
     name = "description"
-    values = ["ELB ${module.alb_app.lb_arn_suffix}"]
+    values = ["ELB ${module.alb_app[0].lb_arn_suffix}"]
   }
 
   filter {
@@ -178,10 +180,10 @@ resource "aws_lb_listener" "nlb_front_end" {
 }
 
 resource "aws_lb_target_group_attachment" "attachment-alb-nlb-tg" {
-  count = var.lb_deploy_nlb ? 1 : 0
+  count = var.lb_deploy_nlb && var.deploy_lb ? 1 : 0
 
   target_group_arn = aws_lb_target_group.nlb_alb_target[0].arn
-  target_id        = module.alb_app.lb_arn
+  target_id        = module.alb_app[0].lb_arn
   port             = local.nlb_port
 }
 
