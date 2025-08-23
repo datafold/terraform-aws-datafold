@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.2...v1.14.3) (2025-08-23)
+
+
+### Bug Fixes
+
+* Options for new operator ([b07eab5](https://github.com/datafold/terraform-aws-datafold/commit/b07eab5879185898e9423ac1ebdb609155824e0e))
+
 ### [1.14.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.1...v1.14.2) (2025-08-21)
 
 
