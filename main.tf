@@ -59,6 +59,7 @@ module "load_balancer" {
   source = "./modules/load_balancer"
 
   deployment_name        = var.deployment_name
+  deploy_lb              = var.deploy_lb
   vpc_id                 = local.vpc_id
   vpc_cidr               = local.vpc_cidr
   vpc_subnets            = length(var.lb_subnets_override) > 0 ? var.lb_subnets_override : (var.lb_internal ? local.vpc_private_subnets : local.vpc_public_subnets)

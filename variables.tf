@@ -405,6 +405,12 @@ variable "lb_vpces_details" {
   description = "Endpoint service to define for internal traffic over private link"
 }
 
+variable "deploy_lb" {
+  type        = bool
+  default     = true
+  description = "Allows a deploy without a load balancer"
+}
+
 #  ╺┳┓┏━┓╺┳╸┏━┓┏┓ ┏━┓┏━┓┏━╸
 #   ┃┃┣━┫ ┃ ┣━┫┣┻┓┣━┫┗━┓┣╸
 #  ╺┻┛╹ ╹ ╹ ╹ ╹┗━┛╹ ╹┗━┛┗━╸
