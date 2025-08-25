@@ -14,13 +14,13 @@ application on an EKS cluster.
   * The application does not work without credentials supplied by sales
 * Access to our public helm-charts repository
 
-This deployment will create the following resources:
+The full deployment will create the following resources:
 
 * AWS VPC
-* AWS subnet
+* AWS subnets
 * AWS S3 bucket for clickhouse backups
-* AWS external load balancer
-* AWS ACM certificate, unless preregistered and provided
+* AWS Application Load Balancer
+* AWS ACM certificate
 * Three EBS volumes for local data storage
 * AWS RDS Postgres database
 * An EKS cluster
@@ -108,20 +108,7 @@ be consistent at least.
 
 ### Initializing the application
 
-The deployment is created and the initjob should have created the databases and done the 
-initialization of the site settings.
-
-If that didn't complete successfully, try to restart the job. 
-
-Once the deployment is complete and the initjob succeeded, we can set the install to that for false in config.yaml:
-
-```
-initjob:
-  install: false
-```
-
-Alternatively, here are the manual
-steps to achieve the same:
+Herea are the steps to initialize databases and the initial site settings:
 
 Establish a shell into the `<deployment>-dfshell` container. 
 It is likely that the scheduler and server containers are crashing in a loop.
@@ -187,6 +174,12 @@ way if the pods continue in the crashloop backoff phase.
 https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service/
 
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html#imds-considerations
+
+## More information
+
+You can get more information from our documentation site:
+
+https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 
 
 <!-- BEGIN_TF_DOCS -->

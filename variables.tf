@@ -82,7 +82,7 @@ variable "environment" {
 
 variable "redis_data_size" {
   type        = number
-  default     = 10
+  default     = 50
   description = "Redis EBS volume size in GB"
 }
 
