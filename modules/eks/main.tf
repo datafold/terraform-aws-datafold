@@ -47,7 +47,7 @@ module "eks" {
   # https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/docs
 
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 21.1.0"
+  version = "~> 21.1.5"
   # version = var.eks_module_version
 
   name               = var.deployment_name
