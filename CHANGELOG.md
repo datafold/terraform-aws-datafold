@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.4...v1.14.5) (2025-08-27)
+
+
+### Bug Fixes
+
+* Fix deployment order for addons ([5d56af4](https://github.com/datafold/terraform-aws-datafold/commit/5d56af48a3203cd51dbfd3de855249d0beb0ca8e))
+
 ### [1.14.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.3...v1.14.4) (2025-08-27)
 
 
