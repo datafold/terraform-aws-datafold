@@ -60,13 +60,16 @@ module "eks" {
 
   addons = {
     coredns = {
-      most_recent = true
+      most_recent    = true
+      before_compute = true
     },
     kube-proxy = {
-      most_recent = true
+      most_recent    = true
+      before_compute = true
     },
     vpc-cni = {
-      most_recent = true
+      most_recent    = true
+      before_compute = true
 
       configuration_values = jsonencode({
         enableNetworkPolicy : "true",
@@ -75,6 +78,7 @@ module "eks" {
     aws-ebs-csi-driver = {
       service_account_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.deployment_name}-ebs-csi-controller"
       most_recent              = true
+      before_compute           = true
       configuration_values     = jsonencode({
         "sidecars": {
           "snapshotter": {
