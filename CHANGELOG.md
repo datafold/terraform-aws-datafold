@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.3...v1.14.4) (2025-08-27)
+
+
+### Bug Fixes
+
+* Force IMDSv2 just in case ([ef24c10](https://github.com/datafold/terraform-aws-datafold/commit/ef24c104d42f9e9584234fd0b435b8660b4f2865))
+
 ### [1.14.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.2...v1.14.3) (2025-08-23)
 
 
