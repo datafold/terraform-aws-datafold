@@ -64,9 +64,10 @@ resource "aws_iam_policy" "clickhouse_backup_policy" {
 
 # dfshell
 module "dfshell_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.dfshell_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.dfshell_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -78,9 +79,10 @@ module "dfshell_role" {
 
 # worker_portal
 module "worker_portal_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.worker_portal_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.worker_portal_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -92,9 +94,10 @@ module "worker_portal_role" {
 
 # operator
 module "operator_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.operator_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.operator_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -106,9 +109,10 @@ module "operator_role" {
 
 # server
 module "server_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.server_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.server_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -120,9 +124,10 @@ module "server_role" {
 
 # scheduler
 module "scheduler_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.scheduler_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.scheduler_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -134,9 +139,10 @@ module "scheduler_role" {
 
 # worker
 module "worker_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.worker_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.worker_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -148,9 +154,10 @@ module "worker_role" {
 
 # worker_catalog
 module "worker_catalog_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.worker_catalog_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.worker_catalog_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -162,9 +169,10 @@ module "worker_catalog_role" {
 
 # worker_interactive
 module "worker_interactive_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.worker_interactive_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.worker_interactive_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -176,9 +184,10 @@ module "worker_interactive_role" {
 
 # worker_singletons
 module "worker_singletons_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.worker_singletons_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.worker_singletons_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -190,9 +199,10 @@ module "worker_singletons_role" {
 
 # worker_lineage
 module "worker_lineage_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.worker_lineage_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.worker_lineage_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -204,9 +214,10 @@ module "worker_lineage_role" {
 
 # worker_monitor
 module "worker_monitor_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.worker_monitor_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.worker_monitor_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -218,9 +229,10 @@ module "worker_monitor_role" {
 
 # storage_worker
 module "storage_worker_role" {
-  count              = 1
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.storage_worker_service_account_name}"
+  count   = 1
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.storage_worker_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {
@@ -231,8 +243,9 @@ module "storage_worker_role" {
 }
 
 module "clickhouse_backup_role" {
-  source        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name          = "${var.deployment_name}-${var.clickhouse_backup_service_account_name}"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name    = "${var.deployment_name}-${var.clickhouse_backup_service_account_name}"
+  version = "6.2.1"
 
   oidc_providers = {
     ex = {

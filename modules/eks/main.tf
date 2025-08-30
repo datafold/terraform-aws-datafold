@@ -1,9 +1,10 @@
 data "aws_caller_identity" "current" {}
 
 module "ebs_csi_irsa_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "6.2.1"
 
-  name             = "${var.deployment_name}-ebs-csi-controller"
+  name                  = "${var.deployment_name}-ebs-csi-controller"
   attach_ebs_csi_policy = true
 
   oidc_providers = {
@@ -15,9 +16,10 @@ module "ebs_csi_irsa_role" {
 }
 
 module "k8s_load_balancer_controller_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "6.2.1"
 
-  name                              = "${var.deployment_name}-lb-controller"
+  name                                   = "${var.deployment_name}-lb-controller"
   attach_load_balancer_controller_policy = true
 
   oidc_providers = {
@@ -29,9 +31,10 @@ module "k8s_load_balancer_controller_role" {
 }
 
 module "cluster_autoscaler_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "6.2.1"
 
-  name                        = "${var.deployment_name}-cluster-autoscaler"
+  name                             = "${var.deployment_name}-cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
   cluster_autoscaler_cluster_names = [module.eks.cluster_name]
 
@@ -53,7 +56,7 @@ module "eks" {
   name               = var.deployment_name
   kubernetes_version = var.k8s_cluster_version
 
-  endpoint_public_access = true
+  endpoint_public_access       = true
   endpoint_public_access_cidrs = var.k8s_public_access_cidrs
 
   enable_irsa = true
@@ -79,10 +82,10 @@ module "eks" {
       service_account_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.deployment_name}-ebs-csi-controller"
       most_recent              = true
       before_compute           = true
-      configuration_values     = jsonencode({
-        "sidecars": {
-          "snapshotter": {
-            "forceEnable": false
+      configuration_values = jsonencode({
+        "sidecars" : {
+          "snapshotter" : {
+            "forceEnable" : false
           }
         }
       })
@@ -96,24 +99,24 @@ module "eks" {
 
   # Self Managed Node Group(s)
   self_managed_node_groups = var.self_managed_node_grps
-  eks_managed_node_groups = var.managed_node_grps
+  eks_managed_node_groups  = var.managed_node_grps
 
-#  access_entries = {
-#    allow_support_access = {
-#      kubernetes_groups = []
-#      principal_arn     = resource.aws_iam_role.eks_support_role.arn  (# from cloud-infra)
-#
-#      policy_associations = {
-#        single = {
-#          policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-#          access_scope = {
-#            namespaces = []
-#            type       = "cluster"
-#          }
-#        }
-#      }
-#    }
-#  }
+  #  access_entries = {
+  #    allow_support_access = {
+  #      kubernetes_groups = []
+  #      principal_arn     = resource.aws_iam_role.eks_support_role.arn  (# from cloud-infra)
+  #
+  #      policy_associations = {
+  #        single = {
+  #          policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  #          access_scope = {
+  #            namespaces = []
+  #            type       = "cluster"
+  #          }
+  #        }
+  #      }
+  #    }
+  #  }
 
   tags = var.tags
 }
