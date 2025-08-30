@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.6](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.5...v1.14.6) (2025-08-30)
+
+
+### Bug Fixes
+
+* Version iam structs because of incompatibilities ([55759cb](https://github.com/datafold/terraform-aws-datafold/commit/55759cb7d5369de30617b2e573eabb1e316934c3))
+
 ### [1.14.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.4...v1.14.5) (2025-08-27)
 
 
