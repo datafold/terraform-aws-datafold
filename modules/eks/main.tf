@@ -2,6 +2,7 @@ data "aws_caller_identity" "current" {}
 
 module "ebs_csi_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version            = "5.58.0"
 
   role_name             = "${var.deployment_name}-ebs-csi-controller"
   attach_ebs_csi_policy = true
@@ -16,6 +17,7 @@ module "ebs_csi_irsa_role" {
 
 module "k8s_load_balancer_controller_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version            = "5.58.0"
 
   role_name                              = "${var.deployment_name}-lb-controller"
   attach_load_balancer_controller_policy = true
@@ -30,6 +32,7 @@ module "k8s_load_balancer_controller_role" {
 
 module "cluster_autoscaler_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version            = "5.58.0"
 
   role_name                        = "${var.deployment_name}-cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
