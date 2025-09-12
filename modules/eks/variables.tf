@@ -135,6 +135,12 @@ variable "dfshell_service_account_name" {
   description = "Name of the service account for dfshell"
 }
 
+variable "dma_service_account_name" {
+  type        = string
+  default     = "datafold-dma"
+  description = "Name of the service account for dma"
+}
+
 variable "worker_portal_service_account_name" {
   type        = string
   default     = "datafold-worker-portal"
