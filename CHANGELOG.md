@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.7](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.6...v1.14.7) (2025-09-18)
+
+
+### Bug Fixes
+
+* Add role for DMA ([73ef83d](https://github.com/datafold/terraform-aws-datafold/commit/73ef83dcca2d6b7bec267281066646c81cc1bd38))
+
 ### [1.14.6](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.5...v1.14.6) (2025-08-30)
 
 
