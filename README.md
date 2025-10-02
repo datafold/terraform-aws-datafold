@@ -1,10 +1,28 @@
 =======
 # Datafold AWS module
 
-This repository provisions resources on AWS, preparing them for a deployment of the
-application on an EKS cluster.
+This repository provisions infrastructure resources on AWS for deploying Datafold using the datafold-operator.
 
 ## About this module
+
+**⚠️ Important**: This module is now **optional**. If you already have EKS infrastructure in place, you can configure the required resources independently. This module is primarily intended for customers who need to set up the complete infrastructure stack for EKS deployment.
+
+The module provisions AWS infrastructure resources that are required for Datafold deployment. Application configuration is now managed through the `datafoldapplication` custom resource on the cluster using the datafold-operator, rather than through Terraform application directories.
+
+## Breaking Changes
+
+### Load Balancer Deployment (Default Changed)
+
+**Breaking Change**: The load balancer is **no longer deployed by default**. The default behavior has been toggled to `deploy_lb = false`.
+
+- **Previous behavior**: Load balancer was deployed by default
+- **New behavior**: Load balancer deployment is disabled by default
+- **Action required**: If you need a load balancer, you must explicitly set `deploy_lb = true` in your configuration, so that you don't lose it. (in the case it does happen, you need to redeploy it and then update your DNS to the new LB CNAME).
+
+### Application Directory Removal
+
+- The "application" directory is no longer part of this repository
+- Application configuration is now managed through the `datafoldapplication` custom resource on the cluster
 
 ## Prerequisites
 
@@ -19,8 +37,8 @@ The full deployment will create the following resources:
 * AWS VPC
 * AWS subnets
 * AWS S3 bucket for clickhouse backups
-* AWS Application Load Balancer
-* AWS ACM certificate
+* AWS Application Load Balancer (optional, disabled by default)
+* AWS ACM certificate (if load balancer is enabled)
 * Three EBS volumes for local data storage
 * AWS RDS Postgres database
 * An EKS cluster
@@ -28,6 +46,8 @@ The full deployment will create the following resources:
   * Provisioning existing EBS volumes
   * Updating load balancer target group to point to specific pods in the cluster
   * Rescaling the nodegroup between 1-2 nodes
+
+**Infrastructure Dependencies**: For a complete list of required infrastructure resources and detailed deployment guidance, see the [Datafold Dedicated Cloud AWS Deployment Documentation](https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws).
 
 ## Negative scope
 
@@ -43,37 +63,56 @@ Create the bucket and dynamodb table for terraform state file:
 * Run `./run_bootstrap.sh` to create them. Enter the deployment_name when the question is asked.
   * The `deployment_name` is important. This is used for the k8s namespace and datadog unified logging tags and other places.
   * Suggestion: `company-datafold`
-* Transfer the name of that bucket and table into the `backend.hcl` (symlinked into both infra and application)
+* Transfer the name of that bucket and table into the `backend.hcl`
 * Set the `target_account_profile` and `region` where the bucket / table are stored.
 * `backend.hcl` is only about where the terraform state file is located.
 
-The example directory contains a single deployment example, which cleanly separates the 
-underlying runtime infra from the application deployment into kubernetes. Some specific
-elements from the `infra` directory are copied and encrypted into the `application` directory.
+The example directory contains a single deployment example for infrastructure setup.
 
 Setting up the infrastructure:
 
 * It is easiest if you have full admin access in the target project.
-* Pre-create the ACM certificate you want to use on AWS and validate it in your DNS.
 * Pre-create a symmetric encryption key that is used to encrypt/decrypt secrets of this deployment.
   * Use the alias instead of the `mrk` link. Put that into `locals.tf`
-* Refer to that certificate in main.tf using it's domain name: (Replace "datafold.acme.com")
-* Change the settings in locals.tf (the versions in infra and application are sym-linked)
+* **Certificate Requirements** (depends on load balancer deployment method):
+  * **If deploying load balancer from this Terraform module** (`deploy_lb = true`): Pre-create and validate the ACM certificate in your DNS, then refer to that certificate in main.tf using its domain name (Replace "datafold.acme.com")
+  * **If deploying load balancer from within Kubernetes**: The certificate will be created automatically, but you must wait for it to become available and then validate it in your DNS after the deployment is complete
+* Change the settings in locals.tf
   * provider_region = which region you want to deploy in.
   * aws_profile = The profile you want to use to issue the deployments. Targets the deployment account.
   * kms_profile = Can be the same profile, unless you want the encryption key elsewhere.
   * kms_key = A pre-created symmetric KMS key. It's only purpose is for encryption/decryption of deployment secrets.
   * deployment_name = The name of the deployment, used in kubernetes namespace, container naming and datadog "deployment" Unified Tag)
-* Run `terraform init -backend-config=../backend.hcl` in both application and infra directory.
-* Our team will reach out to give you two secrets files:
-  * `application_secrets.yaml` goes into the `application` directory.
-  * `infra_secrets.yaml` goes into the `infra` directory.
-  * Encrypt both files with sops and call both `secrets.yaml`
+* Run `terraform init -backend-config=../backend.hcl` in the infra directory.
+
 * Run `terraform apply` in `infra` directory. This should complete ok. 
-  * Check in the console if you see the load balancer, the EKS cluster, etc.
-* Run `terraform apply` in `application` directory.
-  * Check the settings made in the `main.tf` file. Maybe you want to set "datadog.install" to `false`. 
-  * Check with your favourite kubernetes tool if you see the namespace and several datafold pods running there.
+  * Check in the console if you see the EKS cluster, RDS database, etc.
+  * If you enabled load balancer deployment, check for the load balancer as well.
+
+**Application Deployment**: After infrastructure is ready, deploy the application using the datafold-operator. See the [Datafold Helm Charts repository](https://github.com/datafold/helm-charts) for detailed application deployment instructions.
+
+## Infrastructure Dependencies
+
+This module is designed to provide the complete infrastructure stack for Datafold deployment. However, if you already have EKS infrastructure in place, you can choose to configure the required resources independently.
+
+**Required Infrastructure Components**:
+- EKS cluster with appropriate node groups
+- RDS PostgreSQL database
+- S3 bucket for ClickHouse backups
+- EBS volumes for persistent storage (ClickHouse data, ClickHouse logs, Redis data)
+- IAM roles and service accounts for cluster operations
+- Load balancer (optional, can be managed by AWS Load Balancer Controller)
+- VPC and networking components
+- SSL certificate (validation timing depends on deployment method):
+  - **Terraform-managed LB**: Certificate must be pre-created and validated
+  - **Kubernetes-managed LB**: Certificate created automatically, validated post-deployment
+
+**Alternative Approaches**:
+- **Use this module**: Provides complete infrastructure setup for new deployments
+- **Use existing infrastructure**: Configure required resources manually or through other means
+- **Hybrid approach**: Use this module for some components and existing infrastructure for others
+
+For detailed specifications of each required component, see the [Datafold Dedicated Cloud AWS Deployment Documentation](https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws). For application deployment instructions, see the [Datafold Helm Charts repository](https://github.com/datafold/helm-charts).
 
 ## About subnets and where they get created
 
@@ -89,37 +128,24 @@ it's AZ in the module. Thus:
 - [10.0.0.0/24] will get deployed in us-east-1a
 - [10.0.1.0/24] will get deployed in us-east-1b
 
-To deploy to three AZ's, you should override the public/private subnet settings. Then it will iterate across
-3 elements, but the order of the AZ's will be the same by default.
+To deploy to three AZ's, you should override the public/private subnet settings. Then it will iterate 
+across 3 elements, but the order of the AZ's will be the same by default.
 
-You can add an "exclusion list" to the AZ ID's. The AZ ID is not the same as the AZ name. The AZ name on AWS
-is shuffled between their actual location across all AWS accounts. This means that your us-east-1a might be
-use1-az1 for you, but it might be use1-az4 for an account elsewhere. So if you need to match AZ's, you should
-match Availability zone ID's, not Availability zone names. The AZ ID is visible in the EC2 screen in the 
-"settings" screen. There you see a list of enabled AZ's, their ID and their name.
+You can add an "exclusion list" to the AZ ID's. The AZ ID is not the same as the AZ name. The AZ name 
+on AWS is shuffled between their actual location across all AWS accounts. This means that your 
+us-east-1a might be use1-az1 for you, but it might be use1-az4 for an account elsewhere. So if you 
+need to match AZ's, you should match Availability zone ID's, not Availability zone names. The AZ ID 
+is visible in the EC2 screen in the "settings" screen. There you see a list of enabled AZ's, their 
+ID and their name.
 
-To specifically select particular AZ ID's, exclude the ones you do not want in the az_id_exclude_filter. 
-This is a list. That way, you can restrict this to only AZ's you want. Unfortunately it is an exclude filter
-and not an include filter. That means if AWS adds additional AZ's, it could create replacements for a future AZ.
+To specifically select particular AZ ID's, exclude the ones you do not want in the 
+az_id_exclude_filter. This is a list. That way, you can restrict this to only AZ's you want. 
+Unfortunately it is an exclude filter and not an include filter. That means if AWS adds additional 
+AZ's, it could create replacements for a future AZ.
 
-Good news is that when there letters in use, I'd expect those letters to be maintained per AZ ID once they exist.
-Just for new accounts these can be shuffled all over again. So from terraform state perspective, things should
-be consistent at least.
-
-### Initializing the application
-
-Herea are the steps to initialize databases and the initial site settings:
-
-Establish a shell into the `<deployment>-dfshell` container. 
-It is likely that the scheduler and server containers are crashing in a loop.
-
-All we need to is to run these commands:
-
-1. `./manage.py clickhouse create-tables`
-2. `./manage.py database create-or-upgrade`
-3. `./manage.py installation set-new-deployment-params`
-
-Now all containers should be up and running.
+Good news is that when there letters in use, I'd expect those letters to be maintained per AZ ID 
+once they exist. Just for new accounts these can be shuffled all over again. So from terraform 
+state perspective, things should be consistent at least.
 
 ### Upgrading to 1.15+
 

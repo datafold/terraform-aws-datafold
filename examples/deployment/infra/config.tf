@@ -1,10 +1,11 @@
-resource "local_file" "infra_config" {
-  filename = "${path.module}/../application/infra.dec.yaml"
-  content = templatefile(
-    "${path.module}/../templates/datafold/infra_settings.tpl",
+# Output the infrastructure configuration to console
+output "infra_config" {
+  description = "Infrastructure configuration for Datafold deployment"
+  value = templatefile(
+    "${path.module}/../templates/infra_settings.tpl",
     {
       aws_target_group_arn           = module.aws[0].target_group_arn,
-      clickhouse_backup_sa           = "",
+      gcp_backup_account             = "",
       clickhouse_data_size           = module.aws[0].clickhouse_data_size,
       clickhouse_data_volume_id      = module.aws[0].clickhouse_data_volume_id,
       clickhouse_gcs_bucket          = "",
@@ -13,9 +14,9 @@ resource "local_file" "infra_config" {
       clickhouse_s3_bucket           = module.aws[0].clickhouse_s3_bucket,
       clickhouse_s3_region           = module.aws[0].clickhouse_s3_region,
       clickhouse_s3_backup_role      = module.aws[0].clickhouse_backup_role_name,
-      clickhouse_azblob_account_name = "",
-      clickhouse_azblob_account_key  = "",
+      clickhouse_azblob_client_id    = "",
       clickhouse_azblob_container    = "",
+      clickhouse_azblob_account_name = "",
       cloud_provider                 = module.aws[0].cloud_provider,
       cluster_name                   = module.aws[0].cluster_name,
       gcp_neg_name                   = "",
@@ -57,18 +58,9 @@ resource "local_file" "infra_config" {
       worker_monitor_service_account_name     = module.aws[0].worker_monitor_service_account_name,
       storage_worker_role_arn                 = module.aws[0].storage_worker_role_arn,
       storage_worker_service_account_name     = module.aws[0].storage_worker_service_account_name,
+      dma_role_arn                            = module.aws[0].dma_role_arn,
+      dma_service_account_name                = module.aws[0].dma_service_account_name,
     }
   )
-
-  provisioner "local-exec" {
-    environment = {
-      "AWS_PROFILE" : "${local.kms_profile}",
-      "SOPS_KMS_ARN" : "${local.kms_key}"
-    }
-    command = "sops --aws-profile ${local.kms_profile} --output '${path.module}/../application/infra.yaml' -e '${path.module}/../application/infra.dec.yaml'"
-  }
-
-  depends_on = [
-    module.aws
-  ]
+  sensitive = false
 }
