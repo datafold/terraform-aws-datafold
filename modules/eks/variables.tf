@@ -107,6 +107,12 @@ variable "sg_tags" {
   default     = {}
 }
 
+variable "service_account_prefix" {
+  type        = string
+  default     = "datafold-"
+  description = "Prefix for service account names (e.g., 'datafold-' for 'datafold-server', or '' for no prefix)"
+}
+
 variable "clickhouse_backup_service_account_name" {
   type        = string
   default     = "clickhouse"

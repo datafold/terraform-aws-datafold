@@ -206,6 +206,7 @@ module "eks" {
 
   k8s_access_bedrock                  = var.k8s_access_bedrock
   clickhouse_backup_bucket_arn        = local.clickhouse_backup_bucket_arn
+  service_account_prefix              = var.service_account_prefix
 }
 
 locals {

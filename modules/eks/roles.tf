@@ -64,208 +64,222 @@ resource "aws_iam_policy" "clickhouse_backup_policy" {
 
 # dfshell
 module "dfshell_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.dfshell_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.dfshell_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.dfshell_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.dfshell_service_account_name}"]
     }
   }
 }
 
 # worker_portal
 module "worker_portal_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.worker_portal_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.worker_portal_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.worker_portal_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.worker_portal_service_account_name}"]
     }
   }
 }
 
 # operator
 module "operator_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.operator_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.operator_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.operator_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.operator_service_account_name}"]
     }
   }
 }
 
 # server
 module "server_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.server_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.server_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.server_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.server_service_account_name}"]
     }
   }
 }
 
 # scheduler
 module "scheduler_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.scheduler_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.scheduler_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.scheduler_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.scheduler_service_account_name}"]
     }
   }
 }
 
 # worker
 module "worker_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.worker_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.worker_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.worker_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.worker_service_account_name}"]
     }
   }
 }
 
 # worker_catalog
 module "worker_catalog_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.worker_catalog_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.worker_catalog_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.worker_catalog_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.worker_catalog_service_account_name}"]
     }
   }
 }
 
 # worker_interactive
 module "worker_interactive_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.worker_interactive_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.worker_interactive_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.worker_interactive_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.worker_interactive_service_account_name}"]
     }
   }
 }
 
 # worker_singletons
 module "worker_singletons_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.worker_singletons_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.worker_singletons_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.worker_singletons_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.worker_singletons_service_account_name}"]
     }
   }
 }
 
 # worker_lineage
 module "worker_lineage_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.worker_lineage_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.worker_lineage_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.worker_lineage_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.worker_lineage_service_account_name}"]
     }
   }
 }
 
 # worker_monitor
 module "worker_monitor_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.worker_monitor_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.worker_monitor_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.worker_monitor_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.worker_monitor_service_account_name}"]
     }
   }
 }
 
 # storage_worker
 module "storage_worker_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.storage_worker_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.storage_worker_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.storage_worker_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.storage_worker_service_account_name}"]
     }
   }
 }
 
 module "clickhouse_backup_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.clickhouse_backup_service_account_name}"
-  version = "6.2.1"
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.clickhouse_backup_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.clickhouse_backup_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.clickhouse_backup_service_account_name}"]
     }
   }
 }
 
 # storage_worker
 module "dma_role" {
-  count   = 1
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  name    = "${var.deployment_name}-${var.dma_service_account_name}"
-  version = "6.2.1"
+  count           = 1
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-${var.dma_service_account_name}"
+  version         = "6.2.1"
+  use_name_prefix = false
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.deployment_name}:${var.dma_service_account_name}"]
+      namespace_service_accounts = ["${var.deployment_name}:${var.service_account_prefix}${var.dma_service_account_name}"]
     }
   }
 }
