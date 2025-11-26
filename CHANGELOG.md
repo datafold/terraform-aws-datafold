@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.8](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.7...v1.14.8) (2025-11-26)
+
+
+### Bug Fixes
+
+* Prefix for forward reference of service accounts is wrong ([4b70799](https://github.com/datafold/terraform-aws-datafold/commit/4b70799ea4733ea41cbf5c450b719c5009f7fab2))
+
 ### [1.14.7](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.6...v1.14.7) (2025-09-18)
 
 
