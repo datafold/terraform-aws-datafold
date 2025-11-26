@@ -6,6 +6,7 @@ module "ebs_csi_irsa_role" {
 
   name                  = "${var.deployment_name}-ebs-csi-controller"
   attach_ebs_csi_policy = true
+  use_name_prefix       = false
 
   oidc_providers = {
     ex = {
@@ -21,6 +22,7 @@ module "k8s_load_balancer_controller_role" {
 
   name                                   = "${var.deployment_name}-lb-controller"
   attach_load_balancer_controller_policy = true
+  use_name_prefix                        = false
 
   oidc_providers = {
     ex = {
@@ -37,6 +39,7 @@ module "cluster_autoscaler_role" {
   name                             = "${var.deployment_name}-cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
   cluster_autoscaler_cluster_names = [module.eks.cluster_name]
+  use_name_prefix                  = false
 
   oidc_providers = {
     ex = {
@@ -79,7 +82,7 @@ module "eks" {
       })
     },
     aws-ebs-csi-driver = {
-      service_account_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.deployment_name}-ebs-csi-controller"
+      service_account_role_arn = module.ebs_csi_irsa_role.arn
       most_recent              = true
       before_compute           = true
       configuration_values = jsonencode({
