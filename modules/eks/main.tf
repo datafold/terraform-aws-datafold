@@ -7,6 +7,7 @@ module "ebs_csi_irsa_role" {
   name                  = "${var.deployment_name}-ebs-csi-controller"
   attach_ebs_csi_policy = true
   use_name_prefix       = false
+  policy_name           = "${var.deployment_name}-ebs-csi-controller"
 
   oidc_providers = {
     ex = {
@@ -22,6 +23,7 @@ module "k8s_load_balancer_controller_role" {
 
   name                                   = "${var.deployment_name}-lb-controller"
   attach_load_balancer_controller_policy = true
+  policy_name                            = "${var.deployment_name}-lb-controller"
   use_name_prefix                        = false
 
   oidc_providers = {
@@ -38,6 +40,7 @@ module "cluster_autoscaler_role" {
 
   name                             = "${var.deployment_name}-cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
+  policy_name                      = "${var.deployment_name}-cluster-autoscaler"
   cluster_autoscaler_cluster_names = [module.eks.cluster_name]
   use_name_prefix                  = false
 
