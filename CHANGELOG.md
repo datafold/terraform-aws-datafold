@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.9](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.8...v1.14.9) (2025-11-27)
+
+
+### Bug Fixes
+
+* Fix policy names ([7b3ad89](https://github.com/datafold/terraform-aws-datafold/commit/7b3ad89fdcd9ea0ba2ad45bb013e80014ee325a9))
+
 ### [1.14.8](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.7...v1.14.8) (2025-11-26)
 
 
