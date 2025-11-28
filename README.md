@@ -88,8 +88,9 @@ Setting up the infrastructure:
 * Run `terraform apply` in `infra` directory. This should complete ok. 
   * Check in the console if you see the EKS cluster, RDS database, etc.
   * If you enabled load balancer deployment, check for the load balancer as well.
+  * The configuration values needed for application deployment will be output to the console after the apply completes.
 
-**Application Deployment**: After infrastructure is ready, deploy the application using the datafold-operator. See the [Datafold Helm Charts repository](https://github.com/datafold/helm-charts) for detailed application deployment instructions.
+**Application Deployment**: After infrastructure is ready, deploy the application using the datafold-operator. Continue with the [Datafold Helm Charts repository](https://github.com/datafold/helm-charts) to deploy the operator manager and then the application through the operator. The operator is the default and recommended method for deploying Datafold.
 
 ## Infrastructure Dependencies
 
@@ -112,7 +113,7 @@ This module is designed to provide the complete infrastructure stack for Datafol
 - **Use existing infrastructure**: Configure required resources manually or through other means
 - **Hybrid approach**: Use this module for some components and existing infrastructure for others
 
-For detailed specifications of each required component, see the [Datafold Dedicated Cloud AWS Deployment Documentation](https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws). For application deployment instructions, see the [Datafold Helm Charts repository](https://github.com/datafold/helm-charts).
+For detailed specifications of each required component, see the [Datafold Dedicated Cloud AWS Deployment Documentation](https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws). For application deployment instructions, continue with the [Datafold Helm Charts repository](https://github.com/datafold/helm-charts) to deploy the operator manager and then the application through the operator.
 
 ## About subnets and where they get created
 
@@ -173,7 +174,7 @@ automountServiceAccountToken: true
 kind: ServiceAccount
 metadata:
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::1234567889:role/datafold-lb-controller-2025082013431968900000001  <-- This role ARN should correspond to the role.
+    eks.amazonaws.com/role-arn: arn:aws:iam::1234567889:role/datafold-lb-controller
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: aws-load-balancer-controller
@@ -200,6 +201,19 @@ way if the pods continue in the crashloop backoff phase.
 https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service/
 
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html#imds-considerations
+
+### Initializing the application
+
+After deploying the application through the operator (see the [Datafold Helm Charts repository](https://github.com/datafold/helm-charts)), establish a shell into the `<deployment>-dfshell` container. 
+It is likely that the scheduler and server containers are crashing in a loop.
+
+All we need to do is to run these commands:
+
+1. `./manage.py clickhouse create-tables`
+2. `./manage.py database create-or-upgrade`
+3. `./manage.py installation set-new-deployment-params`
+
+Now all containers should be up and running.
 
 ## More information
 
