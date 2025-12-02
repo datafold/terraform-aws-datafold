@@ -109,7 +109,7 @@ variable "sg_tags" {
 
 variable "service_account_prefix" {
   type        = string
-  default     = "datafold-"
+  default     = ""
   description = "Prefix for service account names (e.g., 'datafold-' for 'datafold-server', or '' for no prefix)"
 }
 
