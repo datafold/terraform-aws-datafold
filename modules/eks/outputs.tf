@@ -24,7 +24,7 @@ output "dfshell_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "dfshell_service_account_name" {
-  value       = var.dfshell_service_account_name
+  value       = local.dfshell_service_account_name
   description = "The name of the service account for dfshell"
 }
 
@@ -34,7 +34,7 @@ output "worker_portal_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_portal_service_account_name" {
-  value       = var.worker_portal_service_account_name
+  value       = local.worker_portal_service_account_name
   description = "The name of the service account for worker_portal"
 }
 
@@ -44,7 +44,7 @@ output "operator_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "operator_service_account_name" {
-  value       = var.operator_service_account_name
+  value       = local.operator_service_account_name
   description = "The name of the service account for operator"
 }
 
@@ -54,7 +54,7 @@ output "server_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "server_service_account_name" {
-  value       = var.server_service_account_name
+  value       = local.server_service_account_name
   description = "The name of the service account for server"
 }
 
@@ -64,7 +64,7 @@ output "scheduler_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "scheduler_service_account_name" {
-  value       = var.scheduler_service_account_name
+  value       = local.scheduler_service_account_name
   description = "The name of the service account for scheduler"
 }
 
@@ -74,7 +74,7 @@ output "worker_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_service_account_name" {
-  value       = var.worker_service_account_name
+  value       = local.worker_service_account_name
   description = "The name of the service account for worker"
 }
 
@@ -84,7 +84,7 @@ output "worker_catalog_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_catalog_service_account_name" {
-  value       = var.worker_catalog_service_account_name
+  value       = local.worker_catalog_service_account_name
   description = "The name of the service account for worker_catalog"
 }
 
@@ -94,7 +94,7 @@ output "worker_interactive_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_interactive_service_account_name" {
-  value       = var.worker_interactive_service_account_name
+  value       = local.worker_interactive_service_account_name
   description = "The name of the service account for worker_interactive"
 }
 
@@ -104,7 +104,7 @@ output "worker_singletons_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_singletons_service_account_name" {
-  value       = var.worker_singletons_service_account_name
+  value       = local.worker_singletons_service_account_name
   description = "The name of the service account for worker_singletons"
 }
 
@@ -114,7 +114,7 @@ output "worker_lineage_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_lineage_service_account_name" {
-  value       = var.worker_lineage_service_account_name
+  value       = local.worker_lineage_service_account_name
   description = "The name of the service account for worker_lineage"
 }
 
@@ -124,7 +124,7 @@ output "worker_monitor_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "worker_monitor_service_account_name" {
-  value       = var.worker_monitor_service_account_name
+  value       = local.worker_monitor_service_account_name
   description = "The name of the service account for worker_monitor"
 }
 
@@ -134,7 +134,7 @@ output "storage_worker_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "storage_worker_service_account_name" {
-  value       = var.storage_worker_service_account_name
+  value       = local.storage_worker_service_account_name
   description = "The name of the service account for storage_worker"
 }
 
@@ -144,7 +144,7 @@ output "dma_role_arn" {
   description = "The ARN of the AWS Bedrock role"
 }
 output "dma_service_account_name" {
-  value       = var.dma_service_account_name
+  value       = local.dma_service_account_name
   description = "The name of the service account for dma"
 }
 
