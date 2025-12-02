@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.10](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.9...v1.14.10) (2025-12-02)
+
+
+### Bug Fixes
+
+* Consistency in SA names ([02833ee](https://github.com/datafold/terraform-aws-datafold/commit/02833ee9f7bd370cc3fa61e7577334dced32bfc5))
+
 ### [1.14.9](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.8...v1.14.9) (2025-11-27)
 
 
