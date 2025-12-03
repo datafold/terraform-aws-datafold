@@ -773,7 +773,7 @@ variable "k8s_access_bedrock" {
 
 variable "service_account_prefix" {
   type        = string
-  default     = "datafold-"
+  default     = ""
   description = "Prefix for service account names to match Helm chart naming (e.g., 'datafold-' for 'datafold-server', or '' for no prefix)"
 }
 
