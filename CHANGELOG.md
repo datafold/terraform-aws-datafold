@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.11](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.10...v1.14.11) (2025-12-03)
+
+
+### Bug Fixes
+
+* Fix the prefix ([ea04b54](https://github.com/datafold/terraform-aws-datafold/commit/ea04b5443b9f524b0f24bced63ce975562cb2d93))
+
 ### [1.14.10](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.9...v1.14.10) (2025-12-02)
 
 
