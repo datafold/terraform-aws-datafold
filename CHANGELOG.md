@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.12](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.11...v1.14.12) (2025-12-17)
+
+
+### Bug Fixes
+
+* Update clickhouse backup retention ([854092b](https://github.com/datafold/terraform-aws-datafold/commit/854092b99e01b3ffe7f753a5bb0881229ba81d38))
+
 ### [1.14.11](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.10...v1.14.11) (2025-12-03)
 
 
