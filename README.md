@@ -267,6 +267,7 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="input_apply_major_upgrade"></a> [apply\_major\_upgrade](#input\_apply\_major\_upgrade) | Sets the flag to allow AWS to apply major upgrade on the maintenance plan schedule. | `bool` | `false` | no |
 | <a name="input_az_index"></a> [az\_index](#input\_az\_index) | Index of the availability zone | `number` | `0` | no |
 | <a name="input_backend_app_port"></a> [backend\_app\_port](#input\_backend\_app\_port) | The target port to use for the backend services | `number` | `80` | no |
+| <a name="input_backup_lifecycle_expiration_days"></a> [backup\_lifecycle\_expiration\_days](#input\_backup\_lifecycle\_expiration\_days) | Number of days after which clickhouse backup objects will expire and be deleted. | `number` | `6` | no |
 | <a name="input_ch_data_ebs_iops"></a> [ch\_data\_ebs\_iops](#input\_ch\_data\_ebs\_iops) | IOPS of EBS volume | `number` | `3000` | no |
 | <a name="input_ch_data_ebs_throughput"></a> [ch\_data\_ebs\_throughput](#input\_ch\_data\_ebs\_throughput) | Throughput of EBS volume | `number` | `1000` | no |
 | <a name="input_ch_logs_ebs_iops"></a> [ch\_logs\_ebs\_iops](#input\_ch\_logs\_ebs\_iops) | IOPS of EBS volume | `number` | `3000` | no |
@@ -366,7 +367,7 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="input_s3_clickhouse_backup_tags"></a> [s3\_clickhouse\_backup\_tags](#input\_s3\_clickhouse\_backup\_tags) | The extra tags to be applied to the S3 clickhouse backup bucket | `map(any)` | `{}` | no |
 | <a name="input_self_managed_node_grp_instance_type"></a> [self\_managed\_node\_grp\_instance\_type](#input\_self\_managed\_node\_grp\_instance\_type) | Ref. https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt | `string` | `"THe instance type for the self managed node group."` | no |
 | <a name="input_self_managed_node_grps"></a> [self\_managed\_node\_grps](#input\_self\_managed\_node\_grps) | Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/self-managed-node-group | `any` | `{}` | no |
-| <a name="input_service_account_prefix"></a> [service\_account\_prefix](#input\_service\_account\_prefix) | Prefix for service account names to match Helm chart naming (e.g., 'datafold-' for 'datafold-server', or '' for no prefix) | `string` | `"datafold-"` | no |
+| <a name="input_service_account_prefix"></a> [service\_account\_prefix](#input\_service\_account\_prefix) | Prefix for service account names to match Helm chart naming (e.g., 'datafold-' for 'datafold-server', or '' for no prefix) | `string` | `""` | no |
 | <a name="input_sg_tags"></a> [sg\_tags](#input\_sg\_tags) | The extra tags to be applied to the security group | `map(any)` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to the general module | `any` | `{}` | no |
 | <a name="input_use_default_rds_kms_key"></a> [use\_default\_rds\_kms\_key](#input\_use\_default\_rds\_kms\_key) | Flag weither or not to use the default RDS KMS encryption key. Not recommended. | `bool` | `false` | no |

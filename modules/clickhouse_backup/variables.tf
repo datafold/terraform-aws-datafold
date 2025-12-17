@@ -23,3 +23,9 @@ variable "s3_backup_bucket_name_override" {
   default     = ""
   description = "Bucket name override."
 }
+
+variable "backup_lifecycle_expiration_days" {
+  type        = number
+  default     = 6
+  description = "Number of days after which clickhouse backup objects will expire and be deleted."
+}
