@@ -172,10 +172,11 @@ locals {
 module "clickhouse_backup" {
   source = "./modules/clickhouse_backup"
 
-  deployment_name                = var.deployment_name
-  clickhouse_s3_bucket           = var.clickhouse_s3_bucket
-  s3_clickhouse_backup_tags      = var.s3_clickhouse_backup_tags
-  s3_backup_bucket_name_override = var.s3_backup_bucket_name_override
+  deployment_name                   = var.deployment_name
+  clickhouse_s3_bucket              = var.clickhouse_s3_bucket
+  s3_clickhouse_backup_tags         = var.s3_clickhouse_backup_tags
+  s3_backup_bucket_name_override    = var.s3_backup_bucket_name_override
+  backup_lifecycle_expiration_days  = var.backup_lifecycle_expiration_days
 }
 
 locals {

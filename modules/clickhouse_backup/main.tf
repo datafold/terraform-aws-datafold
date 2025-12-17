@@ -16,9 +16,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "clickhouse_backup" {
   bucket = aws_s3_bucket.clickhouse_backup.bucket
 
   rule {
-    id = "two_week_retention"
+    id = "backup_retention"
     expiration {
-      days = 14
+      days = var.backup_lifecycle_expiration_days
     }
     filter {}
     status = "Enabled"
