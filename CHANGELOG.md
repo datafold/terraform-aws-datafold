@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.13](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.12...v1.14.13) (2026-02-04)
+
+
+### Bug Fixes
+
+* Deploy new pools for ARC ([e259939](https://github.com/datafold/terraform-aws-datafold/commit/e259939a286d5d1228977607daf8f9e4e918159a))
+
 ### [1.14.12](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.11...v1.14.12) (2025-12-17)
 
 
