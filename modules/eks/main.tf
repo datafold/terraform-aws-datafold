@@ -91,7 +91,7 @@ module "eks" {
       configuration_values = jsonencode({
         "sidecars" : {
           "snapshotter" : {
-            "forceEnable" : false
+            "forceEnable" : true
           }
         }
       })

@@ -32,6 +32,14 @@ locals {
   vpc_private_subnets = module.networking.vpc_private_subnets
   azs                 = module.networking.azs
   vpc_cidr            = module.networking.vpc_cidr
+
+  # Secondary subnet index for node groups 4/5/6 (e.g., ARC runners)
+  # Falls back to private_subnet_index if not explicitly set
+  secondary_subnet_index = coalesce(var.secondary_private_subnet_index, var.private_subnet_index)
+
+  # EKS cluster subnets - can be limited to avoid adding new AZs to existing cluster
+  # Node groups can still use additional subnets beyond this list
+  eks_cluster_subnets = var.eks_cluster_subnet_count != null ? slice(local.vpc_private_subnets, 0, var.eks_cluster_subnet_count) : local.vpc_private_subnets
 }
 
 module "security" {
@@ -86,9 +94,9 @@ locals {
       subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
       disk_size  = var.default_node_disk_size
       tags = {
-          "k8s.io/cluster-autoscaler/enabled"                  = "true"
-          "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
-          "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+        "k8s.io/cluster-autoscaler/enabled"                  = "true"
+        "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+        "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
       }
       block_device_mappings = {
         xvda = {
@@ -107,15 +115,15 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-    }, var.managed_node_grp1)
+  }, var.managed_node_grp1)
   second_node_pool = merge(
     {
       subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
       disk_size  = var.default_node_disk_size
       tags = {
-          "k8s.io/cluster-autoscaler/enabled"                  = "true"
-          "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
-          "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+        "k8s.io/cluster-autoscaler/enabled"                  = "true"
+        "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+        "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
       }
       block_device_mappings = {
         xvda = {
@@ -134,15 +142,15 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-    }, var.managed_node_grp2)
+  }, var.managed_node_grp2)
   third_node_pool = merge(
     {
       subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
       disk_size  = var.default_node_disk_size
       tags = {
-          "k8s.io/cluster-autoscaler/enabled"                  = "true"
-          "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
-          "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+        "k8s.io/cluster-autoscaler/enabled"                  = "true"
+        "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+        "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
       }
       block_device_mappings = {
         xvda = {
@@ -161,11 +169,95 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-    }, var.managed_node_grp3)
+  }, var.managed_node_grp3)
+  fourth_node_pool = merge(
+    {
+      subnet_ids = [local.vpc_private_subnets[local.secondary_subnet_index]]
+      disk_size  = var.default_node_disk_size
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"                  = "true"
+        "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+        "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+      }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = var.default_node_disk_size
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 125
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
+      metadata_options = {
+        http_put_response_hop_limit = 2
+        http_tokens                 = "required"
+      }
+  }, var.managed_node_grp4)
+  fifth_node_pool = merge(
+    {
+      subnet_ids = [local.vpc_private_subnets[local.secondary_subnet_index]]
+      disk_size  = var.default_node_disk_size
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"                  = "true"
+        "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+        "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+      }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = var.default_node_disk_size
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 125
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
+      metadata_options = {
+        http_put_response_hop_limit = 2
+        http_tokens                 = "required"
+      }
+  }, var.managed_node_grp5)
+  sixth_node_pool = merge(
+    {
+      subnet_ids = [local.vpc_private_subnets[local.secondary_subnet_index]]
+      disk_size  = var.default_node_disk_size
+      tags = {
+        "k8s.io/cluster-autoscaler/enabled"                  = "true"
+        "k8s.io/cluster-autoscaler/${var.deployment_name}"   = "owned"
+        "k8s.io/cluster-autoscaler/node-template/label/role" = "${var.deployment_name}"
+      }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = var.default_node_disk_size
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 125
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
+      metadata_options = {
+        http_put_response_hop_limit = 2
+        http_tokens                 = "required"
+      }
+  }, var.managed_node_grp6)
   managed_node_groups = merge(
-    {"${var.deployment_name}-k8s": local.default_node_pool},
-    var.managed_node_grp2 != null ? {"${var.deployment_name}-k8s-two" : local.second_node_pool} : {},
-    var.managed_node_grp3 != null ? {"${var.deployment_name}-k8s-three" : local.third_node_pool} : {}
+    { "${var.deployment_name}-k8s" : local.default_node_pool },
+    var.managed_node_grp2 != null ? { "${var.deployment_name}-k8s-two" : local.second_node_pool } : {},
+    var.managed_node_grp3 != null ? { "${var.deployment_name}-k8s-three" : local.third_node_pool } : {},
+    var.managed_node_grp4 != null ? { "${var.deployment_name}-k8s-four" : local.fourth_node_pool } : {},
+    var.managed_node_grp5 != null ? { "${var.deployment_name}-k8s-five" : local.fifth_node_pool } : {},
+    var.managed_node_grp6 != null ? { "${var.deployment_name}-k8s-six" : local.sixth_node_pool } : {}
   )
 }
 
@@ -180,16 +272,17 @@ module "clickhouse_backup" {
 }
 
 locals {
-  clickhouse_backup_bucket_arn  = module.clickhouse_backup.clickhouse_s3_bucket_arn
+  clickhouse_backup_bucket_arn = module.clickhouse_backup.clickhouse_s3_bucket_arn
 }
 
 module "eks" {
   source = "./modules/eks"
 
-  deployment_name                     = var.deployment_name
-  k8s_vpc                             = local.vpc_id
+  deployment_name = var.deployment_name
+  k8s_vpc         = local.vpc_id
   # https://aws.github.io/aws-eks-best-practices/networking/subnets/
-  k8s_subnets                         = local.vpc_private_subnets
+  # Use eks_cluster_subnets to limit subnets for control plane (avoids EKS AZ change errors)
+  k8s_subnets                         = local.eks_cluster_subnets
   k8s_control_subnets                 = []
   k8s_module_version                  = var.k8s_module_version
   k8s_cluster_version                 = var.k8s_cluster_version
@@ -200,65 +293,65 @@ module "eks" {
   managed_node_grps                   = local.managed_node_groups
   k8s_api_access_roles                = var.k8s_api_access_roles
 
-  tags                                = var.tags
-  backend_app_port                    = var.backend_app_port
-  rds_port                            = var.rds_port
-  k8s_public_access_cidrs             = var.k8s_public_access_cidrs
+  tags                    = var.tags
+  backend_app_port        = var.backend_app_port
+  rds_port                = var.rds_port
+  k8s_public_access_cidrs = var.k8s_public_access_cidrs
 
-  k8s_access_bedrock                  = var.k8s_access_bedrock
-  clickhouse_backup_bucket_arn        = local.clickhouse_backup_bucket_arn
-  service_account_prefix              = var.service_account_prefix
+  k8s_access_bedrock           = var.k8s_access_bedrock
+  clickhouse_backup_bucket_arn = local.clickhouse_backup_bucket_arn
+  service_account_prefix       = var.service_account_prefix
 }
 
 locals {
-cluster_name        = module.eks.cluster_name
-control_plane_sg_id = module.eks.control_plane_security_group_id
+  cluster_name        = module.eks.cluster_name
+  control_plane_sg_id = module.eks.control_plane_security_group_id
 }
 
 module "database" {
   source = "./modules/database"
 
-  deployment_name                          = var.deployment_name
-  rds_identifier                           = var.rds_identifier
-  provider_region                          = var.provider_region
-  vpc_private_subnets                      = local.vpc_private_subnets
-  rds_username                             = var.rds_username
-  rds_password_override                    = var.rds_password_override
-  rds_instance                             = var.rds_instance
-  rds_allocated_storage                    = var.rds_allocated_storage
-  rds_max_allocated_storage                = var.rds_max_allocated_storage
-  rds_backups_replication_target_region    = var.rds_backups_replication_target_region
-  rds_backups_replication_retention_period = var.rds_backups_replication_retention_period
-  rds_backup_window                        = var.rds_backup_window
-  rds_maintenance_window                   = var.rds_maintenance_window
-  create_rds_kms_key                       = var.create_rds_kms_key
-  rds_kms_key_alias                        = var.rds_kms_key_alias
-  use_default_rds_kms_key                  = var.use_default_rds_kms_key
-  database_name                            = var.database_name
-  db_subnet_group_name                     = var.db_subnet_group_name
-  db_parameter_group_name                  = var.db_parameter_group_name
-  rds_ro_username                          = var.rds_ro_username
-  rds_version                              = var.rds_version
-  rds_port                                 = var.rds_port
-  rds_param_group_family                   = var.rds_param_group_family
-  apply_major_upgrade                      = var.apply_major_upgrade
-  db_instance_tags                         = var.db_instance_tags
-  db_parameter_group_tags                  = var.db_parameter_group_tags
-  db_subnet_group_tags                     = var.db_subnet_group_tags
-  rds_extra_tags                           = var.rds_extra_tags
-  security_group_id                        = local.db_security_group_id
-  db_extra_parameters                      = var.db_extra_parameters
-  rds_multi_az                             = var.rds_multi_az
-  rds_copy_tags_to_snapshot                = var.rds_copy_tags_to_snapshot
-  rds_performance_insights_enabled         = var.rds_performance_insights_enabled
-  rds_performance_insights_retention_period= var.rds_performance_insights_retention_period
-  rds_monitoring_role_arn                  = var.rds_monitoring_role_arn
-  rds_auto_minor_version_upgrade           = var.rds_auto_minor_version_upgrade
-  rds_monitoring_interval                  = var.rds_monitoring_interval
+  deployment_name                           = var.deployment_name
+  rds_identifier                            = var.rds_identifier
+  provider_region                           = var.provider_region
+  vpc_private_subnets                       = local.vpc_private_subnets
+  rds_username                              = var.rds_username
+  rds_password_override                     = var.rds_password_override
+  rds_instance                              = var.rds_instance
+  rds_allocated_storage                     = var.rds_allocated_storage
+  rds_max_allocated_storage                 = var.rds_max_allocated_storage
+  rds_backups_replication_target_region     = var.rds_backups_replication_target_region
+  rds_backups_replication_retention_period  = var.rds_backups_replication_retention_period
+  rds_backup_window                         = var.rds_backup_window
+  rds_maintenance_window                    = var.rds_maintenance_window
+  create_rds_kms_key                        = var.create_rds_kms_key
+  rds_kms_key_alias                         = var.rds_kms_key_alias
+  use_default_rds_kms_key                   = var.use_default_rds_kms_key
+  database_name                             = var.database_name
+  db_subnet_group_name                      = var.db_subnet_group_name
+  db_parameter_group_name                   = var.db_parameter_group_name
+  rds_ro_username                           = var.rds_ro_username
+  rds_version                               = var.rds_version
+  rds_port                                  = var.rds_port
+  rds_param_group_family                    = var.rds_param_group_family
+  apply_major_upgrade                       = var.apply_major_upgrade
+  db_instance_tags                          = var.db_instance_tags
+  db_parameter_group_tags                   = var.db_parameter_group_tags
+  db_subnet_group_tags                      = var.db_subnet_group_tags
+  rds_extra_tags                            = var.rds_extra_tags
+  security_group_id                         = local.db_security_group_id
+  db_extra_parameters                       = var.db_extra_parameters
+  rds_multi_az                              = var.rds_multi_az
+  rds_copy_tags_to_snapshot                 = var.rds_copy_tags_to_snapshot
+  rds_performance_insights_enabled          = var.rds_performance_insights_enabled
+  rds_performance_insights_retention_period = var.rds_performance_insights_retention_period
+  rds_monitoring_role_arn                   = var.rds_monitoring_role_arn
+  rds_auto_minor_version_upgrade            = var.rds_auto_minor_version_upgrade
+  rds_monitoring_interval                   = var.rds_monitoring_interval
 }
 
 module "private_access" {
-  count = var.deploy_private_access ? 1 : 0
+  count  = var.deploy_private_access ? 1 : 0
   source = "./modules/private_access"
 
   allowed_principals  = var.allowed_principals
@@ -281,7 +374,7 @@ resource "aws_ebs_volume" "clickhouse_data" {
 
   tags = merge({
     Name = "${var.deployment_name}-clickhouse-data"
-    }, var.ebs_extra_tags)
+  }, var.ebs_extra_tags)
 }
 
 resource "aws_ebs_volume" "clickhouse_logs" {
@@ -311,16 +404,16 @@ resource "aws_ebs_volume" "redis_data" {
 }
 
 resource "random_password" "clickhouse_password" {
-  length           = 16
-  min_upper        = 2
-  min_lower        = 2
-  min_numeric      = 2
-  special          = false
+  length      = 16
+  min_upper   = 2
+  min_lower   = 2
+  min_numeric = 2
+  special     = false
 }
 
 resource "random_password" "redis_password" {
-  length           = 12
-  special          = false
+  length  = 12
+  special = false
 }
 
 module "github_reverse_proxy" {
@@ -328,17 +421,17 @@ module "github_reverse_proxy" {
 
   source = "./modules/github_reverse_proxy"
 
-  deployment_name          = var.deployment_name
-  environment              = var.environment
-  region                   = var.provider_region
-  vpc_cidr                 = local.vpc_cidr
-  vpc_id                   = local.vpc_id
-  vpc_private_subnets      = local.vpc_private_subnets
-  github_cidrs             = var.github_cidrs
-  datadog_api_key          = var.datadog_api_key
-  use_private_egress       = var.lb_internal
+  deployment_name     = var.deployment_name
+  environment         = var.environment
+  region              = var.provider_region
+  vpc_cidr            = local.vpc_cidr
+  vpc_id              = local.vpc_id
+  vpc_private_subnets = local.vpc_private_subnets
+  github_cidrs        = var.github_cidrs
+  datadog_api_key     = var.datadog_api_key
+  use_private_egress  = var.lb_internal
 
-  private_system_endpoint  = module.load_balancer.load_balancer_dns
+  private_system_endpoint = module.load_balancer.load_balancer_dns
 }
 
 module "vpc_peering" {
@@ -368,7 +461,7 @@ resource "null_resource" "deployment_check" {
   }
 
   provisioner "local-exec" {
-    command = <<-EOT
+    command     = <<-EOT
       # Get the load balancer IPs value
       LB_IPS="${module.load_balancer.load_balancer_ips}"
 

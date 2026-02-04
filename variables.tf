@@ -3,62 +3,62 @@
 #  ╹ ╹ ╹┗━┛┗━┛
 
 variable "db_instance_tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  default     = {}
   description = "The extra tags to be applied to the RDS instance."
 }
 
 variable "db_parameter_group_tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  default     = {}
   description = "The extra tags to be applied to the parameter group"
 }
 
 variable "db_subnet_group_tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  default     = {}
   description = "The extra tags to be applied to the parameter group"
 }
 
 variable "rds_extra_tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  default     = {}
   description = "The extra tags to be applied to the RDS instance"
 }
 
 variable "ebs_extra_tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  default     = {}
   description = "The extra tags to be applied to the EBS volumes"
 }
 
 variable "private_subnet_tags" {
-  type    = map(any)
-  default = {Tier="private"}
+  type        = map(any)
+  default     = { Tier = "private" }
   description = "The extra tags to be applied to the private subnets"
 }
 
 variable "public_subnet_tags" {
-  type    = map(any)
-  default = {Tier="public"}
+  type        = map(any)
+  default     = { Tier = "public" }
   description = "The extra tags to be applied to the public subnets"
 }
 
 variable "vpc_tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  default     = {}
   description = "The extra tags to be applied to the VPC"
 }
 
 variable "s3_clickhouse_backup_tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  default     = {}
   description = "The extra tags to be applied to the S3 clickhouse backup bucket"
 }
 
 variable "sg_tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  default     = {}
   description = "The extra tags to be applied to the security group"
 }
 
@@ -102,6 +102,18 @@ variable "private_subnet_index" {
   type        = number
   default     = 0
   description = "Index of the private subnet"
+}
+
+variable "secondary_private_subnet_index" {
+  type        = number
+  default     = null
+  description = "Index of the private subnet for secondary node groups (grp4, grp5, grp6). If null, uses private_subnet_index."
+}
+
+variable "eks_cluster_subnet_count" {
+  type        = number
+  default     = null
+  description = "Number of private subnets to use for EKS cluster (control plane). If null, uses all private subnets. Set this to limit which subnets the EKS cluster uses while allowing node groups to use additional subnets."
 }
 
 variable "initial_apply_complete" {
@@ -244,19 +256,19 @@ variable "vpce_details" {
     subnet_ids          = optional(list(string), [])
     private_dns_enabled = optional(bool, true)
 
-    input_rules        = list(object({
-       description = string
-       from_port   = number
-       to_port     = number
-       protocol    = string
-       cidr_blocks = string
+    input_rules = list(object({
+      description = string
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      cidr_blocks = string
     }))
     output_rules = list(object({
-       description = string
-       from_port   = number
-       to_port     = number
-       protocol    = string
-       cidr_blocks = string
+      description = string
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      cidr_blocks = string
     }))
   }))
   description = "Endpoint names to define with security group rule definitions"
@@ -568,7 +580,7 @@ variable "rds_monitoring_role_arn" {
 }
 
 variable "db_extra_parameters" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "List of map of extra variables to apply to the RDS database parameter group"
 }
@@ -700,25 +712,43 @@ variable "self_managed_node_grp_instance_type" {
 }
 
 variable "self_managed_node_grps" {
-  type    = any
-  default = {}
+  type        = any
+  default     = {}
   description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/self-managed-node-group"
 }
 
 variable "managed_node_grp1" {
-  type = any
+  type        = any
   description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
 }
 
 variable "managed_node_grp2" {
-  type = any
-  default = null
+  type        = any
+  default     = null
   description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
 }
 
 variable "managed_node_grp3" {
-  type = any
-  default = null
+  type        = any
+  default     = null
+  description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
+}
+
+variable "managed_node_grp4" {
+  type        = any
+  default     = null
+  description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
+}
+
+variable "managed_node_grp5" {
+  type        = any
+  default     = null
+  description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
+}
+
+variable "managed_node_grp6" {
+  type        = any
+  default     = null
   description = "Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group"
 }
 
@@ -729,8 +759,8 @@ variable "default_node_disk_size" {
 }
 
 variable "tags" {
-  type    = any
-  default = {}
+  type        = any
+  default     = {}
   description = "Tags to apply to the general module"
 }
 
