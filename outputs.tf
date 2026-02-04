@@ -84,13 +84,23 @@ output "cluster_endpoint" {
 }
 
 output "vpc_cidr" {
-  value = module.networking.vpc_cidr
+  value       = module.networking.vpc_cidr
   description = "The CIDR of the entire VPC"
 }
 
 output "vpc_id" {
-  value = module.networking.vpc_id
+  value       = module.networking.vpc_id
   description = "The ID of the VPC"
+}
+
+output "vpc_private_subnets" {
+  value       = module.networking.vpc_private_subnets
+  description = "List of private subnet IDs"
+}
+
+output "vpc_private_subnet_cidrs" {
+  value       = var.vpc_private_subnets
+  description = "List of private subnet CIDRs"
 }
 
 output "clickhouse_password" {
