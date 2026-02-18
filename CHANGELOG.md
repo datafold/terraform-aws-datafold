@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.14](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.13...v1.14.14) (2026-02-18)
+
+
+### Bug Fixes
+
+* Make RDS database optional ([a2232d7](https://github.com/datafold/terraform-aws-datafold/commit/a2232d708046a09c8a8b022ca10d2d1beb49b987))
+
 ### [1.14.13](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.12...v1.14.13) (2026-02-04)
 
 
