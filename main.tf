@@ -309,6 +309,7 @@ locals {
 }
 
 module "database" {
+  count  = var.create_rds ? 1 : 0
   source = "./modules/database"
 
   deployment_name                           = var.deployment_name

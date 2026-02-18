@@ -427,6 +427,12 @@ variable "deploy_lb" {
 #   ┃┃┣━┫ ┃ ┣━┫┣┻┓┣━┫┗━┓┣╸
 #  ╺┻┛╹ ╹ ╹ ╹ ╹┗━┛╹ ╹┗━┛┗━╸
 
+variable "create_rds" {
+  type        = bool
+  default     = true
+  description = "Whether to create the RDS instance."
+}
+
 variable "rds_username" {
   type        = string
   default     = "datafold"
