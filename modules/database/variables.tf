@@ -2,6 +2,12 @@
 #   ┃┃┣━┫ ┃ ┣━┫┣┻┓┣━┫┗━┓┣╸
 #  ╺┻┛╹ ╹ ╹ ╹ ╹┗━┛╹ ╹┗━┛┗━╸
 
+variable "create_rds" {
+  type        = bool
+  default     = true
+  description = "Whether to create the RDS instance."
+}
+
 variable "deployment_name" {
   type        = string
   description = "Name of the current deployment."

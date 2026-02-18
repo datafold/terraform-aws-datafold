@@ -4,7 +4,7 @@ output "domain_name" {
 }
 
 output "db_instance_id" {
-  value = module.database.db_instance_id
+  value       = try(one(module.database[*].db_instance_id), "")
   description = "The ID of the RDS database instance"
 }
 
@@ -29,27 +29,27 @@ output "security_group_id" {
 }
 
 output "postgres_username" {
-  value = module.database.postgres_username
+  value       = try(one(module.database[*].postgres_username), var.rds_username)
   description = "The postgres username to be used by the application"
 }
 
 output "postgres_password" {
-  value = module.database.postgres_password
+  value       = try(one(module.database[*].postgres_password), "")
   description = "The generated postgres password to be used by the application"
 }
 
 output "postgres_database_name" {
-  value = module.database.postgres_database_name
+  value       = try(one(module.database[*].postgres_database_name), var.database_name)
   description = "The name of the pre-provisioned database."
 }
 
 output "postgres_host" {
-  value = module.database.postgres_host
+  value       = try(one(module.database[*].postgres_host), "")
   description = "The DNS name for the postgres database"
 }
 
 output "postgres_port" {
-  value = module.database.postgres_port
+  value       = try(one(module.database[*].postgres_port), 5432)
   description = "The port configured for the RDS database"
 }
 
