@@ -1,19 +1,19 @@
 # Locals for service account names (with prefix)
 locals {
-  dfshell_service_account_name          = "${var.service_account_prefix}${var.dfshell_service_account_name}"
-  worker_portal_service_account_name    = "${var.service_account_prefix}${var.worker_portal_service_account_name}"
-  operator_service_account_name         = "${var.service_account_prefix}${var.operator_service_account_name}"
-  server_service_account_name           = "${var.service_account_prefix}${var.server_service_account_name}"
-  scheduler_service_account_name        = "${var.service_account_prefix}${var.scheduler_service_account_name}"
-  worker_service_account_name           = "${var.service_account_prefix}${var.worker_service_account_name}"
-  worker_catalog_service_account_name   = "${var.service_account_prefix}${var.worker_catalog_service_account_name}"
+  dfshell_service_account_name            = "${var.service_account_prefix}${var.dfshell_service_account_name}"
+  worker_portal_service_account_name      = "${var.service_account_prefix}${var.worker_portal_service_account_name}"
+  operator_service_account_name           = "${var.service_account_prefix}${var.operator_service_account_name}"
+  server_service_account_name             = "${var.service_account_prefix}${var.server_service_account_name}"
+  scheduler_service_account_name          = "${var.service_account_prefix}${var.scheduler_service_account_name}"
+  worker_service_account_name             = "${var.service_account_prefix}${var.worker_service_account_name}"
+  worker_catalog_service_account_name     = "${var.service_account_prefix}${var.worker_catalog_service_account_name}"
   worker_interactive_service_account_name = "${var.service_account_prefix}${var.worker_interactive_service_account_name}"
-  worker_singletons_service_account_name = "${var.service_account_prefix}${var.worker_singletons_service_account_name}"
-  worker_lineage_service_account_name   = "${var.service_account_prefix}${var.worker_lineage_service_account_name}"
-  worker_monitor_service_account_name   = "${var.service_account_prefix}${var.worker_monitor_service_account_name}"
-  storage_worker_service_account_name   = "${var.service_account_prefix}${var.storage_worker_service_account_name}"
-  dma_service_account_name               = "${var.service_account_prefix}${var.dma_service_account_name}"
-  clickhouse_backup_service_account_name = "${var.service_account_prefix}${var.clickhouse_backup_service_account_name}"
+  worker_singletons_service_account_name  = "${var.service_account_prefix}${var.worker_singletons_service_account_name}"
+  worker_lineage_service_account_name     = "${var.service_account_prefix}${var.worker_lineage_service_account_name}"
+  worker_monitor_service_account_name     = "${var.service_account_prefix}${var.worker_monitor_service_account_name}"
+  storage_worker_service_account_name     = "${var.service_account_prefix}${var.storage_worker_service_account_name}"
+  dma_service_account_name                = "${var.service_account_prefix}${var.dma_service_account_name}"
+  clickhouse_backup_service_account_name  = "${var.service_account_prefix}${var.clickhouse_backup_service_account_name}"
 }
 
 # Policies
@@ -336,4 +336,56 @@ resource "aws_iam_role_policy_attachment" "bedrock_dma_attachment" {
   count      = var.k8s_access_bedrock ? 1 : 0
   role       = module.dma_role[0].name
   policy_arn = aws_iam_policy.bedrock_access_policy[0].arn
+}
+
+# temporal
+
+resource "aws_iam_policy" "temporal_backup_policy" {
+  count       = var.deploy_temporal ? 1 : 0
+  name        = "${var.deployment_name}-temporal-backup-policy"
+  description = "Allows Zalando postgres-operator (postgres-pod) to back up Temporal PostgreSQL to S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+        ]
+        Resource = [var.temporal_backup_bucket_arn]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+        ]
+        Resource = ["${var.temporal_backup_bucket_arn}/*"]
+      }
+    ]
+  })
+}
+
+module "temporal_backup_role" {
+  count           = var.deploy_temporal ? 1 : 0
+  source          = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  name            = "${var.deployment_name}-temporal-postgres-pod"
+  version         = "6.2.1"
+  use_name_prefix = false
+
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.temporal_postgres_namespace}:postgres-pod"]
+    }
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "temporal_backup_attachment" {
+  count      = var.deploy_temporal ? 1 : 0
+  role       = module.temporal_backup_role[0].name
+  policy_arn = aws_iam_policy.temporal_backup_policy[0].arn
 }

@@ -14,7 +14,7 @@ resource "aws_secretsmanager_secret" "datadog_api_key" {
 
 resource "aws_secretsmanager_secret_version" "datadog_api_key_version" {
   secret_id     = aws_secretsmanager_secret.datadog_api_key.id
-  secret_string = var.datadog_api_key  # This should be the Datadog API key (input as a variable)
+  secret_string = var.datadog_api_key # This should be the Datadog API key (input as a variable)
 }
 
 locals {
@@ -56,22 +56,22 @@ module "lambda_datadog" {
     "DD_API_KEY_SECRET_ARN" : aws_secretsmanager_secret.datadog_api_key.arn
     "DD_ENV" : var.environment
     "DD_SERVICE" : "github-webhook-service"
-    "DD_SITE": "datadoghq.com"
+    "DD_SITE" : "datadoghq.com"
     "DD_VERSION" : "1.0.0"
-    "DD_EXTENSION_VERSION": "next"
-    "DD_SERVERLESS_LOGS_ENABLED": "true"
-    "DD_LOG_LEVEL": "INFO"
-    "DD_TAGS": "deployment:${var.deployment_name}"
+    "DD_EXTENSION_VERSION" : "next"
+    "DD_SERVERLESS_LOGS_ENABLED" : "true"
+    "DD_LOG_LEVEL" : "INFO"
+    "DD_TAGS" : "deployment:${var.deployment_name}"
     "PRIVATE_SYSTEM_ENDPOINT" : local.private_system_endpoint
-    "DATADOG_MONITORING_ENABLED": "false",
-    "DD_TRACE_ENABLED": "false",
+    "DATADOG_MONITORING_ENABLED" : "false",
+    "DD_TRACE_ENABLED" : "false",
   }
 
   vpc_config_subnet_ids         = local.subnet_ids
   vpc_config_security_group_ids = local.security_group_ids
 
   datadog_extension_layer_version = 63
-  datadog_python_layer_version = 98
+  datadog_python_layer_version    = 98
 
   # Depend on the zip operation
   depends_on = [data.archive_file.zip_lambda_function]
@@ -189,20 +189,20 @@ resource "aws_api_gateway_rest_api_policy" "github_ip_restriction" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-            {
-        Effect: "Allow",
-        Principal: "*",
-        Action: "execute-api:Invoke",
-        Resource: "arn:aws:execute-api:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.webhook_api.id}/*/POST/*",
+      {
+        Effect : "Allow",
+        Principal : "*",
+        Action : "execute-api:Invoke",
+        Resource : "arn:aws:execute-api:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.webhook_api.id}/*/POST/*",
       },
       {
-        Effect: "Deny",
-        Principal: "*",
-        Action: "execute-api:Invoke",
-        Resource: "arn:aws:execute-api:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.webhook_api.id}/*/POST/*",
-        Condition: {
-          "NotIpAddress": {
-            "aws:SourceIp": var.github_cidrs
+        Effect : "Deny",
+        Principal : "*",
+        Action : "execute-api:Invoke",
+        Resource : "arn:aws:execute-api:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.webhook_api.id}/*/POST/*",
+        Condition : {
+          "NotIpAddress" : {
+            "aws:SourceIp" : var.github_cidrs
           }
         }
       }

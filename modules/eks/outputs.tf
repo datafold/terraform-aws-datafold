@@ -153,3 +153,9 @@ output "clickhouse_backup_role_name" {
   value       = module.clickhouse_backup_role.arn
   description = "The name of the role for clickhouse backups"
 }
+
+# temporal
+output "temporal_backup_role_arn" {
+  value       = try(module.temporal_backup_role[0].arn, "")
+  description = "The ARN of the IAM role for Temporal PostgreSQL backups (postgres-pod service account)"
+}

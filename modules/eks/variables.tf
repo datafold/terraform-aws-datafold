@@ -201,3 +201,21 @@ variable "dma_service_account_name" {
   default     = "dma"
   description = "Name of the service account for dma"
 }
+
+variable "deploy_temporal" {
+  type        = bool
+  default     = true
+  description = "Whether to deploy Temporal IAM resources (role + policy for postgres-pod S3 backup access)."
+}
+
+variable "temporal_backup_bucket_arn" {
+  type        = string
+  default     = null
+  description = "ARN of the S3 bucket for Temporal PostgreSQL backups. Required when deploy_temporal is true."
+}
+
+variable "temporal_postgres_namespace" {
+  type        = string
+  default     = "postgres-operator"
+  description = "Kubernetes namespace where the Temporal PostgreSQL CRD (and postgres-pod service account) is deployed."
+}

@@ -9,7 +9,7 @@ locals {
 
 module "aws" {
   source  = "datafold/datafold/aws"
-  version = "~> 1.14.7"  # Always update this to latest version (see releases in repository)
+  version = "~> 1.14.7" # Always update this to latest version (see releases in repository)
 
   providers = {
     aws = aws
@@ -26,7 +26,7 @@ module "aws" {
   alb_certificate_domain = "datafold.example.com"
   create_ssl_cert        = true
   backend_app_port       = var.backend_app_port
-  deploy_lb              = false  # Load balancer disabled by default
+  deploy_lb              = false # Load balancer disabled by default
   initial_apply_complete = true
 
   # Security Groups / Virtual Private Cloud

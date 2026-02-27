@@ -102,7 +102,7 @@ module "db" {
 
 locals {
   log_rds_automated_backups_replication_path = "${path.module}/../../logs/rds_automated_backups_replication.log"
-  rds_password = var.rds_password_override != null ? var.rds_password_override : random_password.rds_master_password.result
+  rds_password                               = var.rds_password_override != null ? var.rds_password_override : random_password.rds_master_password.result
 }
 
 # https://docs.aws.amazon.com/cli/latest/reference/rds/start-db-instance-automated-backups-replication.html

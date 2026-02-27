@@ -264,15 +264,30 @@ locals {
 module "clickhouse_backup" {
   source = "./modules/clickhouse_backup"
 
-  deployment_name                   = var.deployment_name
-  clickhouse_s3_bucket              = var.clickhouse_s3_bucket
-  s3_clickhouse_backup_tags         = var.s3_clickhouse_backup_tags
-  s3_backup_bucket_name_override    = var.s3_backup_bucket_name_override
-  backup_lifecycle_expiration_days  = var.backup_lifecycle_expiration_days
+  deployment_name                  = var.deployment_name
+  clickhouse_s3_bucket             = var.clickhouse_s3_bucket
+  s3_clickhouse_backup_tags        = var.s3_clickhouse_backup_tags
+  s3_backup_bucket_name_override   = var.s3_backup_bucket_name_override
+  backup_lifecycle_expiration_days = var.backup_lifecycle_expiration_days
 }
 
 locals {
   clickhouse_backup_bucket_arn = module.clickhouse_backup.clickhouse_s3_bucket_arn
+}
+
+module "temporal_backup" {
+  count  = var.deploy_temporal ? 1 : 0
+  source = "./modules/temporal_backup"
+
+  deployment_name                  = var.deployment_name
+  temporal_s3_bucket               = var.temporal_s3_bucket
+  s3_bucket_name_override          = var.temporal_s3_bucket_name_override
+  backup_lifecycle_expiration_days = var.temporal_backup_lifecycle_expiration_days
+  s3_temporal_backup_tags          = var.s3_temporal_backup_tags
+}
+
+locals {
+  temporal_backup_bucket_arn = try(one(module.temporal_backup[*].temporal_s3_bucket_arn), null)
 }
 
 module "eks" {
@@ -301,6 +316,10 @@ module "eks" {
   k8s_access_bedrock           = var.k8s_access_bedrock
   clickhouse_backup_bucket_arn = local.clickhouse_backup_bucket_arn
   service_account_prefix       = var.service_account_prefix
+
+  deploy_temporal             = var.deploy_temporal
+  temporal_backup_bucket_arn  = local.temporal_backup_bucket_arn
+  temporal_postgres_namespace = var.temporal_postgres_namespace
 }
 
 locals {

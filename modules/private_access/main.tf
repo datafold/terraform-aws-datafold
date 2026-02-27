@@ -5,16 +5,16 @@ resource "aws_security_group" "nlb_ingress" {
   vpc_id      = var.vpc_id
 
   ingress {
-    from_port = 443
-    protocol  = "tcp"
-    to_port   = 443
+    from_port   = 443
+    protocol    = "tcp"
+    to_port     = 443
     cidr_blocks = [var.vpn_cidr]
   }
 
   egress {
-    from_port = 443
-    protocol  = "tcp"
-    to_port   = 443
+    from_port   = 443
+    protocol    = "tcp"
+    to_port     = 443
     cidr_blocks = ["0.0.0.0/0"]
   }
 

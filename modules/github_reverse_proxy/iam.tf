@@ -14,14 +14,14 @@ resource "aws_iam_role" "lambda_role" {
 }
 
 resource "aws_iam_policy" "lambda_secrets_policy" {
-  name   = "lambda-secrets-policy"
+  name = "lambda-secrets-policy"
   policy = jsonencode({
-    Version: "2012-10-17",
-    Statement: [
+    Version : "2012-10-17",
+    Statement : [
       {
-        Effect: "Allow",
-        Action: "secretsmanager:GetSecretValue",
-        Resource: aws_secretsmanager_secret.datadog_api_key.arn
+        Effect : "Allow",
+        Action : "secretsmanager:GetSecretValue",
+        Resource : aws_secretsmanager_secret.datadog_api_key.arn
       }
     ]
   })
@@ -44,13 +44,13 @@ resource "aws_iam_role_policy_attachment" "lambda_logging_policy" {
 }
 
 resource "aws_iam_policy" "lambda_describe_vpc_policy" {
-  name   = "${var.deployment_name}-lambda-describe-vpc-policy"
+  name = "${var.deployment_name}-lambda-describe-vpc-policy"
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "ec2:DescribeSecurityGroups",
           "ec2:DescribeSubnets",
           "ec2:DescribeVpcs"
@@ -68,13 +68,13 @@ resource "aws_iam_role_policy_attachment" "lambda_describe_vpc_attachment" {
 
 # https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html#configuration-vpc-best-practice
 resource "aws_iam_policy" "lambda_deny_ec2_policy" {
-  name   = "${var.deployment_name}-lambda-deny-ec2-network-interface-policy"
+  name = "${var.deployment_name}-lambda-deny-ec2-network-interface-policy"
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Deny",
-        Action   = [
+        Effect = "Deny",
+        Action = [
           "ec2:CreateNetworkInterface",
           "ec2:DeleteNetworkInterface",
           "ec2:DescribeNetworkInterfaces",
@@ -84,8 +84,8 @@ resource "aws_iam_policy" "lambda_deny_ec2_policy" {
         ],
         Resource = "*",
         Condition = {
-          "ArnEquals": {
-            "lambda:SourceFunctionArn": [
+          "ArnEquals" : {
+            "lambda:SourceFunctionArn" : [
               "arn:aws:lambda:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_alias.prod_alias.function_name}"
             ]
           }
