@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.16](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.15...v1.14.16) (2026-02-27)
+
+
+### Bug Fixes
+
+* Add flag for temporal backup ([81e4c30](https://github.com/datafold/terraform-aws-datafold/commit/81e4c3054c292ada71595ca7bcc8986a04b81200))
+
 ### [1.14.15](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.14...v1.14.15) (2026-02-27)
 
 
