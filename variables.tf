@@ -888,3 +888,43 @@ variable "peer_region" {
   description = "The region of the peer VPC"
 }
 
+# ╺┳╸┏━╸┏┳┓┏━┓┏━┓┏━┓╻
+#  ┃ ┣╸ ┃┃┃┣━┛┃ ┃┣┳┛┃
+#  ╹ ┗━╸╹ ╹╹  ┗━┛╹┗╸┗━╸
+
+variable "deploy_temporal" {
+  type        = bool
+  default     = true
+  description = "Whether to deploy Temporal infrastructure resources (S3 bucket + IAM role for postgres-pod)."
+}
+
+variable "temporal_s3_bucket" {
+  type        = string
+  default     = "temporal-pg-backups"
+  description = "Suffix for the Temporal PostgreSQL backup S3 bucket name. Final name: <deployment_name>-<temporal_s3_bucket>."
+}
+
+variable "temporal_s3_bucket_name_override" {
+  type        = string
+  default     = ""
+  description = "Override the full Temporal backup S3 bucket name (overrides the deployment_name prefix)."
+}
+
+variable "temporal_backup_lifecycle_expiration_days" {
+  type        = number
+  default     = 7
+  description = "Number of days after which Temporal PostgreSQL backup objects will expire and be deleted."
+}
+
+variable "s3_temporal_backup_tags" {
+  type        = map(any)
+  default     = {}
+  description = "Extra tags to apply to the Temporal backup S3 bucket."
+}
+
+variable "temporal_postgres_namespace" {
+  type        = string
+  default     = "postgres-operator"
+  description = "Kubernetes namespace where the Temporal PostgreSQL CRD (and postgres-pod service account) is deployed."
+}
+

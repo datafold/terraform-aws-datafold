@@ -122,19 +122,19 @@ variable "vpce_details" {
     vpces_service_name  = string
     subnet_ids          = optional(list(string), [])
     private_dns_enabled = optional(bool, true)
-    input_rules         = list(object({
-       description = string
-       from_port   = number
-       to_port     = number
-       protocol    = string
-       cidr_blocks = string
+    input_rules = list(object({
+      description = string
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      cidr_blocks = string
     }))
-    output_rules        = list(object({
-       description = string
-       from_port   = number
-       to_port     = number
-       protocol    = string
-       cidr_blocks = string
+    output_rules = list(object({
+      description = string
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      cidr_blocks = string
     }))
   }))
   description = "Endpoint names to define with security group rule definitions"
@@ -142,12 +142,12 @@ variable "vpce_details" {
 
 variable "private_subnet_tags" {
   type    = map(any)
-  default = {Tier="private"}
+  default = { Tier = "private" }
 }
 
 variable "public_subnet_tags" {
   type    = map(any)
-  default = {Tier="public"}
+  default = { Tier = "public" }
 }
 
 variable "vpc_tags" {

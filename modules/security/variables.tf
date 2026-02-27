@@ -7,7 +7,7 @@ variable "deployment_name" {
   description = "Name of the current deployment."
 }
 
-variable "vpc_cidr"  {
+variable "vpc_cidr" {
   type        = string
   description = "CIDR range of the VPC."
 }

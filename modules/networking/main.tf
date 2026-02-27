@@ -19,9 +19,9 @@ locals {
     one(module.vpc[*].private_subnets),
     one(data.aws_subnets.private[*].ids)
   )
-  vpc_main_route_table_id = data.aws_vpc.ensured_vpc.main_route_table_id
+  vpc_main_route_table_id    = data.aws_vpc.ensured_vpc.main_route_table_id
   vpc_private_route_table_id = one(data.aws_route_tables.ensured_private_subnet_route_table.ids)
-  vpc_public_route_table_id = one(data.aws_route_tables.ensured_public_subnet_route_table.ids)
+  vpc_public_route_table_id  = one(data.aws_route_tables.ensured_public_subnet_route_table.ids)
 }
 
 #  ┏┓╻┏━╸╻ ╻   ╻ ╻┏━┓┏━╸
@@ -147,7 +147,7 @@ data "aws_route_tables" "ensured_private_subnet_route_table" {
   vpc_id = local.vpc_id
 
   filter {
-    name = "tag:Name"
+    name   = "tag:Name"
     values = ["${var.deployment_name}-private"]
   }
 }
@@ -156,7 +156,7 @@ data "aws_route_tables" "ensured_public_subnet_route_table" {
   vpc_id = local.vpc_id
 
   filter {
-    name = "tag:Name"
+    name   = "tag:Name"
     values = ["${var.deployment_name}-public"]
   }
 }
@@ -198,14 +198,14 @@ module "vpce_sg" {
 }
 
 resource "aws_vpc_endpoint" "vpce" {
-  for_each          = var.vpce_details
+  for_each = var.vpce_details
 
   vpc_id            = local.vpc_id
   service_name      = each.value.vpces_service_name
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
-      module.vpce_sg[each.key].security_group_id,
+    module.vpce_sg[each.key].security_group_id,
   ]
 
   subnet_ids          = coalescelist(each.value.subnet_ids, local.vpc_private_subnets)

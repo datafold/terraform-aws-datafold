@@ -45,9 +45,9 @@ module "alb_app" {
 
   # See:
   # https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html
-  listener_ssl_policy_default = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
+  listener_ssl_policy_default      = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
   enable_cross_zone_load_balancing = true
-  enable_deletion_protection = var.lb_deletion_protection
+  enable_deletion_protection       = var.lb_deletion_protection
 
   target_groups = [
     {
@@ -111,27 +111,30 @@ locals {
   vpc_subnets_joined = join(",", var.vpc_subnets)
 }
 
-data "aws_network_interface" "lb_app" {
-  count  = var.initial_apply_complete && var.deploy_lb ? length(var.vpc_subnets) : 0
-  
+# Fetch all ENI IDs for this ALB in one query — avoids the "multiple matches"
+# error that occurs when AWS creates more than one ENI per subnet for an ALB.
+data "aws_network_interfaces" "lb_app" {
+  count = var.initial_apply_complete && var.deploy_lb ? 1 : 0
+
   filter {
-    name = "description"
+    name   = "description"
     values = ["ELB ${module.alb_app[0].lb_arn_suffix}"]
   }
 
-  filter {
-    name   = "subnet-id"
-    values = [var.vpc_subnets[count.index]]
-  }
+  depends_on = [module.alb_app]
+}
 
-  depends_on = [ module.alb_app ]
+# Look up each ENI individually so we can read its IP addresses.
+data "aws_network_interface" "lb_app" {
+  for_each = var.initial_apply_complete && var.deploy_lb ? toset(data.aws_network_interfaces.lb_app[0].ids) : toset([])
+  id       = each.value
 }
 
 locals {
   lb_ips = jsonencode(var.initial_apply_complete ? (
-    var.lb_internal ? 
-        [for eni in data.aws_network_interface.lb_app : format("%s", eni.private_ip)] : 
-        [for eni in data.aws_network_interface.lb_app : format("%s", eni.association[0].public_ip)]
+    var.lb_internal ?
+    [for eni in data.aws_network_interface.lb_app : eni.private_ip] :
+    [for eni in data.aws_network_interface.lb_app : eni.association[0].public_ip]
     ) : [""]
   )
 }
@@ -146,7 +149,7 @@ resource "aws_lb_target_group" "nlb_alb_target" {
   vpc_id      = var.vpc_id
 
   health_check {
-    enabled = true
+    enabled  = true
     protocol = "HTTPS"
   }
 }
@@ -161,7 +164,7 @@ resource "aws_lb" "vpces_nlb" {
   security_groups    = [var.vpces_security_group_id]
 
   enable_cross_zone_load_balancing = true
-  enable_deletion_protection = true
+  enable_deletion_protection       = true
 
   enforce_security_group_inbound_rules_on_private_link_traffic = "on"
 }
@@ -194,13 +197,13 @@ resource "aws_lb_target_group_attachment" "attachment-alb-nlb-tg" {
 resource "aws_security_group_rule" "nlb_ingress" {
   count = var.lb_deploy_nlb ? 1 : 0
 
-  type                     = "ingress"
-  from_port                = local.nlb_port
-  to_port                  = local.nlb_port
-  protocol                 = "tcp"
-  security_group_id        = var.vpces_security_group_id
-  cidr_blocks              = ["0.0.0.0/0"]
-  description              = "Allows traffic from VPCES to ALB"
+  type              = "ingress"
+  from_port         = local.nlb_port
+  to_port           = local.nlb_port
+  protocol          = "tcp"
+  security_group_id = var.vpces_security_group_id
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "Allows traffic from VPCES to ALB"
 
   depends_on = [
     resource.aws_lb.vpces_nlb[0]
@@ -210,13 +213,13 @@ resource "aws_security_group_rule" "nlb_ingress" {
 resource "aws_security_group_rule" "nlb_egress" {
   count = var.lb_deploy_nlb ? 1 : 0
 
-  type                     = "egress"
-  from_port                = local.nlb_port
-  to_port                  = local.nlb_port
-  protocol                 = "tcp"
-  security_group_id        = var.vpces_security_group_id
-  cidr_blocks              = [var.vpc_cidr]
-  description              = "Allows traffic from NLB to ALB"
+  type              = "egress"
+  from_port         = local.nlb_port
+  to_port           = local.nlb_port
+  protocol          = "tcp"
+  security_group_id = var.vpces_security_group_id
+  cidr_blocks       = [var.vpc_cidr]
+  description       = "Allows traffic from NLB to ALB"
 
   depends_on = [
     resource.aws_lb.vpces_nlb[0]

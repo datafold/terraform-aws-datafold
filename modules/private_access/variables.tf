@@ -1,5 +1,5 @@
 variable "allowed_principals" {
-  type  = list(string)
+  type        = list(string)
   description = "List of allowed principals to connect to the endpoint"
 }
 
