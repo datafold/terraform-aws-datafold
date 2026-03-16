@@ -924,7 +924,7 @@ variable "s3_temporal_backup_tags" {
 
 variable "temporal_postgres_namespace" {
   type        = string
-  default     = "postgres-operator"
+  default     = "temporal"
   description = "Kubernetes namespace where the Temporal PostgreSQL CRD (and postgres-pod service account) is deployed."
 }
 
