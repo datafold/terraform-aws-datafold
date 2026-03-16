@@ -27,14 +27,38 @@ resource "aws_iam_policy" "bedrock_access_policy" {
     Version = "2012-10-17",
     Statement = [
       {
+        Sid    = "AllowInvokeViaAIP",
+        Effect = "Allow",
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
+        ],
+        Resource = "arn:aws:bedrock:*:${data.aws_caller_identity.current.account_id}:application-inference-profile/*"
+      },
+      {
+        Sid    = "AllowFoundationModelOnlyViaAIP",
+        Effect = "Allow",
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
+        ],
+        Resource = "arn:aws:bedrock:*::foundation-model/*",
+        Condition = {
+          StringLike = {
+            "bedrock:InferenceProfileArn" = "arn:aws:bedrock:*:${data.aws_caller_identity.current.account_id}:application-inference-profile/*"
+          }
+        }
+      },
+      {
+        Sid    = "AllowBedrockManagement",
         Effect = "Allow",
         Action = [
           "bedrock:TagResource",
+          "bedrock:UntagResource",
+          "bedrock:ListTagsForResource",
           "bedrock:CreateInferenceProfile",
           "bedrock:GetFoundationModel",
           "bedrock:GetInferenceProfile",
-          "bedrock:InvokeModel",
-          "bedrock:InvokeModelWithResponseStream",
           "bedrock:ListFoundationModels",
           "bedrock:ListInferenceProfiles",
         ],
