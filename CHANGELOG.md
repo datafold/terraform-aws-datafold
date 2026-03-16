@@ -2,6 +2,14 @@
 
 See this file for notable changes between versions.
 
+### [1.14.17](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.16...v1.14.17) (2026-03-16)
+
+
+### Bug Fixes
+
+* Fix correct namespace ([f2d6c2b](https://github.com/datafold/terraform-aws-datafold/commit/f2d6c2b95a71c71e8067caeecee1857779249f0c))
+* Namespace for service account ([5fe8c39](https://github.com/datafold/terraform-aws-datafold/commit/5fe8c395db5290961d5b71f1f4166c71fe936554))
+
 ### [1.14.16](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.15...v1.14.16) (2026-02-27)
 
 
