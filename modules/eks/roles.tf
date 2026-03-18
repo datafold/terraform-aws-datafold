@@ -46,6 +46,58 @@ resource "aws_iam_policy" "bedrock_access_policy" {
   tags = var.sg_tags
 }
 
+resource "aws_iam_policy" "bedrock_access_policy_aip_only" {
+  count       = var.k8s_access_bedrock ? 1 : 0
+  name        = "${var.deployment_name}-bedrock-access-policy-aip-only"
+  description = "Policy that allows access to AWS Bedrock services only via Application Inference Profiles"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid    = "AllowInvokeViaAIP",
+        Effect = "Allow",
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
+        ],
+        Resource = "arn:aws:bedrock:*:${data.aws_caller_identity.current.account_id}:application-inference-profile/*"
+      },
+      {
+        Sid    = "AllowFoundationModelOnlyViaAIP",
+        Effect = "Allow",
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
+        ],
+        Resource = "arn:aws:bedrock:*::foundation-model/*",
+        Condition = {
+          StringLike = {
+            "bedrock:InferenceProfileArn" = "arn:aws:bedrock:*:${data.aws_caller_identity.current.account_id}:application-inference-profile/*"
+          }
+        }
+      },
+      {
+        Sid    = "AllowBedrockManagement",
+        Effect = "Allow",
+        Action = [
+          "bedrock:TagResource",
+          "bedrock:UntagResource",
+          "bedrock:ListTagsForResource",
+          "bedrock:CreateInferenceProfile",
+          "bedrock:GetFoundationModel",
+          "bedrock:GetInferenceProfile",
+          "bedrock:ListFoundationModels",
+          "bedrock:ListInferenceProfiles",
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+
+  tags = var.sg_tags
+}
+
 resource "aws_iam_policy" "clickhouse_backup_policy" {
   name        = "${var.deployment_name}-clickhouse-backup-policy"
   description = "Policy that allows clickhouse to make backups"
@@ -335,7 +387,7 @@ resource "aws_iam_role_policy_attachment" "clickhouse_backup_attachment" {
 resource "aws_iam_role_policy_attachment" "bedrock_dma_attachment" {
   count      = var.k8s_access_bedrock ? 1 : 0
   role       = module.dma_role[0].name
-  policy_arn = aws_iam_policy.bedrock_access_policy[0].arn
+  policy_arn = aws_iam_policy.bedrock_access_policy_aip_only[0].arn
 }
 
 # temporal
