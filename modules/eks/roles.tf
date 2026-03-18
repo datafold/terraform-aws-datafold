@@ -27,24 +27,14 @@ resource "aws_iam_policy" "bedrock_access_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid    = "AllowInvoke",
-        Effect = "Allow",
-        Action = [
-          "bedrock:InvokeModel",
-          "bedrock:InvokeModelWithResponseStream",
-        ],
-        Resource = "*"
-      },
-      {
-        Sid    = "AllowBedrockManagement",
         Effect = "Allow",
         Action = [
           "bedrock:TagResource",
-          "bedrock:UntagResource",
-          "bedrock:ListTagsForResource",
           "bedrock:CreateInferenceProfile",
           "bedrock:GetFoundationModel",
           "bedrock:GetInferenceProfile",
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
           "bedrock:ListFoundationModels",
           "bedrock:ListInferenceProfiles",
         ],
