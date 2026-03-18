@@ -2,6 +2,15 @@
 
 See this file for notable changes between versions.
 
+### [1.14.18](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.17...v1.14.18) (2026-03-18)
+
+
+### Bug Fixes
+
+* Block non-AIP inference in saas [ENG-3295] ([34133cf](https://github.com/datafold/terraform-aws-datafold/commit/34133cf2e8bb3b9e0323646ccb73f5c6f2896e27))
+* Restore bedrock_access_policy to original form [ENG-3295] ([131f30a](https://github.com/datafold/terraform-aws-datafold/commit/131f30acba9133c1256268245c92b3da8c74e3e5))
+* Split bedrock policy so AIP-only restriction applies to DMA role only [ENG-3295] ([bc11443](https://github.com/datafold/terraform-aws-datafold/commit/bc11443aa093239b30b4b5ce87b101f75d3ef25b))
+
 ### [1.14.17](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.16...v1.14.17) (2026-03-16)
 
 
