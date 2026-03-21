@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.20](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.19...v1.14.20) (2026-03-21)
+
+
+### Bug Fixes
+
+* Param group family ([c830ae0](https://github.com/datafold/terraform-aws-datafold/commit/c830ae03cfd7273766ebcf7086dccbf288f8ea72))
+
 ### [1.14.19](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.18...v1.14.19) (2026-03-21)
 
 
