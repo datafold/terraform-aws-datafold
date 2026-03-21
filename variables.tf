@@ -563,7 +563,7 @@ variable "rds_port" {
 
 variable "rds_param_group_family" {
   type        = string
-  default     = "postgres15"
+  default     = "postgres17"
   description = "The DB parameter group family to use"
 }
 
