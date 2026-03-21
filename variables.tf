@@ -551,7 +551,7 @@ variable "rds_ro_username" {
 
 variable "rds_version" {
   type        = string
-  default     = "15.5"
+  default     = "17.9"
   description = "Postgres RDS version to use."
 }
 
@@ -707,7 +707,7 @@ variable "k8s_module_version" {
 
 variable "k8s_cluster_version" {
   type        = string
-  default     = "1.33"
+  default     = "1.35"
   description = "Ref. https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
 }
 
