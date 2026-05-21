@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.14.21](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.20...v1.14.21) (2026-05-21)
+
+
+### Bug Fixes
+
+* Reconfigure nodes to avoid disk pressure ([96a96be](https://github.com/datafold/terraform-aws-datafold/commit/96a96bee18324737207c9f5b28477bc7a45cca18))
+
 ### [1.14.20](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.19...v1.14.20) (2026-03-21)
 
 
