@@ -115,6 +115,22 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  imageGCHighThresholdPercent: ${var.kubelet_image_gc_high_threshold_percent}
+                  imageGCLowThresholdPercent: ${var.kubelet_image_gc_low_threshold_percent}
+                  imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
+          EOT
+        }
+      ]
   }, var.managed_node_grp1)
   second_node_pool = merge(
     {
@@ -142,6 +158,22 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  imageGCHighThresholdPercent: ${var.kubelet_image_gc_high_threshold_percent}
+                  imageGCLowThresholdPercent: ${var.kubelet_image_gc_low_threshold_percent}
+                  imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
+          EOT
+        }
+      ]
   }, var.managed_node_grp2)
   third_node_pool = merge(
     {
@@ -169,6 +201,22 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  imageGCHighThresholdPercent: ${var.kubelet_image_gc_high_threshold_percent}
+                  imageGCLowThresholdPercent: ${var.kubelet_image_gc_low_threshold_percent}
+                  imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
+          EOT
+        }
+      ]
   }, var.managed_node_grp3)
   fourth_node_pool = merge(
     {
@@ -196,6 +244,22 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  imageGCHighThresholdPercent: ${var.kubelet_image_gc_high_threshold_percent}
+                  imageGCLowThresholdPercent: ${var.kubelet_image_gc_low_threshold_percent}
+                  imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
+          EOT
+        }
+      ]
   }, var.managed_node_grp4)
   fifth_node_pool = merge(
     {
@@ -223,6 +287,22 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  imageGCHighThresholdPercent: ${var.kubelet_image_gc_high_threshold_percent}
+                  imageGCLowThresholdPercent: ${var.kubelet_image_gc_low_threshold_percent}
+                  imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
+          EOT
+        }
+      ]
   }, var.managed_node_grp5)
   sixth_node_pool = merge(
     {
@@ -250,6 +330,22 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  imageGCHighThresholdPercent: ${var.kubelet_image_gc_high_threshold_percent}
+                  imageGCLowThresholdPercent: ${var.kubelet_image_gc_low_threshold_percent}
+                  imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
+          EOT
+        }
+      ]
   }, var.managed_node_grp6)
   managed_node_groups = merge(
     { "${var.deployment_name}-k8s" : local.default_node_pool },

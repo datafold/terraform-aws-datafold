@@ -760,8 +760,26 @@ variable "managed_node_grp6" {
 
 variable "default_node_disk_size" {
   type        = number
-  default     = 40
+  default     = 80
   description = "Disk size for a node in GB"
+}
+
+variable "kubelet_image_gc_high_threshold_percent" {
+  type        = number
+  default     = 85
+  description = "Start reclaiming cached images when nodeFs exceeds this percent. EKS default: 85. Tune lower (e.g. 70) on clusters with high deploy churn to keep GC ahead of eviction."
+}
+
+variable "kubelet_image_gc_low_threshold_percent" {
+  type        = number
+  default     = 80
+  description = "Stop reclaiming cached images when nodeFs drops below this percent. EKS default: 80. Tune lower (e.g. 55) alongside kubelet_image_gc_high_threshold_percent."
+}
+
+variable "kubelet_image_minimum_gc_age" {
+  type        = string
+  default     = "2m"
+  description = "Minimum age for an unused image before kubelet GC considers it. EKS default: 2m."
 }
 
 variable "tags" {
