@@ -6,6 +6,7 @@ module "networking" {
   vpc_private_subnets                = var.vpc_private_subnets
   vpc_public_subnets                 = var.vpc_public_subnets
   deploy_vpc_flow_logs               = var.deploy_vpc_flow_logs
+  vpc_create_nat_gateway             = var.vpc_create_nat_gateway
   nat_gateway_public_ip              = var.nat_gateway_public_ip
   vpc_propagating_vgws               = var.vpc_propagating_vgws
   vpc_vpn_gateway_id                 = var.vpc_vpn_gateway_id
