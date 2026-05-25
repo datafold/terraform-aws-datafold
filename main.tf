@@ -404,10 +404,11 @@ module "eks" {
   managed_node_grps                   = local.managed_node_groups
   k8s_api_access_roles                = var.k8s_api_access_roles
 
-  tags                    = var.tags
-  backend_app_port        = var.backend_app_port
-  rds_port                = var.rds_port
-  k8s_public_access_cidrs = var.k8s_public_access_cidrs
+  tags                       = var.tags
+  backend_app_port           = var.backend_app_port
+  rds_port                   = var.rds_port
+  k8s_public_access_cidrs    = var.k8s_public_access_cidrs
+  k8s_endpoint_public_access = var.k8s_endpoint_public_access
 
   k8s_access_bedrock           = var.k8s_access_bedrock
   clickhouse_backup_bucket_arn = local.clickhouse_backup_bucket_arn
