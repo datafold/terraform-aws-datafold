@@ -189,6 +189,12 @@ variable "deploy_vpc_flow_logs" {
   description = "Activates the VPC flow logs if set."
 }
 
+variable "vpc_create_nat_gateway" {
+  type        = bool
+  default     = true
+  description = "Whether the module should create a NAT gateway in the VPC. When false, no NAT gateway or its EIP is created and the customer is expected to provide outbound internet egress from private subnets out-of-band."
+}
+
 variable "nat_gateway_public_ip" {
   type        = string
   default     = ""
@@ -790,7 +796,14 @@ variable "tags" {
 
 variable "k8s_public_access_cidrs" {
   type        = list(string)
-  description = "List of CIDRs that are allowed to connect to the EKS control plane"
+  default     = []
+  description = "List of CIDRs that are allowed to connect to the EKS public endpoint. Ignored when k8s_endpoint_public_access is false."
+}
+
+variable "k8s_endpoint_public_access" {
+  type        = bool
+  default     = true
+  description = "Whether the EKS API server has a public endpoint. When false, the API is only reachable from within the VPC (or via PrivateLink if deploy_private_access is enabled)."
 }
 
 variable "k8s_api_access_roles" {

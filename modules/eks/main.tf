@@ -62,8 +62,8 @@ module "eks" {
   name               = var.deployment_name
   kubernetes_version = var.k8s_cluster_version
 
-  endpoint_public_access       = true
-  endpoint_public_access_cidrs = var.k8s_public_access_cidrs
+  endpoint_public_access       = var.k8s_endpoint_public_access
+  endpoint_public_access_cidrs = var.k8s_endpoint_public_access ? var.k8s_public_access_cidrs : null
 
   enable_irsa = true
 

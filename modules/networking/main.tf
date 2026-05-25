@@ -35,7 +35,7 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_eip" "nat_gateway" {
-  count = var.nat_gateway_public_ip != "" && var.vpc_id == "" ? 0 : 1
+  count = !var.vpc_create_nat_gateway || (var.nat_gateway_public_ip != "" && var.vpc_id == "") ? 0 : 1
 
   domain = "vpc"
 
@@ -45,7 +45,7 @@ resource "aws_eip" "nat_gateway" {
 }
 
 data "aws_eip" "nat_gateway" {
-  count     = var.nat_gateway_public_ip != "" && var.vpc_id == "" ? 1 : 0
+  count     = var.vpc_create_nat_gateway && var.nat_gateway_public_ip != "" && var.vpc_id == "" ? 1 : 0
   public_ip = var.nat_gateway_public_ip
 }
 
@@ -76,18 +76,18 @@ module "vpc" {
   propagate_public_route_tables_vgw    = var.propagate_public_route_tables_vgw
   vpn_gateway_id                       = var.vpc_vpn_gateway_id
 
-  enable_nat_gateway     = true
+  enable_nat_gateway     = var.vpc_create_nat_gateway
   single_nat_gateway     = true
   one_nat_gateway_per_az = false
   enable_dns_hostnames   = true
   enable_dns_support     = true
-  reuse_nat_ips          = true
-  external_nat_ip_ids = [
+  reuse_nat_ips          = var.vpc_create_nat_gateway
+  external_nat_ip_ids = var.vpc_create_nat_gateway ? [
     try(
       resource.aws_eip.nat_gateway[0].id,
       data.aws_eip.nat_gateway[0].id
     )
-  ]
+  ] : []
 
   dhcp_options_domain_name         = var.dhcp_options_domain_name
   dhcp_options_domain_name_servers = var.dhcp_options_domain_name_servers
@@ -100,7 +100,7 @@ module "vpc" {
   vpc_tags            = var.vpc_tags
 
   depends_on = [
-    resource.aws_eip.nat_gateway[0]
+    aws_eip.nat_gateway
   ]
 }
 
