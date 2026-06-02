@@ -2,6 +2,14 @@
 
 See this file for notable changes between versions.
 
+## [1.15.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.21...v1.15.0) (2026-06-02)
+
+
+### Features
+
+* Add k8s_endpoint_public_access variable for private EKS ([5ff1f2f](https://github.com/datafold/terraform-aws-datafold/commit/5ff1f2f25922f14a08be79e33329ab4c6a70a889))
+* Add vpc_create_nat_gateway variable to optionally skip NAT creation ([c4d33f5](https://github.com/datafold/terraform-aws-datafold/commit/c4d33f58412b03ee4fb31dcbca53b2e14a5b1d96))
+
 ### [1.14.21](https://github.com/datafold/terraform-aws-datafold/compare/v1.14.20...v1.14.21) (2026-05-21)
 
 
