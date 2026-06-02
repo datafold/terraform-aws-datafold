@@ -46,6 +46,12 @@ variable "deploy_vpc_flow_logs" {
   description = "Flag weither or not to deploy vpc flow logs"
 }
 
+variable "vpc_create_nat_gateway" {
+  type        = bool
+  default     = true
+  description = "Whether the module should create a NAT gateway and its EIP. When false, no NAT gateway is provisioned and external egress from private subnets must be supplied out-of-band."
+}
+
 variable "nat_gateway_public_ip" {
   type        = string
   default     = ""
