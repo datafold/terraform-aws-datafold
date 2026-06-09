@@ -141,6 +141,36 @@ resource "aws_security_group_rule" "lb_ingress" {
   ]
 }
 
+# Node-to-node nginx HTTP (:80).
+#
+# The upstream EKS module's recommended node SG rules only permit node-to-node
+# traffic on CoreDNS (53) and the ephemeral range (1025-65535). The nginx
+# ingress pod listens on :80, which is below that range, so a cross-node hop to
+# an nginx pod is dropped by the node SG.
+#
+# This bites when nginx runs >1 replica: the ALB targets nodes (target-type:
+# instance) and the Service uses externalTrafficPolicy: Cluster, so kube-proxy
+# load-balances across all pod endpoints, sending ~half of requests to the
+# nginx pod on the *other* node. Without this rule those requests time out and
+# the ALB returns 504. (With a single replica the only endpoint is node-local,
+# so the gap stays hidden.)
+#
+# Scoped to self (node SG -> node SG) only: this opens nothing toward the load
+# balancer or any external CIDR, it purely permits node-to-node :80.
+resource "aws_security_group_rule" "node_to_node_nginx_http" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  self              = true
+  security_group_id = module.eks.node_security_group_id
+  description       = "Node-to-node nginx ingress HTTP (cross-node NodePort/Cluster path)"
+
+  depends_on = [
+    module.eks
+  ]
+}
+
 resource "aws_security_group_rule" "vpa_ingress" {
   type                     = "ingress"
   from_port                = var.vpa_port
