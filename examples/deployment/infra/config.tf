@@ -1,3 +1,15 @@
+# Generate a random status check token by default. It is used by the server
+# /livez and /readyz probes. Operators can override it by setting the
+# status_check_token variable explicitly.
+resource "random_password" "status_check_token" {
+  length  = 32
+  special = false
+}
+
+locals {
+  status_check_token = coalesce(var.status_check_token, random_password.status_check_token.result)
+}
+
 # Output the infrastructure configuration to console
 output "infra_config" {
   description = "Infrastructure configuration for Datafold deployment"
@@ -32,6 +44,7 @@ output "infra_config" {
       redis_data_volume_id           = module.aws[0].redis_data_volume_id,
       server_name                    = module.aws[0].domain_name,
       vpc_cidr                       = module.aws[0].vpc_cidr,
+      status_check_token             = local.status_check_token,
 
       # service accounts vars
       dfshell_role_arn                        = module.aws[0].dfshell_role_arn,
