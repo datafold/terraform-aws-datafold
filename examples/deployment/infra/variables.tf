@@ -6,6 +6,6 @@ variable "backend_app_port" {
 
 variable "status_check_token" {
   type        = string
-  default     = "token"
-  description = "The status check token to apply"
+  default     = null
+  description = "The status check token used by the server /livez and /readyz probes. When left unset (null), a random token is generated automatically."
 }
