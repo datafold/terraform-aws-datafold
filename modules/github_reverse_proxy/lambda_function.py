@@ -1,3 +1,4 @@
+import base64
 import json
 import logging
 import os
@@ -34,6 +35,16 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': json.dumps('Bad Request: No payload found')
         }
+    if event.get('isBase64Encoded', False):
+        # API Gateway base64-encodes the body when it classifies the
+        # payload as binary; decode back to the original bytes so the
+        # downstream HMAC signature check sees what GitHub signed.
+        body = base64.b64decode(body)
+    elif isinstance(body, str):
+        # Forward bytes, not str: urllib3 1.x (bundled in the Datadog
+        # Lambda layer) falls back to http.client latin-1 encoding for
+        # str bodies and crashes on non-ASCII characters.
+        body = body.encode('utf-8')
     incoming_headers = event.get('headers', {})
 
     logger.info("Starting to forward the payload")
