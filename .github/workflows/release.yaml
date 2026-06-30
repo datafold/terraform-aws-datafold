@@ -6,7 +6,9 @@ on:
     paths:
       - '*.tf'
       - '**/*.tf'
+      - 'modules/**/*.py'
       - '.github/workflows/release.yaml'
+  workflow_dispatch:
 
 jobs:
   build:
