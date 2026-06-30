@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.16.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.0...v1.16.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* Handle base64-encoded and non-ASCII GitHub webhook payloads ([74b7338](https://github.com/datafold/terraform-aws-datafold/commit/74b733896e45f81b90d08be9a3ad8b8926dfbcc8))
+
 ## [1.16.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.15.0...v1.16.0) (2026-06-15)
 
 
