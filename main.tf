@@ -415,6 +415,16 @@ module "eks" {
   clickhouse_backup_bucket_arn = local.clickhouse_backup_bucket_arn
   service_account_prefix       = var.service_account_prefix
 
+  # The CSI driver needs explicit KMS permissions to attach volumes that are
+  # encrypted with a non-default CMK (e.g. customer-held cross-account keys).
+  ebs_csi_kms_cmk_arns = distinct([
+    for arn in [
+      var.ch_data_ebs_kms_key_arn,
+      var.ch_logs_ebs_kms_key_arn,
+      var.redis_ebs_kms_key_arn,
+    ] : arn if arn != null
+  ])
+
   deploy_temporal             = var.deploy_temporal
   temporal_backup_bucket_arn  = local.temporal_backup_bucket_arn
   temporal_postgres_namespace = var.temporal_postgres_namespace
@@ -445,6 +455,7 @@ module "database" {
   create_rds_kms_key                        = var.create_rds_kms_key
   rds_kms_key_alias                         = var.rds_kms_key_alias
   use_default_rds_kms_key                   = var.use_default_rds_kms_key
+  rds_kms_key_arn                           = var.rds_kms_key_arn
   database_name                             = var.database_name
   db_subnet_group_name                      = var.db_subnet_group_name
   db_parameter_group_name                   = var.db_parameter_group_name
@@ -486,6 +497,7 @@ resource "aws_ebs_volume" "clickhouse_data" {
   availability_zone = local.azs[var.az_index]
   size              = var.clickhouse_data_size
   encrypted         = true
+  kms_key_id        = var.ch_data_ebs_kms_key_arn
   type              = var.ebs_type
   iops              = var.ebs_type != "gp2" ? var.ch_data_ebs_iops : null
   throughput        = var.ebs_type != "gp2" ? var.ch_data_ebs_throughput : null
@@ -499,6 +511,7 @@ resource "aws_ebs_volume" "clickhouse_logs" {
   availability_zone = local.azs[var.az_index]
   size              = var.clickhouse_logs_size
   encrypted         = true
+  kms_key_id        = var.ch_logs_ebs_kms_key_arn
   type              = var.ebs_type
   iops              = var.ebs_type != "gp2" ? var.ch_logs_ebs_iops : null
   throughput        = var.ebs_type != "gp2" ? var.ch_logs_ebs_throughput : null
@@ -512,6 +525,7 @@ resource "aws_ebs_volume" "redis_data" {
   availability_zone = local.azs[var.az_index]
   size              = var.redis_data_size
   encrypted         = true
+  kms_key_id        = var.redis_ebs_kms_key_arn
   type              = var.ebs_type
   iops              = var.ebs_type != "gp2" ? var.redis_ebs_iops : null
   throughput        = var.ebs_type != "gp2" ? var.redis_ebs_throughput : null
