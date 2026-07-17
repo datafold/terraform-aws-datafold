@@ -29,7 +29,7 @@ module "db" {
   allocated_storage     = var.rds_allocated_storage
   max_allocated_storage = var.rds_max_allocated_storage
   storage_encrypted     = true
-  kms_key_id            = var.use_default_rds_kms_key ? null : data.aws_kms_key.rds.arn
+  kms_key_id            = var.use_default_rds_kms_key ? null : local.rds_kms_key_arn
 
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
@@ -103,6 +103,8 @@ module "db" {
 locals {
   log_rds_automated_backups_replication_path = "${path.module}/../../logs/rds_automated_backups_replication.log"
   rds_password                               = var.rds_password_override != null ? var.rds_password_override : random_password.rds_master_password.result
+  rds_kms_key_arn                            = var.rds_kms_key_arn != null ? var.rds_kms_key_arn : one(data.aws_kms_key.rds[*].arn)
+  rds_kms_key_id                             = var.rds_kms_key_arn != null ? var.rds_kms_key_arn : one(data.aws_kms_key.rds[*].id)
 }
 
 # https://docs.aws.amazon.com/cli/latest/reference/rds/start-db-instance-automated-backups-replication.html
@@ -113,7 +115,7 @@ resource "null_resource" "rds-automated-backups-replication" {
     command = <<-EOT
       aws rds start-db-instance-automated-backups-replication \
         --source-db-instance-arn ${one(module.db[*].db_instance_arn)} \
-        --kms-key-id ${data.aws_kms_key.rds.id} \
+        --kms-key-id ${local.rds_kms_key_id} \
         --source-region ${var.provider_region} \
         --region ${var.rds_backups_replication_target_region} \
         --backup-retention-period ${var.rds_backups_replication_retention_period} \

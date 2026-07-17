@@ -120,6 +120,12 @@ variable "use_default_rds_kms_key" {
   description = "Flag weither or not to use the default RDS KMS encryption key. Not recommended to be used."
 }
 
+variable "rds_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key (possibly in another account) to encrypt the RDS instance with. Takes precedence over create_rds_kms_key / rds_kms_key_alias."
+}
+
 variable "db_subnet_group_name" {
   type        = string
   default     = ""

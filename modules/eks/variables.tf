@@ -226,3 +226,9 @@ variable "temporal_postgres_namespace" {
   default     = "temporal"
   description = "Kubernetes namespace where the Temporal PostgreSQL CRD (and postgres-pod service account) is deployed."
 }
+
+variable "ebs_csi_kms_cmk_arns" {
+  type        = list(string)
+  default     = []
+  description = "KMS CMK ARNs the EBS CSI driver may use for encrypted volumes (grants + encrypt/decrypt). Needed when volumes are encrypted with a non-default CMK, including keys held in another account."
+}

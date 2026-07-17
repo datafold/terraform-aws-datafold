@@ -531,6 +531,17 @@ variable "use_default_rds_kms_key" {
   description = "Flag weither or not to use the default RDS KMS encryption key. Not recommended."
 }
 
+variable "rds_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt the RDS instance with. Supports keys held in another account, provided the key policy grants this account use of the key. Takes precedence over create_rds_kms_key / rds_kms_key_alias. Must be a key ARN, not an alias: aliases do not resolve across accounts. Changing this on an existing instance forces replacement."
+
+  validation {
+    condition     = var.rds_kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:key/", var.rds_kms_key_arn))
+    error_message = "rds_kms_key_arn must be a full KMS key ARN (arn:aws:kms:<region>:<account-id>:key/<key-id>), not an alias."
+  }
+}
+
 variable "database_name" {
   type        = string
   default     = "datafold"
@@ -661,6 +672,17 @@ variable "ch_data_ebs_throughput" {
   description = "Throughput of EBS volume"
 }
 
+variable "ch_data_ebs_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt the clickhouse data EBS volume with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the account default EBS encryption key is used. Must be a key ARN, not an alias: aliases do not resolve across accounts. Changing this on an existing volume forces replacement."
+
+  validation {
+    condition     = var.ch_data_ebs_kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:key/", var.ch_data_ebs_kms_key_arn))
+    error_message = "ch_data_ebs_kms_key_arn must be a full KMS key ARN (arn:aws:kms:<region>:<account-id>:key/<key-id>), not an alias."
+  }
+}
+
 variable "ch_logs_ebs_iops" {
   type        = number
   default     = 3000
@@ -671,6 +693,17 @@ variable "ch_logs_ebs_throughput" {
   type        = number
   default     = 250
   description = "Throughput of EBS volume"
+}
+
+variable "ch_logs_ebs_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt the clickhouse logs EBS volume with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the account default EBS encryption key is used. Must be a key ARN, not an alias: aliases do not resolve across accounts. Changing this on an existing volume forces replacement."
+
+  validation {
+    condition     = var.ch_logs_ebs_kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:key/", var.ch_logs_ebs_kms_key_arn))
+    error_message = "ch_logs_ebs_kms_key_arn must be a full KMS key ARN (arn:aws:kms:<region>:<account-id>:key/<key-id>), not an alias."
+  }
 }
 
 variable "s3_backup_bucket_name_override" {
@@ -699,6 +732,17 @@ variable "redis_ebs_throughput" {
   type        = number
   default     = 125
   description = "Throughput of EBS redis volume"
+}
+
+variable "redis_ebs_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt the redis data EBS volume with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the account default EBS encryption key is used. Must be a key ARN, not an alias: aliases do not resolve across accounts. Changing this on an existing volume forces replacement."
+
+  validation {
+    condition     = var.redis_ebs_kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:key/", var.redis_ebs_kms_key_arn))
+    error_message = "redis_ebs_kms_key_arn must be a full KMS key ARN (arn:aws:kms:<region>:<account-id>:key/<key-id>), not an alias."
+  }
 }
 
 # ┏━╸╻┏ ┏━┓

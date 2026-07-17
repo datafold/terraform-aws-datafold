@@ -6,6 +6,7 @@ module "ebs_csi_irsa_role" {
 
   name                  = "${var.deployment_name}-ebs-csi-controller"
   attach_ebs_csi_policy = true
+  ebs_csi_kms_cmk_arns  = var.ebs_csi_kms_cmk_arns
   use_name_prefix       = false
   policy_name           = "${var.deployment_name}-ebs-csi-controller"
 
