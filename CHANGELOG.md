@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.16.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.1...v1.16.2) (2026-07-17)
+
+
+### Bug Fixes
+
+* Allow KMS keys from other account ([e9a0ba1](https://github.com/datafold/terraform-aws-datafold/commit/e9a0ba1894899519d6654e889ac3f536619869d5))
+
 ### [1.16.1](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.0...v1.16.1) (2026-06-30)
 
 
