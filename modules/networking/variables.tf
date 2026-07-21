@@ -16,7 +16,7 @@ variable "vpc_cidr" {
 
 variable "vpc_private_subnets" {
   type        = list(string)
-  default     = ["10.0.0.0/24", "10.0.1.0/24"]
+  default     = ["10.0.0.0/22", "10.0.4.0/22"]
   description = "private network cidr thats is included in var.vpc_cidr"
   validation {
     condition = alltrue([
@@ -29,7 +29,7 @@ variable "vpc_private_subnets" {
 
 variable "vpc_public_subnets" {
   type        = list(string)
-  default     = ["10.0.100.0/24", "10.0.101.0/24"]
+  default     = ["10.0.100.0/22", "10.0.104.0/22"]
   description = "public network cidr thats is included in var.vpc_cidr"
   validation {
     condition = alltrue([

@@ -159,7 +159,7 @@ variable "vpc_cidr" {
 
 variable "vpc_private_subnets" {
   type        = list(string)
-  default     = ["10.0.0.0/24", "10.0.1.0/24"]
+  default     = ["10.0.0.0/22", "10.0.4.0/22"]
   description = "The private subnet CIDR ranges when a new VPC is created."
   validation {
     condition = alltrue([
@@ -172,7 +172,7 @@ variable "vpc_private_subnets" {
 
 variable "vpc_public_subnets" {
   type        = list(string)
-  default     = ["10.0.100.0/24", "10.0.101.0/24"]
+  default     = ["10.0.100.0/22", "10.0.104.0/22"]
   description = "The public network CIDR ranges"
   validation {
     condition = alltrue([
@@ -876,6 +876,12 @@ variable "vpn_cidr" {
   type        = string
   description = "CIDR range for administrative access"
   default     = ""
+}
+
+variable "private_access_preserve_client_ip" {
+  type        = bool
+  default     = true
+  description = "Whether the private-access NLB should preserve the original client IP when forwarding to the EKS control plane. Only relevant when deploy_private_access is true."
 }
 
 # ┏┓ ┏━╸╺┳┓┏━┓┏━┓┏━╸╻┏

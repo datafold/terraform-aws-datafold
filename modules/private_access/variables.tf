@@ -37,3 +37,9 @@ variable "vpn_cidr" {
   type        = string
   description = "The CIDR range where VPN or instances accessing this control plane originate."
 }
+
+variable "preserve_client_ip" {
+  type        = bool
+  default     = true
+  description = "Whether the NLB should preserve the original client IP when forwarding to the control plane, instead of rewriting it to the NLB's own IP. Enabled by default for VPN-based private access so the control plane sees the real VPN source address."
+}
