@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.16.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.2...v1.16.3) (2026-07-22)
+
+
+### Bug Fixes
+
+* Increase subnet to /22 ([400cc00](https://github.com/datafold/terraform-aws-datafold/commit/400cc001b75ae8f73ccbe1c4b61ea68a67e16643))
+
 ### [1.16.2](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.1...v1.16.2) (2026-07-17)
 
 
