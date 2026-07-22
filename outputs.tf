@@ -153,6 +153,16 @@ output "private_access_vpces_name" {
   description = "Name of the VPCE service that allows private access to the cluster endpoint"
 }
 
+output "lb_vpces_name" {
+  value       = module.load_balancer.vpces_name
+  description = "Service name of the VPC Endpoint Service fronting the UI (PrivateLink), for consumer-side connections"
+}
+
+output "lb_vpces_az_id" {
+  value       = module.load_balancer.vpces_az_id
+  description = "Availability zone ID where the UI's VPCE service is available"
+}
+
 output "redis_data_size" {
   value       = var.redis_data_size
   description = "The size in GB of the Redis data volume."

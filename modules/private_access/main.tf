@@ -49,10 +49,11 @@ module "nlb" {
   security_groups = [var.control_plane_sg_id, aws_security_group.nlb_ingress.id]
 
   target_groups = [{
-    name             = var.deployment_name
-    backend_protocol = "TCP"
-    backend_port     = 443
-    target_type      = "ip"
+    name               = var.deployment_name
+    backend_protocol   = "TCP"
+    backend_port       = 443
+    target_type        = "ip"
+    preserve_client_ip = var.preserve_client_ip ? "true" : "false"
     health_check = {
       enabled  = true
       path     = "/readyz"

@@ -239,3 +239,10 @@ resource "aws_vpc_endpoint_service" "vpces" {
   private_dns_name           = var.lb_vpces_details.private_dns_name
   supported_ip_address_types = var.lb_vpces_details.supported_ip_address_types
 }
+
+# Used by consumer-side PrivateLink connections to pick a subnet in the same AZ
+data "aws_subnet" "vpces_az" {
+  count = var.lb_deploy_nlb ? 1 : 0
+
+  id = var.lb_nlb_subnets[0]
+}

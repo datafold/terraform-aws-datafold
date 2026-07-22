@@ -126,8 +126,8 @@ alphabetical ordering. In us-east this could be as many as 6 AZ's.
 What the module does is sort the AZs and then it will iteratively deploy a public / private subnet specifying
 it's AZ in the module. Thus:
 
-- [10.0.0.0/24] will get deployed in us-east-1a
-- [10.0.1.0/24] will get deployed in us-east-1b
+- [10.0.0.0/22] will get deployed in us-east-1a
+- [10.0.4.0/22] will get deployed in us-east-1b
 
 To deploy to three AZ's, you should override the public/private subnet settings. Then it will iterate 
 across 3 elements, but the order of the AZ's will be the same by default.
@@ -378,9 +378,9 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | The CIDR of the new VPC, if the vpc\_cidr is not set | `string` | `"10.0.0.0/16"` | no |
 | <a name="input_vpc_exclude_az_ids"></a> [vpc\_exclude\_az\_ids](#input\_vpc\_exclude\_az\_ids) | AZ IDs to exclude from availability zones | `list(string)` | `[]` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The VPC ID of an existing VPC to deploy the cluster in. Creates a new VPC if not set. | `string` | `""` | no |
-| <a name="input_vpc_private_subnets"></a> [vpc\_private\_subnets](#input\_vpc\_private\_subnets) | The private subnet CIDR ranges when a new VPC is created. | `list(string)` | <pre>[<br/>  "10.0.0.0/24",<br/>  "10.0.1.0/24"<br/>]</pre> | no |
+| <a name="input_vpc_private_subnets"></a> [vpc\_private\_subnets](#input\_vpc\_private\_subnets) | The private subnet CIDR ranges when a new VPC is created. | `list(string)` | <pre>[<br/>  "10.0.0.0/22",<br/>  "10.0.4.0/22"<br/>]</pre> | no |
 | <a name="input_vpc_propagating_vgws"></a> [vpc\_propagating\_vgws](#input\_vpc\_propagating\_vgws) | ID's of virtual private gateways to propagate. | `list(any)` | `[]` | no |
-| <a name="input_vpc_public_subnets"></a> [vpc\_public\_subnets](#input\_vpc\_public\_subnets) | The public network CIDR ranges | `list(string)` | <pre>[<br/>  "10.0.100.0/24",<br/>  "10.0.101.0/24"<br/>]</pre> | no |
+| <a name="input_vpc_public_subnets"></a> [vpc\_public\_subnets](#input\_vpc\_public\_subnets) | The public network CIDR ranges | `list(string)` | <pre>[<br/>  "10.0.100.0/22",<br/>  "10.0.104.0/22"<br/>]</pre> | no |
 | <a name="input_vpc_tags"></a> [vpc\_tags](#input\_vpc\_tags) | The extra tags to be applied to the VPC | `map(any)` | `{}` | no |
 | <a name="input_vpc_vpn_gateway_id"></a> [vpc\_vpn\_gateway\_id](#input\_vpc\_vpn\_gateway\_id) | ID of the VPN gateway to attach to the VPC | `string` | `""` | no |
 | <a name="input_vpce_details"></a> [vpce\_details](#input\_vpce\_details) | Endpoint names to define with security group rule definitions | <pre>map(object({<br/>    vpces_service_name  = string<br/>    subnet_ids          = optional(list(string), [])<br/>    private_dns_enabled = optional(bool, true)<br/><br/>    input_rules        = list(object({<br/>       description = string<br/>       from_port   = number<br/>       to_port     = number<br/>       protocol    = string<br/>       cidr_blocks = string<br/>    }))<br/>    output_rules = list(object({<br/>       description = string<br/>       from_port   = number<br/>       to_port     = number<br/>       protocol    = string<br/>       cidr_blocks = string<br/>    }))<br/>  }))</pre> | `{}` | no |

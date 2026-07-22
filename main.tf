@@ -486,11 +486,12 @@ module "private_access" {
   allowed_principals  = var.allowed_principals
   deployment_name     = var.deployment_name
   vpc_id              = local.vpc_id
-  vpc_private_subnets = [local.vpc_private_subnets[0]]
+  vpc_private_subnets = local.vpc_private_subnets
   eks_cluster_name    = local.cluster_name
   tags                = var.tags
   control_plane_sg_id = local.control_plane_sg_id
   vpn_cidr            = var.vpn_cidr
+  preserve_client_ip  = var.private_access_preserve_client_ip
 }
 
 resource "aws_ebs_volume" "clickhouse_data" {
