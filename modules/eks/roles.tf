@@ -28,7 +28,12 @@ resource "aws_iam_policy" "bedrock_access_policy" {
     Statement = [
       {
         Effect = "Allow",
+        # aws-marketplace actions don't support resource-level scoping, hence Resource = "*" here too.
+        # Some Bedrock foundation models require an AWS Marketplace subscription before InvokeModel
+        # succeeds; without these the pod gets a 403 on aws-marketplace:ViewSubscriptions/Subscribe.
         Action = [
+          "aws-marketplace:Subscribe",
+          "aws-marketplace:ViewSubscriptions",
           "bedrock:TagResource",
           "bedrock:CreateInferenceProfile",
           "bedrock:GetFoundationModel",
@@ -80,7 +85,12 @@ resource "aws_iam_policy" "bedrock_access_policy_aip_only" {
       {
         Sid    = "AllowBedrockManagement",
         Effect = "Allow",
+        # aws-marketplace actions don't support resource-level scoping, hence Resource = "*" here too.
+        # Some Bedrock foundation models require an AWS Marketplace subscription before InvokeModel
+        # succeeds; without these the pod gets a 403 on aws-marketplace:ViewSubscriptions/Subscribe.
         Action = [
+          "aws-marketplace:Subscribe",
+          "aws-marketplace:ViewSubscriptions",
           "bedrock:TagResource",
           "bedrock:UntagResource",
           "bedrock:ListTagsForResource",
