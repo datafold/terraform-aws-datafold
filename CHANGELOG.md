@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+### [1.16.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.3...v1.16.4) (2026-08-05)
+
+
+### Bug Fixes
+
+* Required permissions for thunderbolt ([ab8ee30](https://github.com/datafold/terraform-aws-datafold/commit/ab8ee30a7441b862f6fcbc7960006d0d0b8a0d4d))
+
 ### [1.16.3](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.2...v1.16.3) (2026-07-22)
 
 
