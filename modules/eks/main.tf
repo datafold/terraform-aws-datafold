@@ -104,6 +104,16 @@ module "eks" {
   control_plane_subnet_ids = var.k8s_control_subnets
   authentication_mode      = "API"
 
+  # Secrets encryption key. When eks_kms_key_arn is set (e.g. a customer-held
+  # key, including keys in another account), use it directly instead of
+  # having the module create its own — attach_encryption_policy (default
+  # true) grants the cluster IAM role kms:Encrypt/Decrypt/DescribeKey/
+  # ListGrants on whichever key is in effect.
+  create_kms_key = var.eks_kms_key_arn == null
+  encryption_config = {
+    provider_key_arn = var.eks_kms_key_arn
+  }
+
   # Self Managed Node Group(s)
   self_managed_node_groups = var.self_managed_node_grps
   eks_managed_node_groups  = var.managed_node_grps

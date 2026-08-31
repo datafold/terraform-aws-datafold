@@ -8,7 +8,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "temporal_backup" 
   rule {
     blocked_encryption_types = ["SSE-C"]
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      sse_algorithm     = var.kms_key_arn == null ? "AES256" : "aws:kms"
+      kms_master_key_id = var.kms_key_arn
     }
   }
 }

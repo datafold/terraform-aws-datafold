@@ -718,6 +718,17 @@ variable "backup_lifecycle_expiration_days" {
   description = "Number of days after which clickhouse backup objects will expire and be deleted."
 }
 
+variable "clickhouse_s3_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt the clickhouse backup S3 bucket with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the bucket uses SSE-S3 (AES256). Must be a key ARN, not an alias: aliases do not resolve across accounts."
+
+  validation {
+    condition     = var.clickhouse_s3_kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:key/", var.clickhouse_s3_kms_key_arn))
+    error_message = "clickhouse_s3_kms_key_arn must be a full KMS key ARN (arn:aws:kms:<region>:<account-id>:key/<key-id>), not an alias."
+  }
+}
+
 # ┏━┓┏━╸╺┳┓╻┏━┓
 # ┣┳┛┣╸  ┃┃┃┗━┓
 # ╹┗╸┗━╸╺┻┛╹┗━┛
@@ -814,6 +825,17 @@ variable "default_node_disk_size" {
   description = "Disk size for a node in GB"
 }
 
+variable "node_root_volume_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt node root EBS volumes with, including keys held in another account. When null (default), volumes fall back to the account's default EBS encryption key. Must be a key ARN, not an alias: aliases do not resolve across accounts."
+
+  validation {
+    condition     = var.node_root_volume_kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:key/", var.node_root_volume_kms_key_arn))
+    error_message = "node_root_volume_kms_key_arn must be a full KMS key ARN (arn:aws:kms:<region>:<account-id>:key/<key-id>), not an alias."
+  }
+}
+
 variable "kubelet_image_gc_high_threshold_percent" {
   type        = number
   default     = 85
@@ -854,6 +876,35 @@ variable "k8s_api_access_roles" {
   type        = set(string)
   default     = []
   description = "Set of roles that are allowed to access the EKS API"
+}
+
+variable "eks_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt EKS cluster secrets with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the EKS module creates and manages its own dedicated key. Must be a key ARN, not an alias: aliases do not resolve across accounts."
+
+  validation {
+    condition     = var.eks_kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:key/", var.eks_kms_key_arn))
+    error_message = "eks_kms_key_arn must be a full KMS key ARN (arn:aws:kms:<region>:<account-id>:key/<key-id>), not an alias."
+  }
+}
+
+variable "node_registry_proxy_url" {
+  type        = string
+  default     = null
+  description = "HTTP(S) proxy worker nodes must use to pull container images, for environments with no direct internet egress (e.g. no NAT/IGW, egress via a hub that requires an explicit forward proxy). Applied to containerd only, via a systemd drop-in written before nodeadm starts it. When null, no proxy is configured."
+}
+
+variable "node_registry_no_proxy" {
+  type        = list(string)
+  default     = []
+  description = "Additional NO_PROXY entries for the containerd proxy config, appended to a base set covering localhost and the instance metadata service. Only used when node_registry_proxy_url is set."
+}
+
+variable "node_registry_proxy_ca_cert_pem" {
+  type        = string
+  default     = null
+  description = "PEM-encoded CA certificate to trust for registry pulls through node_registry_proxy_url, for proxies that do TLS interception (re-sign traffic with their own CA instead of passing it through). Installed into the node's system trust store (update-ca-trust) before containerd starts. Only used when node_registry_proxy_url is set; without it, TLS interception causes every pull through the proxy to fail with \"certificate signed by unknown authority\"."
 }
 
 # ┏━┓┏━┓╻╻ ╻┏━┓╺┳╸┏━╸   ┏━┓┏━╸┏━╸┏━╸┏━┓┏━┓
@@ -1001,6 +1052,17 @@ variable "s3_temporal_backup_tags" {
   type        = map(any)
   default     = {}
   description = "Extra tags to apply to the Temporal backup S3 bucket."
+}
+
+variable "temporal_s3_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt the Temporal backup S3 bucket with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the bucket uses SSE-S3 (AES256). Must be a key ARN, not an alias: aliases do not resolve across accounts."
+
+  validation {
+    condition     = var.temporal_s3_kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:key/", var.temporal_s3_kms_key_arn))
+    error_message = "temporal_s3_kms_key_arn must be a full KMS key ARN (arn:aws:kms:<region>:<account-id>:key/<key-id>), not an alias."
+  }
 }
 
 variable "temporal_postgres_namespace" {

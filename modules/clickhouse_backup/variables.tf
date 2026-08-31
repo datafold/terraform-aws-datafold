@@ -29,3 +29,9 @@ variable "backup_lifecycle_expiration_days" {
   default     = 6
   description = "Number of days after which clickhouse backup objects will expire and be deleted."
 }
+
+variable "kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt the bucket with. When null, the bucket uses SSE-S3 (AES256)."
+}

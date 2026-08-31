@@ -29,3 +29,9 @@ variable "s3_temporal_backup_tags" {
   type    = map(any)
   default = {}
 }
+
+variable "kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt the bucket with. When null, the bucket uses SSE-S3 (AES256)."
+}
