@@ -2,6 +2,14 @@
 
 See this file for notable changes between versions.
 
+### [1.16.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.4...v1.16.5) (2026-09-01)
+
+
+### Bug Fixes
+
+* Allow proxy traffic and custom kms key for volumes ([ec4e810](https://github.com/datafold/terraform-aws-datafold/commit/ec4e8103edc93d18a6d465f1b3191b1e4f24bea9))
+* Apply tags everywhere ([aca6b23](https://github.com/datafold/terraform-aws-datafold/commit/aca6b231338afb488f7170d06eedaa16580a14bc))
+
 ### [1.16.4](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.3...v1.16.4) (2026-08-05)
 
 
