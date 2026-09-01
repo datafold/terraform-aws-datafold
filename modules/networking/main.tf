@@ -210,6 +210,7 @@ resource "aws_vpc_endpoint" "vpce" {
 
   subnet_ids          = coalescelist(each.value.subnet_ids, local.vpc_private_subnets)
   private_dns_enabled = each.value.private_dns_enabled
+  policy              = each.value.policy
 
   depends_on = [
     module.vpc,
