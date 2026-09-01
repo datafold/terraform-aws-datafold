@@ -128,6 +128,7 @@ variable "vpce_details" {
     vpces_service_name  = string
     subnet_ids          = optional(list(string), [])
     private_dns_enabled = optional(bool, true)
+    policy              = optional(string, null)
     input_rules = list(object({
       description = string
       from_port   = number

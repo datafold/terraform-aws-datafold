@@ -90,6 +90,35 @@ module "load_balancer" {
 }
 
 locals {
+  # Extra cloud-init part, prepended to every node pool's cloudinit_pre_nodeadm
+  # below, that points containerd's image pulls at a corporate forward proxy.
+  # Only needed when nodes have no direct internet egress. Scoped to
+  # containerd only (not a node-wide /etc/environment proxy) so it doesn't
+  # affect kubelet<->API-server traffic or other node processes.
+  node_registry_proxy_cloudinit = var.node_registry_proxy_url == null ? [] : [
+    {
+      content_type = "text/x-shellscript"
+      content      = <<-EOT
+        #!/bin/bash
+        set -euo pipefail
+        %{if var.node_registry_proxy_ca_cert_pem != null~}
+        cat <<'PROXYCACERT' > /etc/pki/ca-trust/source/anchors/node-registry-proxy-ca.pem
+        ${var.node_registry_proxy_ca_cert_pem}
+        PROXYCACERT
+        update-ca-trust extract
+        %{endif~}
+        mkdir -p /etc/systemd/system/containerd.service.d
+        cat <<'PROXYCONF' > /etc/systemd/system/containerd.service.d/http-proxy.conf
+        [Service]
+        Environment="HTTP_PROXY=${var.node_registry_proxy_url}"
+        Environment="HTTPS_PROXY=${var.node_registry_proxy_url}"
+        Environment="NO_PROXY=${join(",", concat(["localhost", "127.0.0.1", "169.254.169.254", ".svc", ".cluster.local"], var.node_registry_no_proxy))}"
+        PROXYCONF
+        systemctl daemon-reload
+      EOT
+    }
+  ]
+
   default_node_pool = merge(
     {
       subnet_ids = [local.vpc_private_subnets[var.private_subnet_index]]
@@ -109,6 +138,7 @@ locals {
             throughput            = 125
             encrypted             = true
             delete_on_termination = true
+            kms_key_id            = var.node_root_volume_kms_key_arn
           }
         }
       }
@@ -116,7 +146,7 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-      cloudinit_pre_nodeadm = [
+      cloudinit_pre_nodeadm = concat([
         {
           content_type = "application/node.eks.aws"
           content      = <<-EOT
@@ -131,7 +161,7 @@ locals {
                   imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
           EOT
         }
-      ]
+      ], local.node_registry_proxy_cloudinit)
   }, var.managed_node_grp1)
   second_node_pool = merge(
     {
@@ -152,6 +182,7 @@ locals {
             throughput            = 125
             encrypted             = true
             delete_on_termination = true
+            kms_key_id            = var.node_root_volume_kms_key_arn
           }
         }
       }
@@ -159,7 +190,7 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-      cloudinit_pre_nodeadm = [
+      cloudinit_pre_nodeadm = concat([
         {
           content_type = "application/node.eks.aws"
           content      = <<-EOT
@@ -174,7 +205,7 @@ locals {
                   imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
           EOT
         }
-      ]
+      ], local.node_registry_proxy_cloudinit)
   }, var.managed_node_grp2)
   third_node_pool = merge(
     {
@@ -195,6 +226,7 @@ locals {
             throughput            = 125
             encrypted             = true
             delete_on_termination = true
+            kms_key_id            = var.node_root_volume_kms_key_arn
           }
         }
       }
@@ -202,7 +234,7 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-      cloudinit_pre_nodeadm = [
+      cloudinit_pre_nodeadm = concat([
         {
           content_type = "application/node.eks.aws"
           content      = <<-EOT
@@ -217,7 +249,7 @@ locals {
                   imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
           EOT
         }
-      ]
+      ], local.node_registry_proxy_cloudinit)
   }, var.managed_node_grp3)
   fourth_node_pool = merge(
     {
@@ -238,6 +270,7 @@ locals {
             throughput            = 125
             encrypted             = true
             delete_on_termination = true
+            kms_key_id            = var.node_root_volume_kms_key_arn
           }
         }
       }
@@ -245,7 +278,7 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-      cloudinit_pre_nodeadm = [
+      cloudinit_pre_nodeadm = concat([
         {
           content_type = "application/node.eks.aws"
           content      = <<-EOT
@@ -260,7 +293,7 @@ locals {
                   imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
           EOT
         }
-      ]
+      ], local.node_registry_proxy_cloudinit)
   }, var.managed_node_grp4)
   fifth_node_pool = merge(
     {
@@ -281,6 +314,7 @@ locals {
             throughput            = 125
             encrypted             = true
             delete_on_termination = true
+            kms_key_id            = var.node_root_volume_kms_key_arn
           }
         }
       }
@@ -288,7 +322,7 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-      cloudinit_pre_nodeadm = [
+      cloudinit_pre_nodeadm = concat([
         {
           content_type = "application/node.eks.aws"
           content      = <<-EOT
@@ -303,7 +337,7 @@ locals {
                   imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
           EOT
         }
-      ]
+      ], local.node_registry_proxy_cloudinit)
   }, var.managed_node_grp5)
   sixth_node_pool = merge(
     {
@@ -324,6 +358,7 @@ locals {
             throughput            = 125
             encrypted             = true
             delete_on_termination = true
+            kms_key_id            = var.node_root_volume_kms_key_arn
           }
         }
       }
@@ -331,7 +366,7 @@ locals {
         http_put_response_hop_limit = 2
         http_tokens                 = "required"
       }
-      cloudinit_pre_nodeadm = [
+      cloudinit_pre_nodeadm = concat([
         {
           content_type = "application/node.eks.aws"
           content      = <<-EOT
@@ -346,7 +381,7 @@ locals {
                   imageMinimumGCAge: "${var.kubelet_image_minimum_gc_age}"
           EOT
         }
-      ]
+      ], local.node_registry_proxy_cloudinit)
   }, var.managed_node_grp6)
   managed_node_groups = merge(
     { "${var.deployment_name}-k8s" : local.default_node_pool },
@@ -366,6 +401,7 @@ module "clickhouse_backup" {
   s3_clickhouse_backup_tags        = var.s3_clickhouse_backup_tags
   s3_backup_bucket_name_override   = var.s3_backup_bucket_name_override
   backup_lifecycle_expiration_days = var.backup_lifecycle_expiration_days
+  kms_key_arn                      = var.clickhouse_s3_kms_key_arn
 }
 
 locals {
@@ -381,6 +417,7 @@ module "temporal_backup" {
   s3_bucket_name_override          = var.temporal_s3_bucket_name_override
   backup_lifecycle_expiration_days = var.temporal_backup_lifecycle_expiration_days
   s3_temporal_backup_tags          = var.s3_temporal_backup_tags
+  kms_key_arn                      = var.temporal_s3_kms_key_arn
 }
 
 locals {
@@ -414,6 +451,7 @@ module "eks" {
   k8s_access_bedrock           = var.k8s_access_bedrock
   clickhouse_backup_bucket_arn = local.clickhouse_backup_bucket_arn
   service_account_prefix       = var.service_account_prefix
+  eks_kms_key_arn              = var.eks_kms_key_arn
 
   # The CSI driver needs explicit KMS permissions to attach volumes that are
   # encrypted with a non-default CMK (e.g. customer-held cross-account keys).
@@ -433,6 +471,35 @@ module "eks" {
 locals {
   cluster_name        = module.eks.cluster_name
   control_plane_sg_id = module.eks.control_plane_security_group_id
+}
+
+data "aws_caller_identity" "current" {}
+
+# EC2 Auto Scaling launches node group instances (and their encrypted root
+# volumes) using its own service-linked role, not our IAM principal. A
+# customer-managed key's default policy only delegates to the account's IAM
+# system (the "root" statement) — AWSServiceRoleForAutoScaling's fixed
+# AWS-managed policy has no KMS permissions of its own, so that delegation
+# never reaches it. Without this grant, node launches fail with
+# Client.InvalidKMSKey.InvalidState. RDS/EBS-CSI don't need this: RDS isn't
+# ASG-launched, and the CSI driver gets its own IRSA-based KMS permissions
+# via ebs_csi_kms_cmk_arns above.
+resource "aws_kms_grant" "asg_node_root_volumes" {
+  count = var.node_root_volume_kms_key_arn == null ? 0 : 1
+
+  name              = "${var.deployment_name}-asg-ebs-node-root-volumes"
+  key_id            = var.node_root_volume_kms_key_arn
+  grantee_principal = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
+  operations = [
+    "Decrypt",
+    "Encrypt",
+    "GenerateDataKey",
+    "GenerateDataKeyWithoutPlaintext",
+    "CreateGrant",
+    "DescribeKey",
+    "ReEncryptFrom",
+    "ReEncryptTo",
+  ]
 }
 
 module "database" {

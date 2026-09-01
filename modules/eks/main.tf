@@ -53,6 +53,29 @@ module "cluster_autoscaler_role" {
   }
 }
 
+# eks_managed_node_groups[*].tags (merged into var.tags below, at the
+# terraform-aws-modules/eks/aws level) only tags the aws_eks_node_group API
+# object itself - it does NOT reach the ASG's launch template, so the actual
+# EC2 instances/EBS volumes/ENIs launched by the node group get no tags at
+# all beyond the module's own EKS/cluster-autoscaler discovery tags.
+# launch_template_tags is the separate knob that feeds the launch template's
+# tag_specifications (which already default to ["instance", "volume",
+# "network-interface"]) - confirmed live on HCF: node instances/volumes/ENIs
+# had zero common tags until this was added. Every other customer is
+# unaffected beyond gaining the same tags on their own node instances.
+locals {
+  managed_node_grps_tagged = {
+    for k, v in var.managed_node_grps : k => merge(v, {
+      launch_template_tags = merge(var.tags, try(v.launch_template_tags, {}))
+    })
+  }
+  self_managed_node_grps_tagged = {
+    for k, v in var.self_managed_node_grps : k => merge(v, {
+      launch_template_tags = merge(var.tags, try(v.launch_template_tags, {}))
+    })
+  }
+}
+
 module "eks" {
   # https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/docs
 
@@ -104,9 +127,19 @@ module "eks" {
   control_plane_subnet_ids = var.k8s_control_subnets
   authentication_mode      = "API"
 
+  # Secrets encryption key. When eks_kms_key_arn is set (e.g. a customer-held
+  # key, including keys in another account), use it directly instead of
+  # having the module create its own — attach_encryption_policy (default
+  # true) grants the cluster IAM role kms:Encrypt/Decrypt/DescribeKey/
+  # ListGrants on whichever key is in effect.
+  create_kms_key = var.eks_kms_key_arn == null
+  encryption_config = {
+    provider_key_arn = var.eks_kms_key_arn
+  }
+
   # Self Managed Node Group(s)
-  self_managed_node_groups = var.self_managed_node_grps
-  eks_managed_node_groups  = var.managed_node_grps
+  self_managed_node_groups = local.self_managed_node_grps_tagged
+  eks_managed_node_groups  = local.managed_node_grps_tagged
 
   #  access_entries = {
   #    allow_support_access = {

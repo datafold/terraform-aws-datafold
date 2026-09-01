@@ -232,3 +232,9 @@ variable "ebs_csi_kms_cmk_arns" {
   default     = []
   description = "KMS CMK ARNs the EBS CSI driver may use for encrypted volumes (grants + encrypt/decrypt). Needed when volumes are encrypted with a non-default CMK, including keys held in another account."
 }
+
+variable "eks_kms_key_arn" {
+  type        = string
+  default     = null
+  description = "Full ARN of an existing KMS key to encrypt cluster secrets with, including keys held in another account. When null, the EKS module creates and manages its own dedicated key."
+}
