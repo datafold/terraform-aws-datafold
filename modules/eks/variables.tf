@@ -238,3 +238,13 @@ variable "eks_kms_key_arn" {
   default     = null
   description = "Full ARN of an existing KMS key to encrypt cluster secrets with, including keys held in another account. When null, the EKS module creates and manages its own dedicated key."
 }
+
+variable "cloudwatch_observability" {
+  type = object({
+    enabled              = optional(bool, false)
+    log_retention_days   = optional(number, 30)
+    configuration_values = optional(string)
+  })
+  default     = {}
+  description = "Container logs to CloudWatch Logs through the amazon-cloudwatch-observability add-on (cloudwatch.tf). configuration_values replaces the module's add-on configuration (JSON)."
+}

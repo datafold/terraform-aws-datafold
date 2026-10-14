@@ -945,6 +945,23 @@ variable "k8s_access_bedrock" {
   description = "Allow cluster to access bedrock in this region"
 }
 
+variable "cloudwatch_observability" {
+  type = object({
+    enabled              = optional(bool, false)
+    log_retention_days   = optional(number, 30)
+    configuration_values = optional(string)
+  })
+  default     = {}
+  description = <<-EOT
+    Ship every container's stdout to CloudWatch Logs
+    (/aws/containerinsights/<cluster>/application) with the
+    amazon-cloudwatch-observability EKS add-on, plus standard Container Insights
+    metrics. Application Signals stays off. `log_retention_days` applies to the
+    add-on's four log groups; `configuration_values` (JSON) replaces the module's
+    add-on configuration entirely (modules/eks/cloudwatch.tf).
+  EOT
+}
+
 variable "service_account_prefix" {
   type        = string
   default     = ""
