@@ -450,6 +450,7 @@ module "eks" {
 
   k8s_access_bedrock           = var.k8s_access_bedrock
   clickhouse_backup_bucket_arn = local.clickhouse_backup_bucket_arn
+  cloudwatch_observability     = var.cloudwatch_observability
   service_account_prefix       = var.service_account_prefix
   eks_kms_key_arn              = var.eks_kms_key_arn
 

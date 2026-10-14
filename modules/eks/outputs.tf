@@ -159,3 +159,7 @@ output "temporal_backup_role_arn" {
   value       = try(module.temporal_backup_role[0].arn, "")
   description = "The ARN of the IAM role for Temporal PostgreSQL backups (postgres-pod service account)"
 }
+
+output "cloudwatch_observability_role_arn" {
+  value = one(module.cloudwatch_observability_role[*].arn)
+}
