@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.17.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.5...v1.17.0) (2026-10-14)
+
+
+### Features
+
+* Ship container logs to CloudWatch with the CloudWatch Observability add-on ([d51350a](https://github.com/datafold/terraform-aws-datafold/commit/d51350afb7d4e478c628148e649f28a167a8123e))
+
 ### [1.16.5](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.4...v1.16.5) (2026-09-01)
 
 
