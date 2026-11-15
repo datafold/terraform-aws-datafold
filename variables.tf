@@ -929,6 +929,12 @@ variable "vpn_cidr" {
   default     = ""
 }
 
+variable "extra_vpn_cidrs" {
+  type        = list(string)
+  description = "Further CIDR ranges allowed into the private-access NLB next to vpn_cidr, e.g. a second VPN while two run side by side."
+  default     = []
+}
+
 variable "private_access_preserve_client_ip" {
   type        = bool
   default     = true

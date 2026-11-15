@@ -251,12 +251,14 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="module_networking"></a> [networking](#module\_networking) | ./modules/networking | n/a |
 | <a name="module_private_access"></a> [private\_access](#module\_private\_access) | ./modules/private_access | n/a |
 | <a name="module_security"></a> [security](#module\_security) | ./modules/security | n/a |
+| <a name="module_temporal_backup"></a> [temporal\_backup](#module\_temporal\_backup) | ./modules/temporal_backup | n/a |
 | <a name="module_vpc_peering"></a> [vpc\_peering](#module\_vpc\_peering) | ./modules/vpc_peering | n/a |
 
 ## Resources
 
 | Name | Type |
 |------|------|
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 
 ## Inputs
 
@@ -277,20 +279,24 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="input_clickhouse_data_size"></a> [clickhouse\_data\_size](#input\_clickhouse\_data\_size) | EBS volume size for clickhouse data in GB | `number` | `40` | no |
 | <a name="input_clickhouse_logs_size"></a> [clickhouse\_logs\_size](#input\_clickhouse\_logs\_size) | EBS volume size for clickhouse logs in GB | `number` | `40` | no |
 | <a name="input_clickhouse_s3_bucket"></a> [clickhouse\_s3\_bucket](#input\_clickhouse\_s3\_bucket) | Bucket where clickhouse backups are stored | `string` | `"clickhouse-backups-abcguo23"` | no |
+| <a name="input_clickhouse_s3_kms_key_arn"></a> [clickhouse\_s3\_kms\_key\_arn](#input\_clickhouse\_s3\_kms\_key\_arn) | Full ARN of an existing KMS key to encrypt the clickhouse backup S3 bucket with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the bucket uses SSE-S3 (AES256). Must be a key ARN, not an alias: aliases do not resolve across accounts. | `string` | `null` | no |
+| <a name="input_cloudwatch_observability"></a> [cloudwatch\_observability](#input\_cloudwatch\_observability) | Ship every container's stdout to CloudWatch Logs<br/>(/aws/containerinsights/<cluster>/application) with the<br/>amazon-cloudwatch-observability EKS add-on, plus standard Container Insights<br/>metrics. Application Signals stays off. `log_retention_days` applies to the<br/>add-on's four log groups; `configuration_values` (JSON) replaces the module's<br/>add-on configuration entirely (modules/eks/cloudwatch.tf). | <pre>object({<br/>    enabled              = optional(bool, false)<br/>    log_retention_days   = optional(number, 30)<br/>    configuration_values = optional(string)<br/>  })</pre> | `{}` | no |
+| <a name="input_create_rds"></a> [create\_rds](#input\_create\_rds) | Whether to create the RDS instance. | `bool` | `true` | no |
 | <a name="input_create_rds_kms_key"></a> [create\_rds\_kms\_key](#input\_create\_rds\_kms\_key) | Set to true to create a separate KMS key (Recommended). | `bool` | `true` | no |
 | <a name="input_create_ssl_cert"></a> [create\_ssl\_cert](#input\_create\_ssl\_cert) | Creates an SSL certificate if set. | `bool` | n/a | yes |
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | RDS database name | `string` | `"datafold"` | no |
 | <a name="input_datadog_api_key"></a> [datadog\_api\_key](#input\_datadog\_api\_key) | The API key for Datadog | `string` | `""` | no |
-| <a name="input_db_extra_parameters"></a> [db\_extra\_parameters](#input\_db\_extra\_parameters) | List of map of extra variables to apply to the RDS database parameter group | `list` | `[]` | no |
+| <a name="input_db_extra_parameters"></a> [db\_extra\_parameters](#input\_db\_extra\_parameters) | List of map of extra variables to apply to the RDS database parameter group | `list(any)` | `[]` | no |
 | <a name="input_db_instance_tags"></a> [db\_instance\_tags](#input\_db\_instance\_tags) | The extra tags to be applied to the RDS instance. | `map(any)` | `{}` | no |
 | <a name="input_db_parameter_group_name"></a> [db\_parameter\_group\_name](#input\_db\_parameter\_group\_name) | The specific parameter group name to associate | `string` | `""` | no |
 | <a name="input_db_parameter_group_tags"></a> [db\_parameter\_group\_tags](#input\_db\_parameter\_group\_tags) | The extra tags to be applied to the parameter group | `map(any)` | `{}` | no |
 | <a name="input_db_subnet_group_name"></a> [db\_subnet\_group\_name](#input\_db\_subnet\_group\_name) | The specific subnet group name to use | `string` | `""` | no |
 | <a name="input_db_subnet_group_tags"></a> [db\_subnet\_group\_tags](#input\_db\_subnet\_group\_tags) | The extra tags to be applied to the parameter group | `map(any)` | `{}` | no |
-| <a name="input_default_node_disk_size"></a> [default\_node\_disk\_size](#input\_default\_node\_disk\_size) | Disk size for a node in GB | `number` | `40` | no |
+| <a name="input_default_node_disk_size"></a> [default\_node\_disk\_size](#input\_default\_node\_disk\_size) | Disk size for a node in GB | `number` | `80` | no |
 | <a name="input_deploy_github_reverse_proxy"></a> [deploy\_github\_reverse\_proxy](#input\_deploy\_github\_reverse\_proxy) | Determines that the github reverse proxy should be deployed | `bool` | `false` | no |
 | <a name="input_deploy_lb"></a> [deploy\_lb](#input\_deploy\_lb) | Allows a deploy without a load balancer | `bool` | `true` | no |
 | <a name="input_deploy_private_access"></a> [deploy\_private\_access](#input\_deploy\_private\_access) | Determines that the cluster should be 100% private | `bool` | `false` | no |
+| <a name="input_deploy_temporal"></a> [deploy\_temporal](#input\_deploy\_temporal) | Whether to deploy Temporal infrastructure resources (S3 bucket + IAM role for postgres-pod). | `bool` | `true` | no |
 | <a name="input_deploy_vpc_flow_logs"></a> [deploy\_vpc\_flow\_logs](#input\_deploy\_vpc\_flow\_logs) | Activates the VPC flow logs if set. | `bool` | `false` | no |
 | <a name="input_deploy_vpc_peering"></a> [deploy\_vpc\_peering](#input\_deploy\_vpc\_peering) | Determines that the VPC peering should be deployed | `bool` | `false` | no |
 | <a name="input_deployment_name"></a> [deployment\_name](#input\_deployment\_name) | Name of the current deployment. | `string` | n/a | yes |
@@ -300,17 +306,24 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="input_dns_egress_cidrs"></a> [dns\_egress\_cidrs](#input\_dns\_egress\_cidrs) | List of Internet addresses to which the application has access | `list(string)` | `[]` | no |
 | <a name="input_ebs_extra_tags"></a> [ebs\_extra\_tags](#input\_ebs\_extra\_tags) | The extra tags to be applied to the EBS volumes | `map(any)` | `{}` | no |
 | <a name="input_ebs_type"></a> [ebs\_type](#input\_ebs\_type) | Type for all EBS volumes | `string` | `"gp3"` | no |
+| <a name="input_eks_cluster_subnet_count"></a> [eks\_cluster\_subnet\_count](#input\_eks\_cluster\_subnet\_count) | Number of private subnets to use for EKS cluster (control plane). If null, uses all private subnets. Set this to limit which subnets the EKS cluster uses while allowing node groups to use additional subnets. | `number` | `null` | no |
+| <a name="input_eks_kms_key_arn"></a> [eks\_kms\_key\_arn](#input\_eks\_kms\_key\_arn) | Full ARN of an existing KMS key to encrypt EKS cluster secrets with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the EKS module creates and manages its own dedicated key. Must be a key ARN, not an alias: aliases do not resolve across accounts. | `string` | `null` | no |
 | <a name="input_enable_dhcp_options"></a> [enable\_dhcp\_options](#input\_enable\_dhcp\_options) | Flag to use custom DHCP options for DNS resolution. | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Global environment tag to apply on all datadog logs, metrics, etc. | `string` | n/a | yes |
+| <a name="input_extra_vpn_cidrs"></a> [extra\_vpn\_cidrs](#input\_extra\_vpn\_cidrs) | Further CIDR ranges allowed into the private-access NLB next to vpn\_cidr, e.g. a second VPN while two run side by side. | `list(string)` | `[]` | no |
 | <a name="input_github_cidrs"></a> [github\_cidrs](#input\_github\_cidrs) | List of CIDRs that are allowed to connect to the github reverse proxy | `list(string)` | `[]` | no |
 | <a name="input_host_override"></a> [host\_override](#input\_host\_override) | Overrides the default domain name used to send links in invite emails and page links. Useful if the application is behind cloudflare for example. | `string` | `""` | no |
 | <a name="input_ingress_enable_http_sg"></a> [ingress\_enable\_http\_sg](#input\_ingress\_enable\_http\_sg) | Whether regular HTTP traffic should be allowed to access the load balancer | `bool` | `false` | no |
 | <a name="input_initial_apply_complete"></a> [initial\_apply\_complete](#input\_initial\_apply\_complete) | Indicates if this infra is deployed or not. Helps to resolve dependencies. | `bool` | `false` | no |
 | <a name="input_k8s_access_bedrock"></a> [k8s\_access\_bedrock](#input\_k8s\_access\_bedrock) | Allow cluster to access bedrock in this region | `bool` | `false` | no |
 | <a name="input_k8s_api_access_roles"></a> [k8s\_api\_access\_roles](#input\_k8s\_api\_access\_roles) | Set of roles that are allowed to access the EKS API | `set(string)` | `[]` | no |
-| <a name="input_k8s_cluster_version"></a> [k8s\_cluster\_version](#input\_k8s\_cluster\_version) | Ref. https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html | `string` | `"1.33"` | no |
+| <a name="input_k8s_cluster_version"></a> [k8s\_cluster\_version](#input\_k8s\_cluster\_version) | Ref. https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html | `string` | `"1.35"` | no |
+| <a name="input_k8s_endpoint_public_access"></a> [k8s\_endpoint\_public\_access](#input\_k8s\_endpoint\_public\_access) | Whether the EKS API server has a public endpoint. When false, the API is only reachable from within the VPC (or via PrivateLink if deploy\_private\_access is enabled). | `bool` | `true` | no |
 | <a name="input_k8s_module_version"></a> [k8s\_module\_version](#input\_k8s\_module\_version) | EKS terraform module version | `string` | `"~> 19.7"` | no |
-| <a name="input_k8s_public_access_cidrs"></a> [k8s\_public\_access\_cidrs](#input\_k8s\_public\_access\_cidrs) | List of CIDRs that are allowed to connect to the EKS control plane | `list(string)` | n/a | yes |
+| <a name="input_k8s_public_access_cidrs"></a> [k8s\_public\_access\_cidrs](#input\_k8s\_public\_access\_cidrs) | List of CIDRs that are allowed to connect to the EKS public endpoint. Ignored when k8s\_endpoint\_public\_access is false. | `list(string)` | `[]` | no |
+| <a name="input_kubelet_image_gc_high_threshold_percent"></a> [kubelet\_image\_gc\_high\_threshold\_percent](#input\_kubelet\_image\_gc\_high\_threshold\_percent) | Start reclaiming cached images when nodeFs exceeds this percent. EKS default: 85. Tune lower (e.g. 70) on clusters with high deploy churn to keep GC ahead of eviction. | `number` | `85` | no |
+| <a name="input_kubelet_image_gc_low_threshold_percent"></a> [kubelet\_image\_gc\_low\_threshold\_percent](#input\_kubelet\_image\_gc\_low\_threshold\_percent) | Stop reclaiming cached images when nodeFs drops below this percent. EKS default: 80. Tune lower (e.g. 55) alongside kubelet\_image\_gc\_high\_threshold\_percent. | `number` | `80` | no |
+| <a name="input_kubelet_image_minimum_gc_age"></a> [kubelet\_image\_minimum\_gc\_age](#input\_kubelet\_image\_minimum\_gc\_age) | Minimum age for an unused image before kubelet GC considers it. EKS default: 2m. | `string` | `"2m"` | no |
 | <a name="input_lb_access_logs"></a> [lb\_access\_logs](#input\_lb\_access\_logs) | Load balancer access logs configuration. | `map(string)` | `{}` | no |
 | <a name="input_lb_deletion_protection"></a> [lb\_deletion\_protection](#input\_lb\_deletion\_protection) | Flag if the load balancer can be deleted or not. | `bool` | `true` | no |
 | <a name="input_lb_deploy_nlb"></a> [lb\_deploy\_nlb](#input\_lb\_deploy\_nlb) | Flag if the network load balancer should be deployed (usually for incoming private link). | `bool` | `false` | no |
@@ -323,13 +336,21 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="input_managed_node_grp1"></a> [managed\_node\_grp1](#input\_managed\_node\_grp1) | Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group | `any` | n/a | yes |
 | <a name="input_managed_node_grp2"></a> [managed\_node\_grp2](#input\_managed\_node\_grp2) | Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group | `any` | `null` | no |
 | <a name="input_managed_node_grp3"></a> [managed\_node\_grp3](#input\_managed\_node\_grp3) | Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group | `any` | `null` | no |
+| <a name="input_managed_node_grp4"></a> [managed\_node\_grp4](#input\_managed\_node\_grp4) | Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group | `any` | `null` | no |
+| <a name="input_managed_node_grp5"></a> [managed\_node\_grp5](#input\_managed\_node\_grp5) | Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group | `any` | `null` | no |
+| <a name="input_managed_node_grp6"></a> [managed\_node\_grp6](#input\_managed\_node\_grp6) | Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group | `any` | `null` | no |
 | <a name="input_monitor_lambda_datadog"></a> [monitor\_lambda\_datadog](#input\_monitor\_lambda\_datadog) | Whether to monitor the Lambda with Datadog | `bool` | `false` | no |
 | <a name="input_nat_gateway_public_ip"></a> [nat\_gateway\_public\_ip](#input\_nat\_gateway\_public\_ip) | Public IP of the NAT gateway when reusing the NAT gateway instead of recreating | `string` | `""` | no |
+| <a name="input_node_registry_no_proxy"></a> [node\_registry\_no\_proxy](#input\_node\_registry\_no\_proxy) | Additional NO\_PROXY entries for the containerd proxy config, appended to a base set covering localhost and the instance metadata service. Only used when node\_registry\_proxy\_url is set. | `list(string)` | `[]` | no |
+| <a name="input_node_registry_proxy_ca_cert_pem"></a> [node\_registry\_proxy\_ca\_cert\_pem](#input\_node\_registry\_proxy\_ca\_cert\_pem) | PEM-encoded CA certificate to trust for registry pulls through node\_registry\_proxy\_url, for proxies that do TLS interception (re-sign traffic with their own CA instead of passing it through). Installed into the node's system trust store (update-ca-trust) before containerd starts. Only used when node\_registry\_proxy\_url is set; without it, TLS interception causes every pull through the proxy to fail with "certificate signed by unknown authority". | `string` | `null` | no |
+| <a name="input_node_registry_proxy_url"></a> [node\_registry\_proxy\_url](#input\_node\_registry\_proxy\_url) | HTTP(S) proxy worker nodes must use to pull container images, for environments with no direct internet egress (e.g. no NAT/IGW, egress via a hub that requires an explicit forward proxy). Applied to containerd only, via a systemd drop-in written before nodeadm starts it. When null, no proxy is configured. | `string` | `null` | no |
+| <a name="input_node_root_volume_kms_key_arn"></a> [node\_root\_volume\_kms\_key\_arn](#input\_node\_root\_volume\_kms\_key\_arn) | Full ARN of an existing KMS key to encrypt node root EBS volumes with, including keys held in another account. When null (default), volumes fall back to the account's default EBS encryption key. Must be a key ARN, not an alias: aliases do not resolve across accounts. | `string` | `null` | no |
 | <a name="input_peer_region"></a> [peer\_region](#input\_peer\_region) | The region of the peer VPC | `string` | `""` | no |
 | <a name="input_peer_vpc_additional_whitelisted_ingress_cidrs"></a> [peer\_vpc\_additional\_whitelisted\_ingress\_cidrs](#input\_peer\_vpc\_additional\_whitelisted\_ingress\_cidrs) | List of CIDRs that can pass through the load balancer | `set(string)` | `[]` | no |
 | <a name="input_peer_vpc_cidr_block"></a> [peer\_vpc\_cidr\_block](#input\_peer\_vpc\_cidr\_block) | The CIDR block of the peer VPC | `string` | `""` | no |
 | <a name="input_peer_vpc_id"></a> [peer\_vpc\_id](#input\_peer\_vpc\_id) | The VPC ID to peer with | `string` | `""` | no |
 | <a name="input_peer_vpc_owner_id"></a> [peer\_vpc\_owner\_id](#input\_peer\_vpc\_owner\_id) | The AWS account ID of the owner of the peer VPC | `string` | `""` | no |
+| <a name="input_private_access_preserve_client_ip"></a> [private\_access\_preserve\_client\_ip](#input\_private\_access\_preserve\_client\_ip) | Whether the private-access NLB should preserve the original client IP when forwarding to the EKS control plane. Only relevant when deploy\_private\_access is true. | `bool` | `true` | no |
 | <a name="input_private_subnet_index"></a> [private\_subnet\_index](#input\_private\_subnet\_index) | Index of the private subnet | `number` | `0` | no |
 | <a name="input_private_subnet_tags"></a> [private\_subnet\_tags](#input\_private\_subnet\_tags) | The extra tags to be applied to the private subnets | `map(any)` | <pre>{<br/>  "Tier": "private"<br/>}</pre> | no |
 | <a name="input_propagate_intra_route_tables_vgw"></a> [propagate\_intra\_route\_tables\_vgw](#input\_propagate\_intra\_route\_tables\_vgw) | If intra subnets should propagate traffic. | `bool` | `false` | no |
@@ -355,27 +376,35 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="input_rds_monitoring_interval"></a> [rds\_monitoring\_interval](#input\_rds\_monitoring\_interval) | RDS monitoring interval | `number` | `0` | no |
 | <a name="input_rds_monitoring_role_arn"></a> [rds\_monitoring\_role\_arn](#input\_rds\_monitoring\_role\_arn) | The IAM role allowed to send RDS metrics to cloudwatch | `string` | `null` | no |
 | <a name="input_rds_multi_az"></a> [rds\_multi\_az](#input\_rds\_multi\_az) | RDS instance in multiple AZ's | `bool` | `false` | no |
-| <a name="input_rds_param_group_family"></a> [rds\_param\_group\_family](#input\_rds\_param\_group\_family) | The DB parameter group family to use | `string` | `"postgres15"` | no |
+| <a name="input_rds_param_group_family"></a> [rds\_param\_group\_family](#input\_rds\_param\_group\_family) | The DB parameter group family to use | `string` | `"postgres17"` | no |
 | <a name="input_rds_password_override"></a> [rds\_password\_override](#input\_rds\_password\_override) | Password override | `string` | `null` | no |
 | <a name="input_rds_performance_insights_enabled"></a> [rds\_performance\_insights\_enabled](#input\_rds\_performance\_insights\_enabled) | RDS performance insights enabled or not | `bool` | `false` | no |
 | <a name="input_rds_performance_insights_retention_period"></a> [rds\_performance\_insights\_retention\_period](#input\_rds\_performance\_insights\_retention\_period) | RDS performance insights retention period | `number` | `7` | no |
 | <a name="input_rds_port"></a> [rds\_port](#input\_rds\_port) | The port the RDS database should be listening on. | `number` | `5432` | no |
 | <a name="input_rds_ro_username"></a> [rds\_ro\_username](#input\_rds\_ro\_username) | RDS read-only user name (not currently used). | `string` | `"datafold_ro"` | no |
 | <a name="input_rds_username"></a> [rds\_username](#input\_rds\_username) | Overrides the default RDS user name that is provisioned. | `string` | `"datafold"` | no |
-| <a name="input_rds_version"></a> [rds\_version](#input\_rds\_version) | Postgres RDS version to use. | `string` | `"15.5"` | no |
+| <a name="input_rds_version"></a> [rds\_version](#input\_rds\_version) | Postgres RDS version to use. | `string` | `"17.9"` | no |
 | <a name="input_redis_data_size"></a> [redis\_data\_size](#input\_redis\_data\_size) | Redis EBS volume size in GB | `number` | `50` | no |
 | <a name="input_redis_ebs_iops"></a> [redis\_ebs\_iops](#input\_redis\_ebs\_iops) | IOPS of EBS redis volume | `number` | `3000` | no |
 | <a name="input_redis_ebs_kms_key_arn"></a> [redis\_ebs\_kms\_key\_arn](#input\_redis\_ebs\_kms\_key\_arn) | Full ARN of an existing KMS key to encrypt the redis data EBS volume with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the account default EBS encryption key is used. Must be a key ARN, not an alias: aliases do not resolve across accounts. Changing this on an existing volume forces replacement. | `string` | `null` | no |
 | <a name="input_redis_ebs_throughput"></a> [redis\_ebs\_throughput](#input\_redis\_ebs\_throughput) | Throughput of EBS redis volume | `number` | `125` | no |
 | <a name="input_s3_backup_bucket_name_override"></a> [s3\_backup\_bucket\_name\_override](#input\_s3\_backup\_bucket\_name\_override) | Bucket name override. | `string` | `""` | no |
 | <a name="input_s3_clickhouse_backup_tags"></a> [s3\_clickhouse\_backup\_tags](#input\_s3\_clickhouse\_backup\_tags) | The extra tags to be applied to the S3 clickhouse backup bucket | `map(any)` | `{}` | no |
+| <a name="input_s3_temporal_backup_tags"></a> [s3\_temporal\_backup\_tags](#input\_s3\_temporal\_backup\_tags) | Extra tags to apply to the Temporal backup S3 bucket. | `map(any)` | `{}` | no |
+| <a name="input_secondary_private_subnet_index"></a> [secondary\_private\_subnet\_index](#input\_secondary\_private\_subnet\_index) | Index of the private subnet for secondary node groups (grp4, grp5, grp6). If null, uses private\_subnet\_index. | `number` | `null` | no |
 | <a name="input_self_managed_node_grp_instance_type"></a> [self\_managed\_node\_grp\_instance\_type](#input\_self\_managed\_node\_grp\_instance\_type) | Ref. https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt | `string` | `"THe instance type for the self managed node group."` | no |
 | <a name="input_self_managed_node_grps"></a> [self\_managed\_node\_grps](#input\_self\_managed\_node\_grps) | Ref. https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/self-managed-node-group | `any` | `{}` | no |
 | <a name="input_service_account_prefix"></a> [service\_account\_prefix](#input\_service\_account\_prefix) | Prefix for service account names to match Helm chart naming (e.g., 'datafold-' for 'datafold-server', or '' for no prefix) | `string` | `""` | no |
 | <a name="input_sg_tags"></a> [sg\_tags](#input\_sg\_tags) | The extra tags to be applied to the security group | `map(any)` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to the general module | `any` | `{}` | no |
+| <a name="input_temporal_backup_lifecycle_expiration_days"></a> [temporal\_backup\_lifecycle\_expiration\_days](#input\_temporal\_backup\_lifecycle\_expiration\_days) | Number of days after which Temporal PostgreSQL backup objects will expire and be deleted. | `number` | `7` | no |
+| <a name="input_temporal_postgres_namespace"></a> [temporal\_postgres\_namespace](#input\_temporal\_postgres\_namespace) | Kubernetes namespace where the Temporal PostgreSQL CRD (and postgres-pod service account) is deployed. | `string` | `"temporal"` | no |
+| <a name="input_temporal_s3_bucket"></a> [temporal\_s3\_bucket](#input\_temporal\_s3\_bucket) | Suffix for the Temporal PostgreSQL backup S3 bucket name. Final name: <deployment\_name>-<temporal\_s3\_bucket>. | `string` | `"temporal-pg-backups"` | no |
+| <a name="input_temporal_s3_bucket_name_override"></a> [temporal\_s3\_bucket\_name\_override](#input\_temporal\_s3\_bucket\_name\_override) | Override the full Temporal backup S3 bucket name (overrides the deployment\_name prefix). | `string` | `""` | no |
+| <a name="input_temporal_s3_kms_key_arn"></a> [temporal\_s3\_kms\_key\_arn](#input\_temporal\_s3\_kms\_key\_arn) | Full ARN of an existing KMS key to encrypt the Temporal backup S3 bucket with. Supports keys held in another account, provided the key policy grants this account use of the key. When null, the bucket uses SSE-S3 (AES256). Must be a key ARN, not an alias: aliases do not resolve across accounts. | `string` | `null` | no |
 | <a name="input_use_default_rds_kms_key"></a> [use\_default\_rds\_kms\_key](#input\_use\_default\_rds\_kms\_key) | Flag weither or not to use the default RDS KMS encryption key. Not recommended. | `bool` | `false` | no |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | The CIDR of the new VPC, if the vpc\_cidr is not set | `string` | `"10.0.0.0/16"` | no |
+| <a name="input_vpc_create_nat_gateway"></a> [vpc\_create\_nat\_gateway](#input\_vpc\_create\_nat\_gateway) | Whether the module should create a NAT gateway in the VPC. When false, no NAT gateway or its EIP is created and the customer is expected to provide outbound internet egress from private subnets out-of-band. | `bool` | `true` | no |
 | <a name="input_vpc_exclude_az_ids"></a> [vpc\_exclude\_az\_ids](#input\_vpc\_exclude\_az\_ids) | AZ IDs to exclude from availability zones | `list(string)` | `[]` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The VPC ID of an existing VPC to deploy the cluster in. Creates a new VPC if not set. | `string` | `""` | no |
 | <a name="input_vpc_private_subnets"></a> [vpc\_private\_subnets](#input\_vpc\_private\_subnets) | The private subnet CIDR ranges when a new VPC is created. | `list(string)` | <pre>[<br/>  "10.0.0.0/22",<br/>  "10.0.4.0/22"<br/>]</pre> | no |
@@ -383,7 +412,7 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="input_vpc_public_subnets"></a> [vpc\_public\_subnets](#input\_vpc\_public\_subnets) | The public network CIDR ranges | `list(string)` | <pre>[<br/>  "10.0.100.0/22",<br/>  "10.0.104.0/22"<br/>]</pre> | no |
 | <a name="input_vpc_tags"></a> [vpc\_tags](#input\_vpc\_tags) | The extra tags to be applied to the VPC | `map(any)` | `{}` | no |
 | <a name="input_vpc_vpn_gateway_id"></a> [vpc\_vpn\_gateway\_id](#input\_vpc\_vpn\_gateway\_id) | ID of the VPN gateway to attach to the VPC | `string` | `""` | no |
-| <a name="input_vpce_details"></a> [vpce\_details](#input\_vpce\_details) | Endpoint names to define with security group rule definitions | <pre>map(object({<br/>    vpces_service_name  = string<br/>    subnet_ids          = optional(list(string), [])<br/>    private_dns_enabled = optional(bool, true)<br/><br/>    input_rules        = list(object({<br/>       description = string<br/>       from_port   = number<br/>       to_port     = number<br/>       protocol    = string<br/>       cidr_blocks = string<br/>    }))<br/>    output_rules = list(object({<br/>       description = string<br/>       from_port   = number<br/>       to_port     = number<br/>       protocol    = string<br/>       cidr_blocks = string<br/>    }))<br/>  }))</pre> | `{}` | no |
+| <a name="input_vpce_details"></a> [vpce\_details](#input\_vpce\_details) | Endpoint names to define with security group rule definitions | <pre>map(object({<br/>    vpces_service_name  = string<br/>    subnet_ids          = optional(list(string), [])<br/>    private_dns_enabled = optional(bool, true)<br/><br/>    input_rules = list(object({<br/>      description = string<br/>      from_port   = number<br/>      to_port     = number<br/>      protocol    = string<br/>      cidr_blocks = string<br/>    }))<br/>    output_rules = list(object({<br/>      description = string<br/>      from_port   = number<br/>      to_port     = number<br/>      protocol    = string<br/>      cidr_blocks = string<br/>    }))<br/>  }))</pre> | `{}` | no |
 | <a name="input_vpn_cidr"></a> [vpn\_cidr](#input\_vpn\_cidr) | CIDR range for administrative access | `string` | `""` | no |
 | <a name="input_whitelisted_egress_cidrs"></a> [whitelisted\_egress\_cidrs](#input\_whitelisted\_egress\_cidrs) | List of Internet addresses the application can access going outside | `list(string)` | n/a | yes |
 | <a name="input_whitelisted_ingress_cidrs"></a> [whitelisted\_ingress\_cidrs](#input\_whitelisted\_ingress\_cidrs) | List of CIDRs that can pass through the load balancer | `list(string)` | n/a | yes |
@@ -414,6 +443,8 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="output_github_reverse_proxy_url"></a> [github\_reverse\_proxy\_url](#output\_github\_reverse\_proxy\_url) | The URL of the API Gateway that acts as a reverse proxy to the GitHub API |
 | <a name="output_k8s_load_balancer_controller_role_arn"></a> [k8s\_load\_balancer\_controller\_role\_arn](#output\_k8s\_load\_balancer\_controller\_role\_arn) | The ARN of the role provisioned so the k8s cluster can edit the target group through the AWS load balancer controller. |
 | <a name="output_lb_name"></a> [lb\_name](#output\_lb\_name) | The name of the external load balancer |
+| <a name="output_lb_vpces_az_id"></a> [lb\_vpces\_az\_id](#output\_lb\_vpces\_az\_id) | Availability zone ID where the UI's VPCE service is available |
+| <a name="output_lb_vpces_name"></a> [lb\_vpces\_name](#output\_lb\_vpces\_name) | Service name of the VPC Endpoint Service fronting the UI (PrivateLink), for consumer-side connections |
 | <a name="output_load_balancer_ips"></a> [load\_balancer\_ips](#output\_load\_balancer\_ips) | The load balancer IP when it was provisioned. |
 | <a name="output_operator_role_arn"></a> [operator\_role\_arn](#output\_operator\_role\_arn) | The ARN of the AWS Bedrock role |
 | <a name="output_operator_service_account_name"></a> [operator\_service\_account\_name](#output\_operator\_service\_account\_name) | The name of the service account for operator |
@@ -434,8 +465,13 @@ https://docs.datafold.com/datafold-deployment/dedicated-cloud/aws
 | <a name="output_storage_worker_role_arn"></a> [storage\_worker\_role\_arn](#output\_storage\_worker\_role\_arn) | The ARN of the AWS Bedrock role |
 | <a name="output_storage_worker_service_account_name"></a> [storage\_worker\_service\_account\_name](#output\_storage\_worker\_service\_account\_name) | The name of the service account for storage\_worker |
 | <a name="output_target_group_arn"></a> [target\_group\_arn](#output\_target\_group\_arn) | The ARN to the target group where the pods need to be registered as targets. |
+| <a name="output_temporal_backup_role_arn"></a> [temporal\_backup\_role\_arn](#output\_temporal\_backup\_role\_arn) | The ARN of the IAM role for Temporal PostgreSQL backups (annotate the postgres-pod service account with this) |
+| <a name="output_temporal_s3_bucket"></a> [temporal\_s3\_bucket](#output\_temporal\_s3\_bucket) | The S3 bucket for Temporal PostgreSQL backups |
+| <a name="output_temporal_s3_region"></a> [temporal\_s3\_region](#output\_temporal\_s3\_region) | The region of the Temporal PostgreSQL backup S3 bucket |
 | <a name="output_vpc_cidr"></a> [vpc\_cidr](#output\_vpc\_cidr) | The CIDR of the entire VPC |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | The ID of the VPC |
+| <a name="output_vpc_private_subnet_cidrs"></a> [vpc\_private\_subnet\_cidrs](#output\_vpc\_private\_subnet\_cidrs) | List of private subnet CIDRs |
+| <a name="output_vpc_private_subnets"></a> [vpc\_private\_subnets](#output\_vpc\_private\_subnets) | List of private subnet IDs |
 | <a name="output_vpces_azs"></a> [vpces\_azs](#output\_vpces\_azs) | Set of availability zones where the VPCES is available. |
 | <a name="output_worker_catalog_role_arn"></a> [worker\_catalog\_role\_arn](#output\_worker\_catalog\_role\_arn) | The ARN of the AWS Bedrock role |
 | <a name="output_worker_catalog_service_account_name"></a> [worker\_catalog\_service\_account\_name](#output\_worker\_catalog\_service\_account\_name) | The name of the service account for worker\_catalog |

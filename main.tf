@@ -559,6 +559,7 @@ module "private_access" {
   tags                = var.tags
   control_plane_sg_id = local.control_plane_sg_id
   vpn_cidr            = var.vpn_cidr
+  extra_vpn_cidrs     = var.extra_vpn_cidrs
   preserve_client_ip  = var.private_access_preserve_client_ip
 }
 
