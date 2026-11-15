@@ -2,6 +2,13 @@
 
 See this file for notable changes between versions.
 
+## [1.18.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.17.0...v1.18.0) (2026-11-15)
+
+
+### Features
+
+* Allow further VPN CIDRs into the private-access NLB ([b6bce00](https://github.com/datafold/terraform-aws-datafold/commit/b6bce00395a455be65accf3c8cd12162f431be58))
+
 ## [1.17.0](https://github.com/datafold/terraform-aws-datafold/compare/v1.16.5...v1.17.0) (2026-10-14)
 
 
