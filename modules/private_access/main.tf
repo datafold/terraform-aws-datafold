@@ -8,7 +8,7 @@ resource "aws_security_group" "nlb_ingress" {
     from_port   = 443
     protocol    = "tcp"
     to_port     = 443
-    cidr_blocks = [var.vpn_cidr]
+    cidr_blocks = concat([var.vpn_cidr], var.extra_vpn_cidrs)
   }
 
   egress {

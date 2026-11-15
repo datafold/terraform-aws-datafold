@@ -38,6 +38,12 @@ variable "vpn_cidr" {
   description = "The CIDR range where VPN or instances accessing this control plane originate."
 }
 
+variable "extra_vpn_cidrs" {
+  type        = list(string)
+  default     = []
+  description = "Further CIDR ranges allowed in next to vpn_cidr (a second VPN running side by side)."
+}
+
 variable "preserve_client_ip" {
   type        = bool
   default     = true
